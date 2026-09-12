@@ -21,14 +21,17 @@ def history(image):
 
 
 def fix_env_quotes(inst):
-    """history prints `ENV K=a b c` unquoted; Dockerfile needs ENV K="a b c" when the value has spaces."""
+    """history prints `ENV K=a b c` unquoted; Dockerfile needs ENV K="a b c" when the value has spaces.
+    `ENV A=1 B=2` (several pairs) is left alone; a value whose extra tokens are not KEY=VAL pairs
+    (e.g. JVM flags such as -XX:MaxMetaspaceSize=256m) is quoted as one value."""
     m = re.match(r"^(ENV|ARG) ([A-Za-z_][A-Za-z0-9_]*)=(.*)$", inst, re.S)
-    if m and " " in m.group(3) and not re.match(r'^"[^"]*"$', m.group(3)) and "=" not in m.group(3).split(" ", 1)[1].split(" ")[0]:
-        val = m.group(3)
-        # several KEY=VAL pairs on one line -> leave alone unless no other token looks like KEY=VAL
-        if not re.search(r"\s[A-Za-z_][A-Za-z0-9_]*=", val):
-            return f'{m.group(1)} {m.group(2)}="{val.replace(chr(92), chr(92)*2).replace(chr(34), chr(92)+chr(34))}"'
-    return inst
+    if not m or " " not in m.group(3) or re.match(r'^"[^"]*"$', m.group(3)):
+        return inst
+    val = m.group(3)
+    tokens = val.split(" ")[1:]
+    if tokens and all(re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", t) for t in tokens if t):
+        return inst  # several KEY=VAL pairs on one line
+    return f'{m.group(1)} {m.group(2)}="{val.replace(chr(92), chr(92)*2).replace(chr(34), chr(92)+chr(34))}"'
 
 
 def fix_exec_form(inst):
