@@ -37,9 +37,19 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
   on arm64; EOL Debian archives
 * constraints that clash with a repo's own exact pins are dropped automatically and the build retried
 * eval scripts that hard-code `/usr/lib/jvm/java-N-openjdk-amd64` get a symlink to the arm64 JVM;
-  bazel gets netty-tcnative's `linux-aarch_64` native on `java.library.path`; baked wheelhouses
-  (`/opt/promax-wheelhouse/<id>`) and Bazel's repository cache are regenerated/transplanted; builds
-  retry on network-error signatures
+  baked wheelhouses (`/opt/promax-wheelhouse/<id>`) and Bazel's repository caches (default and the
+  `--config=ci-linux` one under `/var/lib/buildkite-agent`) are regenerated/transplanted; builds retry on
+  network-error signatures
+* bazel: `third_party/BUILD` strips every `.so` from the netty-tcnative jar on linux_aarch64 (a stale
+  "the .so is x86" rule), so the `linux-aarch_64` native of the exact version Bazel resolved is placed on
+  `java.library.path`, where Netty's loader finds it
+* fprime: `Fw/Logger/test/ut/LoggerRules.cpp` (at the instances' base commits) passes `U32` values through
+  `%lu`; that is undefined behaviour which passes on x86-64 (verified 5/5 on the official image under qemu)
+  and fails on every aarch64 run because stack-passed varargs keep stale upper halves. The image applies
+  upstream's own later fix (nasa/fprime 589ed5d, "Switch to U64 Logger Tests", #4262).
+* timing-sensitive gold tests (WasmEdge `WasiTest.*Socket*` 100 ms polls, fprime `PosixRawTimeTest`
+  25 us threshold, bazel `RemoteExecutionServiceTest` interrupt race) fail only while the host is
+  saturated by parallel builds and pass when validated alone; the final pass validates them at one job
 
 ## Terminal-Bench 3.0 — 72/74 validated; 2 tasks need H100 hardware
 

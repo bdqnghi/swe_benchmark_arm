@@ -168,6 +168,12 @@ REPO_FIXES = {
                          'RUN if grep -qs "repository_cache=/var/lib/buildkite-agent/bazeltest/repo_cache" /testbed/.bazelrc && [ -d /root/.cache/bazel/_bazel_root/cache/repos/v1 ]; then '
                          'mkdir -p /var/lib/buildkite-agent/bazeltest/repo_cache && cp -an /root/.cache/bazel/_bazel_root/cache/repos/v1/. /var/lib/buildkite-agent/bazeltest/repo_cache/ '
                          '&& find /var/lib/buildkite-agent/bazeltest/repo_cache -type f | wc -l; fi'],
+    # Fw/Logger/test/ut/LoggerRules.cpp (not part of any test patch) passes U32 values through "%lu": undefined behaviour
+    # that only works on x86-64, where stale stack slots happen to be zero; on aarch64 the stack-passed varargs carry
+    # garbage upper halves and the test fails on every run. Apply upstream's own fix (nasa/fprime 589ed5d "Switch to
+    # U64 Logger Tests (#4262)"): make the array U64 so the values match the format.
+    "nasa/fprime": ['RUN f=/testbed/Fw/Logger/test/ut/LoggerRules.cpp; if [ -f "$f" ] && grep -q "U32 ra\\[10\\];" "$f" && grep -q "%lu" "$f"; '
+                    'then sed -i "s/U32 ra\\[10\\];/U64 ra[10];/" "$f" && grep -n "U64 ra\\[10\\]" "$f"; fi'],
     # its eval script puts /usr/lib/x86_64-linux-gnu/pkgconfig on PKG_CONFIG_PATH
     "bloomberg/blazingmq": ['RUN mkdir -p /usr/lib/x86_64-linux-gnu && ln -sfn /usr/lib/aarch64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig'],
     # mk/tools.mk errors at parse time for any host but linux-x86_64/macosx/windows, even for host unit tests
@@ -364,6 +370,11 @@ class Status:
 
     def set(self, key, **kw):
         with lock:
+            try:  # merge with what other pipeline processes wrote (e.g. a --instance re-run alongside the full run)
+                on_disk = json.load(open(self.path))
+                self.data = {**on_disk, **{k: v for k, v in self.data.items() if k not in on_disk or k == key}}
+            except (OSError, ValueError):
+                pass
             self.data[key] = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), **kw}
             tmp = self.path.with_suffix(".tmp")
             json.dump(self.data, open(tmp, "w"), indent=1)
