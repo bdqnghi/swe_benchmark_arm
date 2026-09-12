@@ -8,7 +8,7 @@ rust / eclipse-temurin ...). We detect that base from the image and reconstruct 
 (test_run.py) takes the image from `image_name` in swe-bench-promax.json, so a rewritten copy of that file is
 written to swe-bench-promax.arm64.json.
 """
-import argparse, contextlib, json, os, re, subprocess, sys, threading, time
+import argparse, shlex, contextlib, json, os, re, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -18,6 +18,13 @@ lock = threading.Lock()
 sys.path.insert(0, str(ROOT))
 import test_run  # the official ProMax eval runner; reused for gold-patch validation
 test_run.print = lambda *a, **k: None  # silence its per-command chatter (redirect_stdout would hijack all threads)
+# Kernels >= 6.13 raised the default tcp_rmem ceiling from 6 MB to 32 MB; WasmEdge's WasiTest.*Socket* poll tests assume
+# the classic buffer dynamics (write until EAGAIN, expect a 100 ms poll timeout, drain, expect writability) and flake
+# on both the official amd64 image and ours under the new default, but pass 100% with the old ceiling. Run every eval
+# container with the classic value (test_run.py has no hook for extra `docker run` flags, so extend its network flags).
+TCP_RMEM_CLASSIC = "4096 131072 6291456"
+_orig_net_flags = test_run._docker_network_flags
+test_run._docker_network_flags = lambda: _orig_net_flags() + f" --sysctl net.ipv4.tcp_rmem={shlex.quote(TCP_RMEM_CLASSIC)}"
 
 DATA = {d["instance_id"]: d for d in json.load(open(ROOT / "swe-bench-promax.json"))}
 EVAL = json.load(open(ROOT / "eval.json"))

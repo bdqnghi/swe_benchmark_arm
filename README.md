@@ -81,6 +81,12 @@ the upstream dataset with `image_name` rewritten to `bdqnghi/swebench-promax:<in
 transplants architecture-neutral caches (cargo registry, deno, Hugging Face, Maven, npm) and
 validates the gold patch offline before pushing.
 
+On hosts with Linux 6.13 or newer, run the eval containers with the classic receive-buffer ceiling
+(`docker run --sysctl net.ipv4.tcp_rmem="4096 131072 6291456"`; `build_promax.py` adds it to
+`test_run.py`'s container flags). Newer kernels default to 32 MB, and WasmEdge's `WasiTest.*Socket*`
+poll tests, which assume the older TCP buffer dynamics, then fail intermittently on the official
+amd64 image as well as on the arm64 one.
+
 ### Terminal-Bench 3.0 / 4.0
 
 ```

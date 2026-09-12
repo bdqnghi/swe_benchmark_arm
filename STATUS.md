@@ -47,9 +47,15 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
   `%lu`; that is undefined behaviour which passes on x86-64 (verified 5/5 on the official image under qemu)
   and fails on every aarch64 run because stack-passed varargs keep stale upper halves. The image applies
   upstream's own later fix (nasa/fprime 589ed5d, "Switch to U64 Logger Tests", #4262).
-* timing-sensitive gold tests (WasmEdge `WasiTest.*Socket*` 100 ms polls, fprime `PosixRawTimeTest`
-  25 us threshold, bazel `RemoteExecutionServiceTest` interrupt race) fail only while the host is
-  saturated by parallel builds and pass when validated alone; the final pass validates them at one job
+* timing-sensitive gold tests (fprime `PosixRawTimeTest` 25 us threshold, bazel
+  `RemoteExecutionServiceTest` interrupt race) fail only while the host is saturated by parallel builds
+  and pass when validated alone
+* WasmEdge `WasiTest.*Socket*`: the poll tests write until EAGAIN, expect a 100 ms timeout, have the
+  peer drain, then expect writability; whether that holds depends on the kernel's TCP buffer
+  autotuning. Under Linux 6.17's 32 MB `tcp_rmem` ceiling they fail intermittently on the official
+  amd64 image too (0/6 clean runs under qemu on this host); with the pre-6.13 ceiling
+  (`--sysctl net.ipv4.tcp_rmem="4096 131072 6291456"`) they pass 6/6. The validation runs eval
+  containers with that setting (see README).
 
 ## Terminal-Bench 3.0 — 72/74 validated; 2 tasks need H100 hardware
 
