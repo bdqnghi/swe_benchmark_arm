@@ -99,7 +99,8 @@ cd / && find testbed \( -name Cargo.lock -o -name package-lock.json -o -name yar
 SNAPSHOT_CACHES = r"""
 cd / && ls -d root/.cache/deno root/.cache/huggingface root/.cargo/registry usr/local/cargo/registry \
   root/go/pkg/mod/cache/download usr/local/go/mod-cache/cache/download root/.m2/repository \
-  root/.gradle/caches/modules-2 root/.npm/_cacache usr/local/bin/docker-entrypoint.sh root/.cache/bazel/_bazel_root/cache/repos 2>/dev/null \
+  root/.gradle/caches/modules-2 root/.npm/_cacache usr/local/bin/docker-entrypoint.sh root/.cache/bazel/_bazel_root/cache/repos \
+  var/lib/buildkite-agent/bazeltest/repo_cache 2>/dev/null \
   | tar cf - --exclude='v8_code_cache_v2*' --exclude='registry/src' -T - 2>/dev/null
 """
 
@@ -153,13 +154,20 @@ REPO_PRE_FIXES = {
 REPO_FIXES = {
     # aarch64 `char` is unsigned; ETL's tests narrow negative literals into char and only compile with x86's signed char
     "ETLCPP/etl": ['ENV CXXFLAGS=-fsigned-char CFLAGS=-fsigned-char'],
-    # the test classpath only carries netty-tcnative's linux-x86_64 BoringSSL jar; Netty's loader also accepts the native
-    # from java.library.path, so install the matching linux-aarch_64 build (version from the repo's MODULE.bazel)
-    "bazelbuild/bazel": ['RUN set -eux; V=$(grep -oE "netty-tcnative-boringssl-static:jar:linux-aarch_64:[0-9A-Za-z.]+" /testbed/MODULE.bazel | head -1 | awk -F: \'{print $NF}\'); '
-                         '[ -n "$V" ] || V=$(grep -oE "netty-tcnative-boringssl-static:jar:linux-x86_64:[0-9A-Za-z.]+" /testbed/MODULE.bazel | head -1 | awk -F: \'{print $NF}\'); '
-                         'curl -fsSL -o /tmp/tcn.jar "https://repo1.maven.org/maven2/io/netty/netty-tcnative-boringssl-static/$V/netty-tcnative-boringssl-static-$V-linux-aarch_64.jar" '
-                         '&& cd /tmp && unzip -o -j tcn.jar "META-INF/native/libnetty_tcnative_linux_aarch_64.so" -d /usr/lib/aarch64-linux-gnu/ && rm -f /tmp/tcn.jar '
-                         '&& ls -la /usr/lib/aarch64-linux-gnu/libnetty_tcnative_linux_aarch_64.so'],
+    # third_party/BUILD strips every .so from the tcnative jar on linux_aarch64 (stale "the .so is x86" comment), so the test
+    # classpath has no native; Netty's loader falls back to java.library.path. Install the linux-aarch_64 native of the exact
+    # version the build resolved (the jar Bazel already fetched into external/, else maven_install.json, else MODULE.bazel).
+    "bazelbuild/bazel": ['RUN set -eux; J=$(find /root/.cache/bazel/_bazel_root -path "*netty-tcnative-boringssl-static*linux-aarch_64.jar" 2>/dev/null | head -1); '
+                         'if [ -z "$J" ]; then V=$(python3 -c "import json;d=json.load(open(\'/testbed/maven_install.json\'));print(d[\'artifacts\'][\'io.netty:netty-tcnative-classes\'][\'version\'])" 2>/dev/null || true); '
+                         '[ -n "$V" ] || V=$(grep -oE "netty-tcnative-boringssl-static:jar:linux-(aarch_64|x86_64):[0-9A-Za-z.]+" /testbed/MODULE.bazel | head -1 | awk -F: \'{print $NF}\'); '
+                         'curl -fsSL -o /tmp/tcn.jar "https://repo1.maven.org/maven2/io/netty/netty-tcnative-boringssl-static/$V/netty-tcnative-boringssl-static-$V-linux-aarch_64.jar"; J=/tmp/tcn.jar; fi; '
+                         'cd /tmp && unzip -o -j "$J" "META-INF/native/libnetty_tcnative_linux_aarch_64.so" -d /usr/lib/aarch64-linux-gnu/ && rm -f /tmp/tcn.jar '
+                         '&& ls -la /usr/lib/aarch64-linux-gnu/libnetty_tcnative_linux_aarch_64.so',
+                         # --config=ci-linux points --repository_cache at /var/lib/buildkite-agent/bazeltest/repo_cache (transplanted from the
+                         # official image); merge what the build-time `bazel fetch` cached (registry files, aarch64 toolchains) into it
+                         'RUN if grep -qs "repository_cache=/var/lib/buildkite-agent/bazeltest/repo_cache" /testbed/.bazelrc && [ -d /root/.cache/bazel/_bazel_root/cache/repos/v1 ]; then '
+                         'mkdir -p /var/lib/buildkite-agent/bazeltest/repo_cache && cp -an /root/.cache/bazel/_bazel_root/cache/repos/v1/. /var/lib/buildkite-agent/bazeltest/repo_cache/ '
+                         '&& find /var/lib/buildkite-agent/bazeltest/repo_cache -type f | wc -l; fi'],
     # its eval script puts /usr/lib/x86_64-linux-gnu/pkgconfig on PKG_CONFIG_PATH
     "bloomberg/blazingmq": ['RUN mkdir -p /usr/lib/x86_64-linux-gnu && ln -sfn /usr/lib/aarch64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig'],
     # mk/tools.mk errors at parse time for any host but linux-x86_64/macosx/windows, even for host unit tests

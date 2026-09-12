@@ -41,10 +41,10 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
   (`/opt/promax-wheelhouse/<id>`) and Bazel's repository cache are regenerated/transplanted; builds
   retry on network-error signatures
 
-## Terminal-Bench 3.0 — 71/74 validated; 2 tasks need H100 hardware; 1 in progress
+## Terminal-Bench 3.0 — 72/74 validated; 2 tasks need H100 hardware
 
 All 74 environment and 74 verifier images built and pushed. Harbor oracle passes on all 70 non-GPU
-tasks, including memcached-backdoor (upstream pins linux/amd64 for Ghidra; the arm64 image builds
+tasks, including coq-block-bound (native Coq base, see below), memcached-backdoor (upstream pins linux/amd64 for Ghidra; the arm64 image builds
 Ghidra's native decompiler/sleigh/demangler from the bundled sources) and ico-path-patch (x86 service
 binary under qemu with multiarch libc). GPU tasks, validated through the Harbor CDI patch on a GB10:
 
@@ -56,13 +56,13 @@ binary under qemu with multiarch libc). GPU tasks, validated through the Harbor 
   `wgmma` instructions, and the speedrun grader enforces an H100-calibrated wall-clock budget that the
   GB10 exceeds. They need an arm64 Hopper host (e.g. GH200) for validation.
 
-coq-block-bound is being rebuilt on `bdqnghi/coq:8.18`, a multi-arch manifest joining the official
-amd64 `coqorg/coq:8.18` with an arm64 build of the same layout (`terminal_bench/bases/coq-8.18`),
-because the official image is amd64-only.
+coq-block-bound passes (v3 and v4) on `bdqnghi/coq:8.18`, a multi-arch manifest joining the official
+amd64 `coqorg/coq:8.18` with a native arm64 build of the same layout (`terminal_bench/bases/coq-8.18`,
+Coq 8.18.0 on OCaml 4.13.1+flambda), because the official image is amd64-only.
 
-## Terminal-Bench 4.0 — 63/66 validated; math-eval-grader and coq-block-bound rebuilds in progress
+## Terminal-Bench 4.0 — 64/66 validated; math-eval-grader rebuild in progress
 
 All 66 environment and 66 verifier images built and pushed. Harbor oracle passes on all 63 non-GPU
 tasks (live-database-cutover is load-sensitive: it failed while the host was saturated and passed
 when run alone). fp8-rmsnorm-gemm and jax-speedrun-gpu need H100 hardware (see 3.0);
-math-eval-grader and coq-block-bound follow the v3 rebuilds.
+coq-block-bound passes on the multi-arch Coq base; math-eval-grader follows the v3 rebuild.
