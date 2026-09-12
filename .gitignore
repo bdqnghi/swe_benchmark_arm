@@ -1,0 +1,13 @@
+work/
+logs/
+logs*.txt
+jobs*/
+status.json
+status.tmp
+*.tar
+__pycache__/
+*-venv/
+tb-v*/
+deep-swe/
+validation/
+parity/*.txt

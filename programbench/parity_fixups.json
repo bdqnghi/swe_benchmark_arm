@@ -1,0 +1,58 @@
+{
+ "chirlu__sox.42b3557": [
+  "libltdl7"
+ ],
+ "hpjansson__chafa.dd4d4c1": [
+  "fontconfig",
+  "libcairo-gobject2",
+  "libcairo2",
+  "libdatrie1",
+  "libfribidi0",
+  "libgdk-pixbuf-2.0-0",
+  "libgdk-pixbuf2.0-common",
+  "libgraphite2-3",
+  "libharfbuzz0b",
+  "libpango-1.0-0",
+  "libpangocairo-1.0-0",
+  "libpangoft2-1.0-0",
+  "libpixman-1-0",
+  "librsvg2-2",
+  "libthai-data",
+  "libthai0",
+  "libwebpdemux2",
+  "libxcb-render0",
+  "libxcb-shm0",
+  "libxrender1",
+  "shared-mime-info"
+ ],
+ "osgeo__gdal.0847f12": [
+  "libgeotiff5",
+  "libjson-c5",
+  "libproj22",
+  "proj-data"
+ ],
+ "universal-ctags__ctags.243595e": [
+  "libjansson4",
+  "libyaml-0-2"
+ ],
+ "yassinebridi__serpl.c48a9d7": [
+  "ripgrep"
+ ],
+ "zevv__duc.a58fa4e": [
+  "fontconfig",
+  "libcairo2",
+  "libdatrie1",
+  "libfribidi0",
+  "libgraphite2-3",
+  "libharfbuzz0b",
+  "libpango-1.0-0",
+  "libpangocairo-1.0-0",
+  "libpangoft2-1.0-0",
+  "libpixman-1-0",
+  "libthai-data",
+  "libthai0",
+  "libxcb-render0",
+  "libxcb-shm0",
+  "libxrender1"
+ ]
+}

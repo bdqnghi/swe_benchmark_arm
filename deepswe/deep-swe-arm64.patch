@@ -1,0 +1,3360 @@
+diff --git a/tasks/abs-module-cache-flags/task.toml b/tasks/abs-module-cache-flags/task.toml
+index 5021e65..a077682 100644
+--- a/tasks/abs-module-cache-flags/task.toml
++++ b/tasks/abs-module-cache-flags/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75679ajj3b8dtd7se3h7z0a1833y6r-v1.1"
++docker_image = "bdqnghi/deepswe:abs-module-cache-flags"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/abs-module-cache-flags/tests/Dockerfile b/tasks/abs-module-cache-flags/tests/Dockerfile
+index 72a2692..cce2f07 100644
+--- a/tasks/abs-module-cache-flags/tests/Dockerfile
++++ b/tasks/abs-module-cache-flags/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75679ajj3b8dtd7se3h7z0a1833y6r-v1.1
++FROM bdqnghi/deepswe:abs-module-cache-flags
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/abs-stepped-slices/task.toml b/tasks/abs-stepped-slices/task.toml
+index 90cdf94..0b6a4b4 100644
+--- a/tasks/abs-stepped-slices/task.toml
++++ b/tasks/abs-stepped-slices/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7d5m4ed35zfp7gyhx7wdahed82yw72-v1.1"
++docker_image = "bdqnghi/deepswe:abs-stepped-slices"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/abs-stepped-slices/tests/Dockerfile b/tasks/abs-stepped-slices/tests/Dockerfile
+index c80d043..e6e06da 100644
+--- a/tasks/abs-stepped-slices/tests/Dockerfile
++++ b/tasks/abs-stepped-slices/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7d5m4ed35zfp7gyhx7wdahed82yw72-v1.1
++FROM bdqnghi/deepswe:abs-stepped-slices
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/actionlint-action-pinning-lint/task.toml b/tasks/actionlint-action-pinning-lint/task.toml
+index c07016c..ddcff87 100644
+--- a/tasks/actionlint-action-pinning-lint/task.toml
++++ b/tasks/actionlint-action-pinning-lint/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79dnvkvq8j9bs22ededmsc79823akj-v1.1"
++docker_image = "bdqnghi/deepswe:actionlint-action-pinning-lint"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/actionlint-action-pinning-lint/tests/Dockerfile b/tasks/actionlint-action-pinning-lint/tests/Dockerfile
+index 734adee..715e27a 100644
+--- a/tasks/actionlint-action-pinning-lint/tests/Dockerfile
++++ b/tasks/actionlint-action-pinning-lint/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79dnvkvq8j9bs22ededmsc79823akj-v1.1
++FROM bdqnghi/deepswe:actionlint-action-pinning-lint
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/adaptix-name-mapping-aliases/task.toml b/tasks/adaptix-name-mapping-aliases/task.toml
+index 74237d4..26f9df8 100644
+--- a/tasks/adaptix-name-mapping-aliases/task.toml
++++ b/tasks/adaptix-name-mapping-aliases/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73dq4n55jdxasppe6jjmth4183d47n-v1.1"
++docker_image = "bdqnghi/deepswe:adaptix-name-mapping-aliases"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/adaptix-name-mapping-aliases/tests/Dockerfile b/tasks/adaptix-name-mapping-aliases/tests/Dockerfile
+index 435bfe7..e866187 100644
+--- a/tasks/adaptix-name-mapping-aliases/tests/Dockerfile
++++ b/tasks/adaptix-name-mapping-aliases/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73dq4n55jdxasppe6jjmth4183d47n-v1.1
++FROM bdqnghi/deepswe:adaptix-name-mapping-aliases
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/aiomonitor-task-snapshots-diff/task.toml b/tasks/aiomonitor-task-snapshots-diff/task.toml
+index cb3f4ab..2aa4c19 100644
+--- a/tasks/aiomonitor-task-snapshots-diff/task.toml
++++ b/tasks/aiomonitor-task-snapshots-diff/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75rc2q0zhmsqwk7wewfwwtrx830v2n-v1.1"
++docker_image = "bdqnghi/deepswe:aiomonitor-task-snapshots-diff"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/aiomonitor-task-snapshots-diff/tests/Dockerfile b/tasks/aiomonitor-task-snapshots-diff/tests/Dockerfile
+index e56aa38..dd5103c 100644
+--- a/tasks/aiomonitor-task-snapshots-diff/tests/Dockerfile
++++ b/tasks/aiomonitor-task-snapshots-diff/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75rc2q0zhmsqwk7wewfwwtrx830v2n-v1.1
++FROM bdqnghi/deepswe:aiomonitor-task-snapshots-diff
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/anko-default-function-arguments/task.toml b/tasks/anko-default-function-arguments/task.toml
+index fcc62bb..5629327 100644
+--- a/tasks/anko-default-function-arguments/task.toml
++++ b/tasks/anko-default-function-arguments/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fj3hc92zehtc8azrm32xzb182w9dr-v1.1"
++docker_image = "bdqnghi/deepswe:anko-default-function-arguments"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/anko-default-function-arguments/tests/Dockerfile b/tasks/anko-default-function-arguments/tests/Dockerfile
+index e6635e3..f693a32 100644
+--- a/tasks/anko-default-function-arguments/tests/Dockerfile
++++ b/tasks/anko-default-function-arguments/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fj3hc92zehtc8azrm32xzb182w9dr-v1.1
++FROM bdqnghi/deepswe:anko-default-function-arguments
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/anko-typed-variable-bindings/task.toml b/tasks/anko-typed-variable-bindings/task.toml
+index 4ac4871..f0a8688 100644
+--- a/tasks/anko-typed-variable-bindings/task.toml
++++ b/tasks/anko-typed-variable-bindings/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79betfed7ets4an20cr4j57182y9wt-v1.1"
++docker_image = "bdqnghi/deepswe:anko-typed-variable-bindings"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/anko-typed-variable-bindings/tests/Dockerfile b/tasks/anko-typed-variable-bindings/tests/Dockerfile
+index c820c81..97950e8 100644
+--- a/tasks/anko-typed-variable-bindings/tests/Dockerfile
++++ b/tasks/anko-typed-variable-bindings/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79betfed7ets4an20cr4j57182y9wt-v1.1
++FROM bdqnghi/deepswe:anko-typed-variable-bindings
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/arcane-drift-detection-baselines/task.toml b/tasks/arcane-drift-detection-baselines/task.toml
+index 8c40eb8..7bf12c4 100644
+--- a/tasks/arcane-drift-detection-baselines/task.toml
++++ b/tasks/arcane-drift-detection-baselines/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70nj38qyatmsmj1d5zh57j25820vrx-v1.1"
++docker_image = "bdqnghi/deepswe:arcane-drift-detection-baselines"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/arcane-drift-detection-baselines/tests/Dockerfile b/tasks/arcane-drift-detection-baselines/tests/Dockerfile
+index b0e519e..476b882 100644
+--- a/tasks/arcane-drift-detection-baselines/tests/Dockerfile
++++ b/tasks/arcane-drift-detection-baselines/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70nj38qyatmsmj1d5zh57j25820vrx-v1.1
++FROM bdqnghi/deepswe:arcane-drift-detection-baselines
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/arktype-json-schema-refs-dependencies/task.toml b/tasks/arktype-json-schema-refs-dependencies/task.toml
+index f88715a..d04520f 100644
+--- a/tasks/arktype-json-schema-refs-dependencies/task.toml
++++ b/tasks/arktype-json-schema-refs-dependencies/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh771gpr8crkjsnt9pj81bafgs8229em-v1.1"
++docker_image = "bdqnghi/deepswe:arktype-json-schema-refs-dependencies"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/arktype-json-schema-refs-dependencies/tests/Dockerfile b/tasks/arktype-json-schema-refs-dependencies/tests/Dockerfile
+index b3f6826..0671ea3 100644
+--- a/tasks/arktype-json-schema-refs-dependencies/tests/Dockerfile
++++ b/tasks/arktype-json-schema-refs-dependencies/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh771gpr8crkjsnt9pj81bafgs8229em-v1.1
++FROM bdqnghi/deepswe:arktype-json-schema-refs-dependencies
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/awilix-async-container-initialization/task.toml b/tasks/awilix-async-container-initialization/task.toml
+index 6424a88..e2ab153 100644
+--- a/tasks/awilix-async-container-initialization/task.toml
++++ b/tasks/awilix-async-container-initialization/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70bg8gy4xks4eyh1s71ecmk9822p9c-v1.1"
++docker_image = "bdqnghi/deepswe:awilix-async-container-initialization"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/awilix-async-container-initialization/tests/Dockerfile b/tasks/awilix-async-container-initialization/tests/Dockerfile
+index 0107dd0..ac8723a 100644
+--- a/tasks/awilix-async-container-initialization/tests/Dockerfile
++++ b/tasks/awilix-async-container-initialization/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70bg8gy4xks4eyh1s71ecmk9822p9c-v1.1
++FROM bdqnghi/deepswe:awilix-async-container-initialization
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/bandit-incremental-cache-control/task.toml b/tasks/bandit-incremental-cache-control/task.toml
+index 30ec36a..0e9737b 100644
+--- a/tasks/bandit-incremental-cache-control/task.toml
++++ b/tasks/bandit-incremental-cache-control/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7drfg2vkvdvfh9xx0nfd5pz9821xr7-v1.1"
++docker_image = "bdqnghi/deepswe:bandit-incremental-cache-control"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/bandit-incremental-cache-control/tests/Dockerfile b/tasks/bandit-incremental-cache-control/tests/Dockerfile
+index ba9217a..9cd271d 100644
+--- a/tasks/bandit-incremental-cache-control/tests/Dockerfile
++++ b/tasks/bandit-incremental-cache-control/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7drfg2vkvdvfh9xx0nfd5pz9821xr7-v1.1
++FROM bdqnghi/deepswe:bandit-incremental-cache-control
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/bandit-interprocedural-taint-checks/task.toml b/tasks/bandit-interprocedural-taint-checks/task.toml
+index 511723c..fe71d92 100644
+--- a/tasks/bandit-interprocedural-taint-checks/task.toml
++++ b/tasks/bandit-interprocedural-taint-checks/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77yap0nc4zwm5bysc954xbr182tptg-v1.1"
++docker_image = "bdqnghi/deepswe:bandit-interprocedural-taint-checks"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/bandit-interprocedural-taint-checks/tests/Dockerfile b/tasks/bandit-interprocedural-taint-checks/tests/Dockerfile
+index 5e939f2..ac3bd4d 100644
+--- a/tasks/bandit-interprocedural-taint-checks/tests/Dockerfile
++++ b/tasks/bandit-interprocedural-taint-checks/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77yap0nc4zwm5bysc954xbr182tptg-v1.1
++FROM bdqnghi/deepswe:bandit-interprocedural-taint-checks
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/bandit-structured-nosec-directives/task.toml b/tasks/bandit-structured-nosec-directives/task.toml
+index be16e5f..0f7d00e 100644
+--- a/tasks/bandit-structured-nosec-directives/task.toml
++++ b/tasks/bandit-structured-nosec-directives/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh757d8ggvnfaszv8zcav3msy982ma7f-v1.1"
++docker_image = "bdqnghi/deepswe:bandit-structured-nosec-directives"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/bandit-structured-nosec-directives/tests/Dockerfile b/tasks/bandit-structured-nosec-directives/tests/Dockerfile
+index 37a3b55..4c26543 100644
+--- a/tasks/bandit-structured-nosec-directives/tests/Dockerfile
++++ b/tasks/bandit-structured-nosec-directives/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh757d8ggvnfaszv8zcav3msy982ma7f-v1.1
++FROM bdqnghi/deepswe:bandit-structured-nosec-directives
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/boa-hierarchical-evaluation-cancellation/environment/Dockerfile b/tasks/boa-hierarchical-evaluation-cancellation/environment/Dockerfile
+index c3e3fbe..e5f2687 100644
+--- a/tasks/boa-hierarchical-evaluation-cancellation/environment/Dockerfile
++++ b/tasks/boa-hierarchical-evaluation-cancellation/environment/Dockerfile
+@@ -26,7 +26,7 @@ RUN if [ -f /app/Cargo.toml ]; then cargo fetch --manifest-path /app/Cargo.toml;
+ # Reporter config lives OUTSIDE the repo (--config-file) so the model can't
+ # hijack it via .config/nextest.toml.
+ ARG NEXTEST_VERSION=0.9.97
+-RUN curl -LsSf "https://get.nexte.st/${NEXTEST_VERSION}/linux" | tar zxf - -C /usr/local/bin \
++RUN curl -LsSf "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-${NEXTEST_VERSION}/cargo-nextest-${NEXTEST_VERSION}-aarch64-unknown-linux-gnu.tar.gz" | tar zxf - -C /usr/local/bin \
+  && cargo nextest --version
+ 
+ RUN mkdir -p /opt/nextest \
+diff --git a/tasks/boa-hierarchical-evaluation-cancellation/task.toml b/tasks/boa-hierarchical-evaluation-cancellation/task.toml
+index fd18cda..8a07191 100644
+--- a/tasks/boa-hierarchical-evaluation-cancellation/task.toml
++++ b/tasks/boa-hierarchical-evaluation-cancellation/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71kat2v58yys3pnyybkgycax832vj2-v1.1"
++docker_image = "bdqnghi/deepswe:boa-hierarchical-evaluation-cancellation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/boa-hierarchical-evaluation-cancellation/tests/Dockerfile b/tasks/boa-hierarchical-evaluation-cancellation/tests/Dockerfile
+index 950dc09..9213725 100644
+--- a/tasks/boa-hierarchical-evaluation-cancellation/tests/Dockerfile
++++ b/tasks/boa-hierarchical-evaluation-cancellation/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71kat2v58yys3pnyybkgycax832vj2-v1.1
++FROM bdqnghi/deepswe:boa-hierarchical-evaluation-cancellation
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/cattrs-partial-structuring-recovery/task.toml b/tasks/cattrs-partial-structuring-recovery/task.toml
+index 0ba76b2..9b9580f 100644
+--- a/tasks/cattrs-partial-structuring-recovery/task.toml
++++ b/tasks/cattrs-partial-structuring-recovery/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7f7cahc5ddm1qzpxz13kpmrh8235pc-v1.1"
++docker_image = "bdqnghi/deepswe:cattrs-partial-structuring-recovery"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/cattrs-partial-structuring-recovery/tests/Dockerfile b/tasks/cattrs-partial-structuring-recovery/tests/Dockerfile
+index 21f0a4e..e7a8c98 100644
+--- a/tasks/cattrs-partial-structuring-recovery/tests/Dockerfile
++++ b/tasks/cattrs-partial-structuring-recovery/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7f7cahc5ddm1qzpxz13kpmrh8235pc-v1.1
++FROM bdqnghi/deepswe:cattrs-partial-structuring-recovery
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/clack-async-autocomplete-options/task.toml b/tasks/clack-async-autocomplete-options/task.toml
+index 156e7ef..be347a3 100644
+--- a/tasks/clack-async-autocomplete-options/task.toml
++++ b/tasks/clack-async-autocomplete-options/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh78c5dwwna57y757p2y5ktw79836dnv-v1.1"
++docker_image = "bdqnghi/deepswe:clack-async-autocomplete-options"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/clack-async-autocomplete-options/tests/Dockerfile b/tasks/clack-async-autocomplete-options/tests/Dockerfile
+index 3001b4e..ca1ebc4 100644
+--- a/tasks/clack-async-autocomplete-options/tests/Dockerfile
++++ b/tasks/clack-async-autocomplete-options/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh78c5dwwna57y757p2y5ktw79836dnv-v1.1
++FROM bdqnghi/deepswe:clack-async-autocomplete-options
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/claude-code-by-agents-recursive-delegation/task.toml b/tasks/claude-code-by-agents-recursive-delegation/task.toml
+index 152a069..bf66365 100644
+--- a/tasks/claude-code-by-agents-recursive-delegation/task.toml
++++ b/tasks/claude-code-by-agents-recursive-delegation/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh734ehfw2s3bztf7pzc9xf3x18212bs-v1.1"
++docker_image = "bdqnghi/deepswe:claude-code-by-agents-recursive-delegation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/claude-code-by-agents-recursive-delegation/tests/Dockerfile b/tasks/claude-code-by-agents-recursive-delegation/tests/Dockerfile
+index 704b96e..0d1fbc6 100644
+--- a/tasks/claude-code-by-agents-recursive-delegation/tests/Dockerfile
++++ b/tasks/claude-code-by-agents-recursive-delegation/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh734ehfw2s3bztf7pzc9xf3x18212bs-v1.1
++FROM bdqnghi/deepswe:claude-code-by-agents-recursive-delegation
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/cliffy-config-file-parsing/environment/Dockerfile b/tasks/cliffy-config-file-parsing/environment/Dockerfile
+index 4748efd..5334610 100644
+--- a/tasks/cliffy-config-file-parsing/environment/Dockerfile
++++ b/tasks/cliffy-config-file-parsing/environment/Dockerfile
+@@ -16,7 +16,7 @@ RUN git clone https://github.com/c4spar/cliffy . \
+  && git gc --prune=now \
+  && (git submodule update --init --recursive || true)
+ 
+-RUN curl -fsSL -o /tmp/deno.zip https://github.com/denoland/deno/releases/download/v2.0.0/deno-x86_64-unknown-linux-gnu.zip && \
++RUN curl -fsSL -o /tmp/deno.zip https://github.com/denoland/deno/releases/download/v2.0.0/deno-aarch64-unknown-linux-gnu.zip && \
+     unzip -o /tmp/deno.zip -d /usr/local/bin && \
+     chmod +x /usr/local/bin/deno && \
+     rm /tmp/deno.zip
+diff --git a/tasks/cliffy-config-file-parsing/task.toml b/tasks/cliffy-config-file-parsing/task.toml
+index 7c004ef..cb0aada 100644
+--- a/tasks/cliffy-config-file-parsing/task.toml
++++ b/tasks/cliffy-config-file-parsing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72088pg9vkc6peacnkc35yy9832jff-v1.1"
++docker_image = "bdqnghi/deepswe:cliffy-config-file-parsing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/cliffy-config-file-parsing/tests/Dockerfile b/tasks/cliffy-config-file-parsing/tests/Dockerfile
+index de7b0ca..455dc31 100644
+--- a/tasks/cliffy-config-file-parsing/tests/Dockerfile
++++ b/tasks/cliffy-config-file-parsing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72088pg9vkc6peacnkc35yy9832jff-v1.1
++FROM bdqnghi/deepswe:cliffy-config-file-parsing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/csstree-shorthand-expansion-compression/task.toml b/tasks/csstree-shorthand-expansion-compression/task.toml
+index 756e9fb..4917513 100644
+--- a/tasks/csstree-shorthand-expansion-compression/task.toml
++++ b/tasks/csstree-shorthand-expansion-compression/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72qraccnjwdet6ynagsccr4x82y65c-v1.1"
++docker_image = "bdqnghi/deepswe:csstree-shorthand-expansion-compression"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/csstree-shorthand-expansion-compression/tests/Dockerfile b/tasks/csstree-shorthand-expansion-compression/tests/Dockerfile
+index 8cafd15..0c4e4a6 100644
+--- a/tasks/csstree-shorthand-expansion-compression/tests/Dockerfile
++++ b/tasks/csstree-shorthand-expansion-compression/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72qraccnjwdet6ynagsccr4x82y65c-v1.1
++FROM bdqnghi/deepswe:csstree-shorthand-expansion-compression
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/dasel-html-document-format/task.toml b/tasks/dasel-html-document-format/task.toml
+index 424609a..aefa18b 100644
+--- a/tasks/dasel-html-document-format/task.toml
++++ b/tasks/dasel-html-document-format/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7c7rrg3zke74w7068nawak9x82t6am-v1.1"
++docker_image = "bdqnghi/deepswe:dasel-html-document-format"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/dasel-html-document-format/tests/Dockerfile b/tasks/dasel-html-document-format/tests/Dockerfile
+index 4a08132..d550ae5 100644
+--- a/tasks/dasel-html-document-format/tests/Dockerfile
++++ b/tasks/dasel-html-document-format/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7c7rrg3zke74w7068nawak9x82t6am-v1.1
++FROM bdqnghi/deepswe:dasel-html-document-format
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/dateutil-rfc5545-timezone-interop/environment/Dockerfile b/tasks/dateutil-rfc5545-timezone-interop/environment/Dockerfile
+index 65ca3df..001f8de 100644
+--- a/tasks/dateutil-rfc5545-timezone-interop/environment/Dockerfile
++++ b/tasks/dateutil-rfc5545-timezone-interop/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM public.ecr.aws/x8v8d7g8/mars-base:latest
++COPY constraints.txt /opt/deepswe-constraints.txt
++ENV PIP_CONSTRAINT=/opt/deepswe-constraints.txt UV_CONSTRAINT=/opt/deepswe-constraints.txt
+ 
+ WORKDIR /app
+ 
+diff --git a/tasks/dateutil-rfc5545-timezone-interop/environment/constraints.txt b/tasks/dateutil-rfc5545-timezone-interop/environment/constraints.txt
+new file mode 100644
+index 0000000..6b62c94
+--- /dev/null
++++ b/tasks/dateutil-rfc5545-timezone-interop/environment/constraints.txt
+@@ -0,0 +1,71 @@
++anyio==4.12.0
++anysqlite==0.0.5
++argcomplete==3.6.3
++attrs==26.1.0
++blinker==1.9.0
++build==1.3.0
++cachecontrol==0.14.4
++certifi==2025.11.12
++cffi==2.0.0
++charset_normalizer==3.4.4
++cleo==2.1.0
++click==8.3.1
++coverage==7.14.1
++crashtest==0.4.1
++cryptography==46.0.3
++dep_logic==0.5.2
++distlib==0.4.0
++dulwich==0.21.7
++fastjsonschema==2.21.2
++filelock==3.20.1
++findpython==0.7.1
++freezegun==1.5.5
++h11==0.16.0
++hishel==0.1.5
++httpcore==1.0.9
++httpx==0.28.1
++hypothesis==6.155.2
++id==1.5.0
++idna==3.11
++iniconfig==2.3.0
++installer==0.7.0
++jaraco.classes==3.4.0
++jeepney==0.9.0
++keyring==24.3.1
++markdown_it_py==4.0.0
++mdurl==0.1.2
++more_itertools==10.8.0
++msgpack==1.1.2
++pbs_installer==2025.12.17
++pdm==2.26.2
++pexpect==4.9.0
++pipx==1.8.0
++pkginfo==1.12.1.2
++platformdirs==4.5.1
++pluggy==1.6.0
++poetry==1.8.2
++poetry_plugin_export==1.8.0
++ptyprocess==0.7.0
++pycparser==2.23
++pygments==2.19.2
++pyproject_hooks==1.2.0
++pytest==9.0.3
++pytest_cov==7.1.0
++python_dotenv==1.2.1
++rapidfuzz==3.14.3
++requests==2.32.5
++requests_toolbelt==1.0.0
++resolvelib==1.2.1
++rich==14.2.0
++secretstorage==3.5.0
++shellingham==1.5.4
++six==1.17.0
++socksio==1.0.0
++sortedcontainers==2.4.0
++tomlkit==0.13.3
++truststore==0.10.4
++typing_extensions==4.15.0
++unearth==0.18.1
++urllib3==2.6.2
++userpath==1.9.2
++virtualenv==20.35.4
+diff --git a/tasks/dateutil-rfc5545-timezone-interop/task.toml b/tasks/dateutil-rfc5545-timezone-interop/task.toml
+index 8bd40d2..e990fe3 100644
+--- a/tasks/dateutil-rfc5545-timezone-interop/task.toml
++++ b/tasks/dateutil-rfc5545-timezone-interop/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7czqrrmrm1vnwfx1nhtjh9as833esn-v1.1"
++docker_image = "bdqnghi/deepswe:dateutil-rfc5545-timezone-interop"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/dateutil-rfc5545-timezone-interop/tests/Dockerfile b/tasks/dateutil-rfc5545-timezone-interop/tests/Dockerfile
+index a9ba73c..e20b57b 100644
+--- a/tasks/dateutil-rfc5545-timezone-interop/tests/Dockerfile
++++ b/tasks/dateutil-rfc5545-timezone-interop/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7czqrrmrm1vnwfx1nhtjh9as833esn-v1.1
++FROM bdqnghi/deepswe:dateutil-rfc5545-timezone-interop
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/drizzle-orm-window-function-builders/environment/Dockerfile b/tasks/drizzle-orm-window-function-builders/environment/Dockerfile
+index d935dba..b3e68ef 100644
+--- a/tasks/drizzle-orm-window-function-builders/environment/Dockerfile
++++ b/tasks/drizzle-orm-window-function-builders/environment/Dockerfile
+@@ -16,7 +16,10 @@ RUN git clone https://github.com/drizzle-team/drizzle-orm . \
+  && git gc --prune=now \
+  && (git submodule update --init --recursive || true)
+ 
+-RUN pnpm install --frozen-lockfile
++# arm64 rebuild: the lockfile pins drizzle-kit-0.25.0-b1faa33.tgz which npm has removed; seed pnpm's content-addressable
++# store from the official (pinned) image so that package resolves offline. Native modules still build for aarch64.
++ADD pnpm-store.tar /
++RUN pnpm install --frozen-lockfile --prefer-offline
+ 
+ # v1.1 node-id scoring (CTRF route): vitest's built-in JUnit reporter is used
+ # at verify time (`--reporter=junit --outputFile=...`) and the XML is converted
+diff --git a/tasks/drizzle-orm-window-function-builders/task.toml b/tasks/drizzle-orm-window-function-builders/task.toml
+index 6ac84fd..755fecf 100644
+--- a/tasks/drizzle-orm-window-function-builders/task.toml
++++ b/tasks/drizzle-orm-window-function-builders/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70cshdjenz3z5gq2wrqzhjmn82xbb0-v1.1"
++docker_image = "bdqnghi/deepswe:drizzle-orm-window-function-builders"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/drizzle-orm-window-function-builders/tests/Dockerfile b/tasks/drizzle-orm-window-function-builders/tests/Dockerfile
+index 4d60680..1e29e78 100644
+--- a/tasks/drizzle-orm-window-function-builders/tests/Dockerfile
++++ b/tasks/drizzle-orm-window-function-builders/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70cshdjenz3z5gq2wrqzhjmn82xbb0-v1.1
++FROM bdqnghi/deepswe:drizzle-orm-window-function-builders
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/dynamodb-toolbox-conditional-attribute-requirements/task.toml b/tasks/dynamodb-toolbox-conditional-attribute-requirements/task.toml
+index f78ee45..dd2863c 100644
+--- a/tasks/dynamodb-toolbox-conditional-attribute-requirements/task.toml
++++ b/tasks/dynamodb-toolbox-conditional-attribute-requirements/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79xyw12drtaz3reht4enc2hs83ef6v-v1.1"
++docker_image = "bdqnghi/deepswe:dynamodb-toolbox-conditional-attribute-requirements"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/dynamodb-toolbox-conditional-attribute-requirements/tests/Dockerfile b/tasks/dynamodb-toolbox-conditional-attribute-requirements/tests/Dockerfile
+index ad7983d..fdb7e38 100644
+--- a/tasks/dynamodb-toolbox-conditional-attribute-requirements/tests/Dockerfile
++++ b/tasks/dynamodb-toolbox-conditional-attribute-requirements/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79xyw12drtaz3reht4enc2hs83ef6v-v1.1
++FROM bdqnghi/deepswe:dynamodb-toolbox-conditional-attribute-requirements
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/dynamodb-toolbox-lazy-recursive-schemas/task.toml b/tasks/dynamodb-toolbox-lazy-recursive-schemas/task.toml
+index 745f0c3..c944008 100644
+--- a/tasks/dynamodb-toolbox-lazy-recursive-schemas/task.toml
++++ b/tasks/dynamodb-toolbox-lazy-recursive-schemas/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72mtcjbhgxmwq036jccx77dh83dj5n-v1.1"
++docker_image = "bdqnghi/deepswe:dynamodb-toolbox-lazy-recursive-schemas"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/dynamodb-toolbox-lazy-recursive-schemas/tests/Dockerfile b/tasks/dynamodb-toolbox-lazy-recursive-schemas/tests/Dockerfile
+index 1c96b99..9c3d3a3 100644
+--- a/tasks/dynamodb-toolbox-lazy-recursive-schemas/tests/Dockerfile
++++ b/tasks/dynamodb-toolbox-lazy-recursive-schemas/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72mtcjbhgxmwq036jccx77dh83dj5n-v1.1
++FROM bdqnghi/deepswe:dynamodb-toolbox-lazy-recursive-schemas
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/effect-sse-httpapi-streaming/task.toml b/tasks/effect-sse-httpapi-streaming/task.toml
+index 10f6277..e579890 100644
+--- a/tasks/effect-sse-httpapi-streaming/task.toml
++++ b/tasks/effect-sse-httpapi-streaming/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ajcjberhnnhk914qezwwt0x830v6v-v1.1"
++docker_image = "bdqnghi/deepswe:effect-sse-httpapi-streaming"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/effect-sse-httpapi-streaming/tests/Dockerfile b/tasks/effect-sse-httpapi-streaming/tests/Dockerfile
+index 3ce4047..2c89617 100644
+--- a/tasks/effect-sse-httpapi-streaming/tests/Dockerfile
++++ b/tasks/effect-sse-httpapi-streaming/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ajcjberhnnhk914qezwwt0x830v6v-v1.1
++FROM bdqnghi/deepswe:effect-sse-httpapi-streaming
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/eicrud-keyset-pagination-cursor/environment/Dockerfile b/tasks/eicrud-keyset-pagination-cursor/environment/Dockerfile
+index 49bd318..09164ed 100644
+--- a/tasks/eicrud-keyset-pagination-cursor/environment/Dockerfile
++++ b/tasks/eicrud-keyset-pagination-cursor/environment/Dockerfile
+@@ -16,13 +16,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ 
++# arm64 patch: MongoDB ships no Debian arm64 packages; use the Ubuntu jammy arm64 build (glibc-compatible with bookworm)
+ RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc \
+         | gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg \
+     && DISTRO_ID=$(. /etc/os-release && echo "$ID") \
+     && DISTRO_CODENAME=$(lsb_release -cs) \
+     && if [ "$DISTRO_ID" = "debian" ]; then COMPONENT="main"; else COMPONENT="multiverse"; fi \
+-    && echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] \
+-https://repo.mongodb.org/apt/${DISTRO_ID} ${DISTRO_CODENAME}/mongodb-org/7.0 ${COMPONENT}" \
++    && echo "deb [ arch=arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] \
++https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" \
+         > /etc/apt/sources.list.d/mongodb-org-7.0.list \
+     && apt-get update && apt-get install -y mongodb-org \
+     && rm -rf /var/lib/apt/lists/*
+@@ -99,4 +100,10 @@ RUN git checkout -- package.json package-lock.json \
+ # Broken hook environments otherwise block the agent's (and oracle's) commits.
+ RUN cd /app && git config core.hooksPath /dev/null
+ 
++# arm64/host patch: hosts whose Docker default soft nofile limit is 1024 make mongod drop connections
++# ("Too many open files") midway through the serial jest run; raise the soft limit to the hard limit at start.
++RUN mv /usr/bin/mongod /usr/bin/mongod.real \
++ && printf '#!/bin/sh\nulimit -n "$(ulimit -Hn)" 2>/dev/null\nexec /usr/bin/mongod.real "$@"\n' > /usr/bin/mongod \
++ && chmod +x /usr/bin/mongod
++
+ CMD ["/bin/bash"]
+diff --git a/tasks/eicrud-keyset-pagination-cursor/task.toml b/tasks/eicrud-keyset-pagination-cursor/task.toml
+index 30d304f..1e5e47a 100644
+--- a/tasks/eicrud-keyset-pagination-cursor/task.toml
++++ b/tasks/eicrud-keyset-pagination-cursor/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vgnwnp3wfz0b63ft8zbs81822re8-v1.1"
++docker_image = "bdqnghi/deepswe:eicrud-keyset-pagination-cursor"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/eicrud-keyset-pagination-cursor/tests/Dockerfile b/tasks/eicrud-keyset-pagination-cursor/tests/Dockerfile
+index ffa8e50..98e34d4 100644
+--- a/tasks/eicrud-keyset-pagination-cursor/tests/Dockerfile
++++ b/tasks/eicrud-keyset-pagination-cursor/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vgnwnp3wfz0b63ft8zbs81822re8-v1.1
++FROM bdqnghi/deepswe:eicrud-keyset-pagination-cursor
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/etree-xml-diff-patch/task.toml b/tasks/etree-xml-diff-patch/task.toml
+index 5b7e10e..57f859e 100644
+--- a/tasks/etree-xml-diff-patch/task.toml
++++ b/tasks/etree-xml-diff-patch/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7e0e2z02keqh6j7db6bcg1c9822140-v1.1"
++docker_image = "bdqnghi/deepswe:etree-xml-diff-patch"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/etree-xml-diff-patch/tests/Dockerfile b/tasks/etree-xml-diff-patch/tests/Dockerfile
+index d0f7099..8971c20 100644
+--- a/tasks/etree-xml-diff-patch/tests/Dockerfile
++++ b/tasks/etree-xml-diff-patch/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7e0e2z02keqh6j7db6bcg1c9822140-v1.1
++FROM bdqnghi/deepswe:etree-xml-diff-patch
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/expr-try-catch-errors/task.toml b/tasks/expr-try-catch-errors/task.toml
+index e75ae43..8c5fc15 100644
+--- a/tasks/expr-try-catch-errors/task.toml
++++ b/tasks/expr-try-catch-errors/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71gkadwafw4ry4r6g37era0182qpms-v1.1"
++docker_image = "bdqnghi/deepswe:expr-try-catch-errors"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/expr-try-catch-errors/tests/Dockerfile b/tasks/expr-try-catch-errors/tests/Dockerfile
+index b99ea01..a819047 100644
+--- a/tasks/expr-try-catch-errors/tests/Dockerfile
++++ b/tasks/expr-try-catch-errors/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71gkadwafw4ry4r6g37era0182qpms-v1.1
++FROM bdqnghi/deepswe:expr-try-catch-errors
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/fastapi-deprecation-response-headers/task.toml b/tasks/fastapi-deprecation-response-headers/task.toml
+index 7809ae3..5f9944d 100644
+--- a/tasks/fastapi-deprecation-response-headers/task.toml
++++ b/tasks/fastapi-deprecation-response-headers/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75azsnb5eqs3mf4xm0zkzha582rvcd-v1.1"
++docker_image = "bdqnghi/deepswe:fastapi-deprecation-response-headers"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/fastapi-deprecation-response-headers/tests/Dockerfile b/tasks/fastapi-deprecation-response-headers/tests/Dockerfile
+index 0dd6530..aa9e597 100644
+--- a/tasks/fastapi-deprecation-response-headers/tests/Dockerfile
++++ b/tasks/fastapi-deprecation-response-headers/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75azsnb5eqs3mf4xm0zkzha582rvcd-v1.1
++FROM bdqnghi/deepswe:fastapi-deprecation-response-headers
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/fastapi-implicit-head-options/task.toml b/tasks/fastapi-implicit-head-options/task.toml
+index bfa9d93..53cba26 100644
+--- a/tasks/fastapi-implicit-head-options/task.toml
++++ b/tasks/fastapi-implicit-head-options/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7191qb52n5pfwh0a4yhahmt18343sn-v1.1"
++docker_image = "bdqnghi/deepswe:fastapi-implicit-head-options"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/fastapi-implicit-head-options/tests/Dockerfile b/tasks/fastapi-implicit-head-options/tests/Dockerfile
+index 2592eee..c3d6d39 100644
+--- a/tasks/fastapi-implicit-head-options/tests/Dockerfile
++++ b/tasks/fastapi-implicit-head-options/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7191qb52n5pfwh0a4yhahmt18343sn-v1.1
++FROM bdqnghi/deepswe:fastapi-implicit-head-options
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/fd-deterministic-multi-key-sorting/environment/Dockerfile b/tasks/fd-deterministic-multi-key-sorting/environment/Dockerfile
+index 9345a35..6df9a2e 100644
+--- a/tasks/fd-deterministic-multi-key-sorting/environment/Dockerfile
++++ b/tasks/fd-deterministic-multi-key-sorting/environment/Dockerfile
+@@ -22,7 +22,7 @@ RUN cargo fetch --locked
+ # Reporter config lives OUTSIDE the repo (--config-file) so the model can't
+ # hijack it via .config/nextest.toml.
+ ARG NEXTEST_VERSION=0.9.97
+-RUN curl -LsSf "https://get.nexte.st/${NEXTEST_VERSION}/linux" | tar zxf - -C /usr/local/bin \
++RUN curl -LsSf "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-${NEXTEST_VERSION}/cargo-nextest-${NEXTEST_VERSION}-aarch64-unknown-linux-gnu.tar.gz" | tar zxf - -C /usr/local/bin \
+  && cargo nextest --version
+ RUN mkdir -p /opt/nextest \
+  && printf '[profile.junit]\nfail-fast = false\n\n[profile.junit.junit]\npath = "junit.xml"\n' > /opt/nextest/nextest.toml
+diff --git a/tasks/fd-deterministic-multi-key-sorting/task.toml b/tasks/fd-deterministic-multi-key-sorting/task.toml
+index fda4f3d..8fb43ba 100644
+--- a/tasks/fd-deterministic-multi-key-sorting/task.toml
++++ b/tasks/fd-deterministic-multi-key-sorting/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79s1ny2ab454f8caet44rv5n82za06-v1.1"
++docker_image = "bdqnghi/deepswe:fd-deterministic-multi-key-sorting"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/fd-deterministic-multi-key-sorting/tests/Dockerfile b/tasks/fd-deterministic-multi-key-sorting/tests/Dockerfile
+index 60161a5..8220bc9 100644
+--- a/tasks/fd-deterministic-multi-key-sorting/tests/Dockerfile
++++ b/tasks/fd-deterministic-multi-key-sorting/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79s1ny2ab454f8caet44rv5n82za06-v1.1
++FROM bdqnghi/deepswe:fd-deterministic-multi-key-sorting
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/geo-shapeindex-serialization/task.toml b/tasks/geo-shapeindex-serialization/task.toml
+index 6d7b5bd..68f7aa8 100644
+--- a/tasks/geo-shapeindex-serialization/task.toml
++++ b/tasks/geo-shapeindex-serialization/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74gd4v9cty7573mr6k7va39183ngrq-v1.1"
++docker_image = "bdqnghi/deepswe:geo-shapeindex-serialization"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/geo-shapeindex-serialization/tests/Dockerfile b/tasks/geo-shapeindex-serialization/tests/Dockerfile
+index eeb2784..e6224d4 100644
+--- a/tasks/geo-shapeindex-serialization/tests/Dockerfile
++++ b/tasks/geo-shapeindex-serialization/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74gd4v9cty7573mr6k7va39183ngrq-v1.1
++FROM bdqnghi/deepswe:geo-shapeindex-serialization
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/go-critic-doc-link-checker/task.toml b/tasks/go-critic-doc-link-checker/task.toml
+index 37c65e3..ee8e38c 100644
+--- a/tasks/go-critic-doc-link-checker/task.toml
++++ b/tasks/go-critic-doc-link-checker/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh727w7pxd9cv476t3cxptxcg182e1e5-v1.1"
++docker_image = "bdqnghi/deepswe:go-critic-doc-link-checker"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/go-critic-doc-link-checker/tests/Dockerfile b/tasks/go-critic-doc-link-checker/tests/Dockerfile
+index 0117583..42599c1 100644
+--- a/tasks/go-critic-doc-link-checker/tests/Dockerfile
++++ b/tasks/go-critic-doc-link-checker/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh727w7pxd9cv476t3cxptxcg182e1e5-v1.1
++FROM bdqnghi/deepswe:go-critic-doc-link-checker
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/go-genai-streamed-function-args/task.toml b/tasks/go-genai-streamed-function-args/task.toml
+index 3d59186..1dfc2bd 100644
+--- a/tasks/go-genai-streamed-function-args/task.toml
++++ b/tasks/go-genai-streamed-function-args/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ahy57bb3jmdjzmbvq257swh8353nm-v1.1"
++docker_image = "bdqnghi/deepswe:go-genai-streamed-function-args"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/go-genai-streamed-function-args/tests/Dockerfile b/tasks/go-genai-streamed-function-args/tests/Dockerfile
+index d99df9d..e40e3a7 100644
+--- a/tasks/go-genai-streamed-function-args/tests/Dockerfile
++++ b/tasks/go-genai-streamed-function-args/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ahy57bb3jmdjzmbvq257swh8353nm-v1.1
++FROM bdqnghi/deepswe:go-genai-streamed-function-args
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/go-git-worktree-merge-conflicts/task.toml b/tasks/go-git-worktree-merge-conflicts/task.toml
+index 596ef5b..3866368 100644
+--- a/tasks/go-git-worktree-merge-conflicts/task.toml
++++ b/tasks/go-git-worktree-merge-conflicts/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7bnb92eb32zvxx50fzjnshes822db0-v1.1"
++docker_image = "bdqnghi/deepswe:go-git-worktree-merge-conflicts"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/go-git-worktree-merge-conflicts/tests/Dockerfile b/tasks/go-git-worktree-merge-conflicts/tests/Dockerfile
+index 8f2f5b1..b6b2458 100644
+--- a/tasks/go-git-worktree-merge-conflicts/tests/Dockerfile
++++ b/tasks/go-git-worktree-merge-conflicts/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7bnb92eb32zvxx50fzjnshes822db0-v1.1
++FROM bdqnghi/deepswe:go-git-worktree-merge-conflicts
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/goreleaser-retry-publish-auditing/task.toml b/tasks/goreleaser-retry-publish-auditing/task.toml
+index f3b99c6..7bba8fc 100644
+--- a/tasks/goreleaser-retry-publish-auditing/task.toml
++++ b/tasks/goreleaser-retry-publish-auditing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7cc4hqw7wb87h3kwwnkq0pv1830gjz-v1.1"
++docker_image = "bdqnghi/deepswe:goreleaser-retry-publish-auditing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/goreleaser-retry-publish-auditing/tests/Dockerfile b/tasks/goreleaser-retry-publish-auditing/tests/Dockerfile
+index 7eed759..7351488 100644
+--- a/tasks/goreleaser-retry-publish-auditing/tests/Dockerfile
++++ b/tasks/goreleaser-retry-publish-auditing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7cc4hqw7wb87h3kwwnkq0pv1830gjz-v1.1
++FROM bdqnghi/deepswe:goreleaser-retry-publish-auditing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/gql-incremental-graphql-delivery/task.toml b/tasks/gql-incremental-graphql-delivery/task.toml
+index e1503af..f8636f9 100644
+--- a/tasks/gql-incremental-graphql-delivery/task.toml
++++ b/tasks/gql-incremental-graphql-delivery/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vjbp8dv1pyk7t09zdb9xx9821628-v1.1"
++docker_image = "bdqnghi/deepswe:gql-incremental-graphql-delivery"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/gql-incremental-graphql-delivery/tests/Dockerfile b/tasks/gql-incremental-graphql-delivery/tests/Dockerfile
+index b010539..6145d5f 100644
+--- a/tasks/gql-incremental-graphql-delivery/tests/Dockerfile
++++ b/tasks/gql-incremental-graphql-delivery/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vjbp8dv1pyk7t09zdb9xx9821628-v1.1
++FROM bdqnghi/deepswe:gql-incremental-graphql-delivery
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/happy-dom-abort-pending-body-reads/task.toml b/tasks/happy-dom-abort-pending-body-reads/task.toml
+index 429c2f2..19febc2 100644
+--- a/tasks/happy-dom-abort-pending-body-reads/task.toml
++++ b/tasks/happy-dom-abort-pending-body-reads/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7c2re7cvbseq7xz6samd1xr182y1dc-v1.1"
++docker_image = "bdqnghi/deepswe:happy-dom-abort-pending-body-reads"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/happy-dom-abort-pending-body-reads/tests/Dockerfile b/tasks/happy-dom-abort-pending-body-reads/tests/Dockerfile
+index 8dde6c2..b8785ec 100644
+--- a/tasks/happy-dom-abort-pending-body-reads/tests/Dockerfile
++++ b/tasks/happy-dom-abort-pending-body-reads/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7c2re7cvbseq7xz6samd1xr182y1dc-v1.1
++FROM bdqnghi/deepswe:happy-dom-abort-pending-body-reads
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/happy-dom-deterministic-intersectionobserver/task.toml b/tasks/happy-dom-deterministic-intersectionobserver/task.toml
+index c3c0d67..3824270 100644
+--- a/tasks/happy-dom-deterministic-intersectionobserver/task.toml
++++ b/tasks/happy-dom-deterministic-intersectionobserver/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75ggdejhnymjbhkbtkxvhz758352br-v1.1"
++docker_image = "bdqnghi/deepswe:happy-dom-deterministic-intersectionobserver"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/happy-dom-deterministic-intersectionobserver/tests/Dockerfile b/tasks/happy-dom-deterministic-intersectionobserver/tests/Dockerfile
+index aeadd41..b3aeb18 100644
+--- a/tasks/happy-dom-deterministic-intersectionobserver/tests/Dockerfile
++++ b/tasks/happy-dom-deterministic-intersectionobserver/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75ggdejhnymjbhkbtkxvhz758352br-v1.1
++FROM bdqnghi/deepswe:happy-dom-deterministic-intersectionobserver
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/helm-array-merge-strategies/task.toml b/tasks/helm-array-merge-strategies/task.toml
+index 673ded7..f2e9e9a 100644
+--- a/tasks/helm-array-merge-strategies/task.toml
++++ b/tasks/helm-array-merge-strategies/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72a3qcr0kjpdr153havavn8s83bx8t-v1.1"
++docker_image = "bdqnghi/deepswe:helm-array-merge-strategies"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/helm-array-merge-strategies/tests/Dockerfile b/tasks/helm-array-merge-strategies/tests/Dockerfile
+index b9eb13d..87770e8 100644
+--- a/tasks/helm-array-merge-strategies/tests/Dockerfile
++++ b/tasks/helm-array-merge-strategies/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72a3qcr0kjpdr153havavn8s83bx8t-v1.1
++FROM bdqnghi/deepswe:helm-array-merge-strategies
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/helm-unified-manifest-stream/task.toml b/tasks/helm-unified-manifest-stream/task.toml
+index f301f89..5c629ca 100644
+--- a/tasks/helm-unified-manifest-stream/task.toml
++++ b/tasks/helm-unified-manifest-stream/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1"
++docker_image = "bdqnghi/deepswe:helm-unified-manifest-stream"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/helm-unified-manifest-stream/tests/Dockerfile b/tasks/helm-unified-manifest-stream/tests/Dockerfile
+index 4b5fec4..3ca5b8d 100644
+--- a/tasks/helm-unified-manifest-stream/tests/Dockerfile
++++ b/tasks/helm-unified-manifest-stream/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dvkse99x41x83c5z6f2eq7n82w8fm-v1.1
++FROM bdqnghi/deepswe:helm-unified-manifest-stream
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/httpx-deterministic-cookie-store/task.toml b/tasks/httpx-deterministic-cookie-store/task.toml
+index a043018..dc3d344 100644
+--- a/tasks/httpx-deterministic-cookie-store/task.toml
++++ b/tasks/httpx-deterministic-cookie-store/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ccr1w93zymhy42k5hs2m9w1831xpx-v1.1"
++docker_image = "bdqnghi/deepswe:httpx-deterministic-cookie-store"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/httpx-deterministic-cookie-store/tests/Dockerfile b/tasks/httpx-deterministic-cookie-store/tests/Dockerfile
+index c6facdc..93489aa 100644
+--- a/tasks/httpx-deterministic-cookie-store/tests/Dockerfile
++++ b/tasks/httpx-deterministic-cookie-store/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ccr1w93zymhy42k5hs2m9w1831xpx-v1.1
++FROM bdqnghi/deepswe:httpx-deterministic-cookie-store
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/httpx-multipart-response-parsing/task.toml b/tasks/httpx-multipart-response-parsing/task.toml
+index f0ce2a4..c829936 100644
+--- a/tasks/httpx-multipart-response-parsing/task.toml
++++ b/tasks/httpx-multipart-response-parsing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fr6f1yw1289ye5ttsfvaqen8319dq-v1.1"
++docker_image = "bdqnghi/deepswe:httpx-multipart-response-parsing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/httpx-multipart-response-parsing/tests/Dockerfile b/tasks/httpx-multipart-response-parsing/tests/Dockerfile
+index 957f800..be615df 100644
+--- a/tasks/httpx-multipart-response-parsing/tests/Dockerfile
++++ b/tasks/httpx-multipart-response-parsing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fr6f1yw1289ye5ttsfvaqen8319dq-v1.1
++FROM bdqnghi/deepswe:httpx-multipart-response-parsing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/httpx-streaming-json-iteration/task.toml b/tasks/httpx-streaming-json-iteration/task.toml
+index 3ea1a21..a547c92 100644
+--- a/tasks/httpx-streaming-json-iteration/task.toml
++++ b/tasks/httpx-streaming-json-iteration/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73snc7v9x3psk69rg4eqvjgs836v5a-v1.1"
++docker_image = "bdqnghi/deepswe:httpx-streaming-json-iteration"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/httpx-streaming-json-iteration/tests/Dockerfile b/tasks/httpx-streaming-json-iteration/tests/Dockerfile
+index d2828c2..5650616 100644
+--- a/tasks/httpx-streaming-json-iteration/tests/Dockerfile
++++ b/tasks/httpx-streaming-json-iteration/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73snc7v9x3psk69rg4eqvjgs836v5a-v1.1
++FROM bdqnghi/deepswe:httpx-streaming-json-iteration
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/igel-persist-feature-schema/task.toml b/tasks/igel-persist-feature-schema/task.toml
+index d961a77..aef467c 100644
+--- a/tasks/igel-persist-feature-schema/task.toml
++++ b/tasks/igel-persist-feature-schema/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7brwh7cv23ggeshkz85ac5fx831x5k-v1.1"
++docker_image = "bdqnghi/deepswe:igel-persist-feature-schema"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/igel-persist-feature-schema/tests/Dockerfile b/tasks/igel-persist-feature-schema/tests/Dockerfile
+index f65e472..a7e44f0 100644
+--- a/tasks/igel-persist-feature-schema/tests/Dockerfile
++++ b/tasks/igel-persist-feature-schema/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7brwh7cv23ggeshkz85ac5fx831x5k-v1.1
++FROM bdqnghi/deepswe:igel-persist-feature-schema
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/ink-grid-box-layout/task.toml b/tasks/ink-grid-box-layout/task.toml
+index de12918..2423e5c 100644
+--- a/tasks/ink-grid-box-layout/task.toml
++++ b/tasks/ink-grid-box-layout/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75wxkjyha9441e7m9tpetb2582mn63-v1.1"
++docker_image = "bdqnghi/deepswe:ink-grid-box-layout"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/ink-grid-box-layout/tests/Dockerfile b/tasks/ink-grid-box-layout/tests/Dockerfile
+index 1f45460..137b4a8 100644
+--- a/tasks/ink-grid-box-layout/tests/Dockerfile
++++ b/tasks/ink-grid-box-layout/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75wxkjyha9441e7m9tpetb2582mn63-v1.1
++FROM bdqnghi/deepswe:ink-grid-box-layout
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/ipython-session-bundle-replay/task.toml b/tasks/ipython-session-bundle-replay/task.toml
+index 6c5c997..80711c3 100644
+--- a/tasks/ipython-session-bundle-replay/task.toml
++++ b/tasks/ipython-session-bundle-replay/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75kn07w0t92m4xxd3dy0cgp982jz6m-v1.1"
++docker_image = "bdqnghi/deepswe:ipython-session-bundle-replay"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/ipython-session-bundle-replay/tests/Dockerfile b/tasks/ipython-session-bundle-replay/tests/Dockerfile
+index add501d..45b04e9 100644
+--- a/tasks/ipython-session-bundle-replay/tests/Dockerfile
++++ b/tasks/ipython-session-bundle-replay/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh75kn07w0t92m4xxd3dy0cgp982jz6m-v1.1
++FROM bdqnghi/deepswe:ipython-session-bundle-replay
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/katex-multicolumn-array-spans/task.toml b/tasks/katex-multicolumn-array-spans/task.toml
+index d61c05f..6748615 100644
+--- a/tasks/katex-multicolumn-array-spans/task.toml
++++ b/tasks/katex-multicolumn-array-spans/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fkjmy67qny9z98mt6bj52m182ygdy-v1.1"
++docker_image = "bdqnghi/deepswe:katex-multicolumn-array-spans"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/katex-multicolumn-array-spans/tests/Dockerfile b/tasks/katex-multicolumn-array-spans/tests/Dockerfile
+index ead6640..3957115 100644
+--- a/tasks/katex-multicolumn-array-spans/tests/Dockerfile
++++ b/tasks/katex-multicolumn-array-spans/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fkjmy67qny9z98mt6bj52m182ygdy-v1.1
++FROM bdqnghi/deepswe:katex-multicolumn-array-spans
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kcp-go-multiplexed-kcp-streams/task.toml b/tasks/kcp-go-multiplexed-kcp-streams/task.toml
+index b4fd5e6..781e458 100644
+--- a/tasks/kcp-go-multiplexed-kcp-streams/task.toml
++++ b/tasks/kcp-go-multiplexed-kcp-streams/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72w47mwm321wh9xj47vskc8d822e9t-v1.1"
++docker_image = "bdqnghi/deepswe:kcp-go-multiplexed-kcp-streams"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kcp-go-multiplexed-kcp-streams/tests/Dockerfile b/tasks/kcp-go-multiplexed-kcp-streams/tests/Dockerfile
+index 35923f7..3344834 100644
+--- a/tasks/kcp-go-multiplexed-kcp-streams/tests/Dockerfile
++++ b/tasks/kcp-go-multiplexed-kcp-streams/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72w47mwm321wh9xj47vskc8d822e9t-v1.1
++FROM bdqnghi/deepswe:kcp-go-multiplexed-kcp-streams
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kea-atomic-signal-selectors/task.toml b/tasks/kea-atomic-signal-selectors/task.toml
+index c277075..86770f1 100644
+--- a/tasks/kea-atomic-signal-selectors/task.toml
++++ b/tasks/kea-atomic-signal-selectors/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7anwezzyc0zgk160c9peh13n82r12z-v1.1"
++docker_image = "bdqnghi/deepswe:kea-atomic-signal-selectors"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kea-atomic-signal-selectors/tests/Dockerfile b/tasks/kea-atomic-signal-selectors/tests/Dockerfile
+index 5eda155..913e6cf 100644
+--- a/tasks/kea-atomic-signal-selectors/tests/Dockerfile
++++ b/tasks/kea-atomic-signal-selectors/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7anwezzyc0zgk160c9peh13n82r12z-v1.1
++FROM bdqnghi/deepswe:kea-atomic-signal-selectors
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kgateway-consistent-hash-policy/task.toml b/tasks/kgateway-consistent-hash-policy/task.toml
+index 4a2deed..5957d53 100644
+--- a/tasks/kgateway-consistent-hash-policy/task.toml
++++ b/tasks/kgateway-consistent-hash-policy/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74gnp94dw8fx3h047h4m4ht9830bat-v1.1"
++docker_image = "bdqnghi/deepswe:kgateway-consistent-hash-policy"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kgateway-consistent-hash-policy/tests/Dockerfile b/tasks/kgateway-consistent-hash-policy/tests/Dockerfile
+index 49df949..6d3ae4a 100644
+--- a/tasks/kgateway-consistent-hash-policy/tests/Dockerfile
++++ b/tasks/kgateway-consistent-hash-policy/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74gnp94dw8fx3h047h4m4ht9830bat-v1.1
++FROM bdqnghi/deepswe:kgateway-consistent-hash-policy
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kombu-single-active-consumer-priority/task.toml b/tasks/kombu-single-active-consumer-priority/task.toml
+index e0cafa0..4758655 100644
+--- a/tasks/kombu-single-active-consumer-priority/task.toml
++++ b/tasks/kombu-single-active-consumer-priority/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71vrtr4b1jj5vavv6aybnvjd83pcar-v1.1"
++docker_image = "bdqnghi/deepswe:kombu-single-active-consumer-priority"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kombu-single-active-consumer-priority/tests/Dockerfile b/tasks/kombu-single-active-consumer-priority/tests/Dockerfile
+index 2f088a3..a2a0220 100644
+--- a/tasks/kombu-single-active-consumer-priority/tests/Dockerfile
++++ b/tasks/kombu-single-active-consumer-priority/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71vrtr4b1jj5vavv6aybnvjd83pcar-v1.1
++FROM bdqnghi/deepswe:kombu-single-active-consumer-priority
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kombu-virtual-queue-dead-lettering/task.toml b/tasks/kombu-virtual-queue-dead-lettering/task.toml
+index ba3a330..7d1cfe9 100644
+--- a/tasks/kombu-virtual-queue-dead-lettering/task.toml
++++ b/tasks/kombu-virtual-queue-dead-lettering/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72pgvncj82fnbfq2bvmy1qs183jdc5-v1.1"
++docker_image = "bdqnghi/deepswe:kombu-virtual-queue-dead-lettering"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kombu-virtual-queue-dead-lettering/tests/Dockerfile b/tasks/kombu-virtual-queue-dead-lettering/tests/Dockerfile
+index 8d8ad74..1da279d 100644
+--- a/tasks/kombu-virtual-queue-dead-lettering/tests/Dockerfile
++++ b/tasks/kombu-virtual-queue-dead-lettering/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72pgvncj82fnbfq2bvmy1qs183jdc5-v1.1
++FROM bdqnghi/deepswe:kombu-virtual-queue-dead-lettering
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/koota-composite-trait-aspects/task.toml b/tasks/koota-composite-trait-aspects/task.toml
+index f414c6a..f41a285 100644
+--- a/tasks/koota-composite-trait-aspects/task.toml
++++ b/tasks/koota-composite-trait-aspects/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh705e1hgmtj22pyetcmqa8ygs83bh33-v1.1"
++docker_image = "bdqnghi/deepswe:koota-composite-trait-aspects"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/koota-composite-trait-aspects/tests/Dockerfile b/tasks/koota-composite-trait-aspects/tests/Dockerfile
+index ee9ca8a..46b6aa9 100644
+--- a/tasks/koota-composite-trait-aspects/tests/Dockerfile
++++ b/tasks/koota-composite-trait-aspects/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh705e1hgmtj22pyetcmqa8ygs83bh33-v1.1
++FROM bdqnghi/deepswe:koota-composite-trait-aspects
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/koota-deferred-mutation-buffer/task.toml b/tasks/koota-deferred-mutation-buffer/task.toml
+index f539db8..980b10f 100644
+--- a/tasks/koota-deferred-mutation-buffer/task.toml
++++ b/tasks/koota-deferred-mutation-buffer/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7evrvtwkk64hraqvefgx9ndd821j43-v1.1"
++docker_image = "bdqnghi/deepswe:koota-deferred-mutation-buffer"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/koota-deferred-mutation-buffer/tests/Dockerfile b/tasks/koota-deferred-mutation-buffer/tests/Dockerfile
+index 485ee9e..f46cfae 100644
+--- a/tasks/koota-deferred-mutation-buffer/tests/Dockerfile
++++ b/tasks/koota-deferred-mutation-buffer/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7evrvtwkk64hraqvefgx9ndd821j43-v1.1
++FROM bdqnghi/deepswe:koota-deferred-mutation-buffer
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/koota-entity-snapshot-rollback/task.toml b/tasks/koota-entity-snapshot-rollback/task.toml
+index e290a79..274c7da 100644
+--- a/tasks/koota-entity-snapshot-rollback/task.toml
++++ b/tasks/koota-entity-snapshot-rollback/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71b98xenay7p45357036xq5x82tcdf-v1.1"
++docker_image = "bdqnghi/deepswe:koota-entity-snapshot-rollback"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/koota-entity-snapshot-rollback/tests/Dockerfile b/tasks/koota-entity-snapshot-rollback/tests/Dockerfile
+index c60eda0..d9f9911 100644
+--- a/tasks/koota-entity-snapshot-rollback/tests/Dockerfile
++++ b/tasks/koota-entity-snapshot-rollback/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71b98xenay7p45357036xq5x82tcdf-v1.1
++FROM bdqnghi/deepswe:koota-entity-snapshot-rollback
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/koota-pair-relation-tracking/task.toml b/tasks/koota-pair-relation-tracking/task.toml
+index cd37128..964d951 100644
+--- a/tasks/koota-pair-relation-tracking/task.toml
++++ b/tasks/koota-pair-relation-tracking/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7cshjqfe84fmtb2ye37nrd6h82dds6-v1.1"
++docker_image = "bdqnghi/deepswe:koota-pair-relation-tracking"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/koota-pair-relation-tracking/tests/Dockerfile b/tasks/koota-pair-relation-tracking/tests/Dockerfile
+index 891fb7c..f7feba6 100644
+--- a/tasks/koota-pair-relation-tracking/tests/Dockerfile
++++ b/tasks/koota-pair-relation-tracking/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7cshjqfe84fmtb2ye37nrd6h82dds6-v1.1
++FROM bdqnghi/deepswe:koota-pair-relation-tracking
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/koota-query-predicates/task.toml b/tasks/koota-query-predicates/task.toml
+index 69e3255..740de5f 100644
+--- a/tasks/koota-query-predicates/task.toml
++++ b/tasks/koota-query-predicates/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dkes3xb054yt1fd3g6nym5s83bz2h-v1.1"
++docker_image = "bdqnghi/deepswe:koota-query-predicates"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/koota-query-predicates/tests/Dockerfile b/tasks/koota-query-predicates/tests/Dockerfile
+index 50484bc..84607c9 100644
+--- a/tasks/koota-query-predicates/tests/Dockerfile
++++ b/tasks/koota-query-predicates/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dkes3xb054yt1fd3g6nym5s83bz2h-v1.1
++FROM bdqnghi/deepswe:koota-query-predicates
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/kysely-window-grouping-helpers/task.toml b/tasks/kysely-window-grouping-helpers/task.toml
+index b9277ed..1cf3ead 100644
+--- a/tasks/kysely-window-grouping-helpers/task.toml
++++ b/tasks/kysely-window-grouping-helpers/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh799f394epg9pb2j9fhzky98183e8ec-v1.1"
++docker_image = "bdqnghi/deepswe:kysely-window-grouping-helpers"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/kysely-window-grouping-helpers/tests/Dockerfile b/tasks/kysely-window-grouping-helpers/tests/Dockerfile
+index 291f89e..4223bc9 100644
+--- a/tasks/kysely-window-grouping-helpers/tests/Dockerfile
++++ b/tasks/kysely-window-grouping-helpers/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh799f394epg9pb2j9fhzky98183e8ec-v1.1
++FROM bdqnghi/deepswe:kysely-window-grouping-helpers
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/langchain-request-coalescing/task.toml b/tasks/langchain-request-coalescing/task.toml
+index a30b2db..64240de 100644
+--- a/tasks/langchain-request-coalescing/task.toml
++++ b/tasks/langchain-request-coalescing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71y4gxtry9p0m42wvg4th515831mwz-v1.1"
++docker_image = "bdqnghi/deepswe:langchain-request-coalescing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/langchain-request-coalescing/tests/Dockerfile b/tasks/langchain-request-coalescing/tests/Dockerfile
+index 03b68b9..9f27299 100644
+--- a/tasks/langchain-request-coalescing/tests/Dockerfile
++++ b/tasks/langchain-request-coalescing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71y4gxtry9p0m42wvg4th515831mwz-v1.1
++FROM bdqnghi/deepswe:langchain-request-coalescing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/mashumaro-flattened-dataclass-fields/task.toml b/tasks/mashumaro-flattened-dataclass-fields/task.toml
+index f62fef4..8b15489 100644
+--- a/tasks/mashumaro-flattened-dataclass-fields/task.toml
++++ b/tasks/mashumaro-flattened-dataclass-fields/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70k6aj3y457hgtraar0rmgdn822qx8-v1.1"
++docker_image = "bdqnghi/deepswe:mashumaro-flattened-dataclass-fields"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/mashumaro-flattened-dataclass-fields/tests/Dockerfile b/tasks/mashumaro-flattened-dataclass-fields/tests/Dockerfile
+index fbda5c2..2e0fa22 100644
+--- a/tasks/mashumaro-flattened-dataclass-fields/tests/Dockerfile
++++ b/tasks/mashumaro-flattened-dataclass-fields/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70k6aj3y457hgtraar0rmgdn822qx8-v1.1
++FROM bdqnghi/deepswe:mashumaro-flattened-dataclass-fields
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/meriyah-explicit-resource-declarations/task.toml b/tasks/meriyah-explicit-resource-declarations/task.toml
+index 2da96fc..0985548 100644
+--- a/tasks/meriyah-explicit-resource-declarations/task.toml
++++ b/tasks/meriyah-explicit-resource-declarations/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7398skqnxqwg9hbmdj7ncmk1822aa0-v1.1"
++docker_image = "bdqnghi/deepswe:meriyah-explicit-resource-declarations"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/meriyah-explicit-resource-declarations/tests/Dockerfile b/tasks/meriyah-explicit-resource-declarations/tests/Dockerfile
+index 6ca2bdc..d66f5c0 100644
+--- a/tasks/meriyah-explicit-resource-declarations/tests/Dockerfile
++++ b/tasks/meriyah-explicit-resource-declarations/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7398skqnxqwg9hbmdj7ncmk1822aa0-v1.1
++FROM bdqnghi/deepswe:meriyah-explicit-resource-declarations
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/mnamer-daemon-watch-lifecycle/task.toml b/tasks/mnamer-daemon-watch-lifecycle/task.toml
+index e71163f..2cec571 100644
+--- a/tasks/mnamer-daemon-watch-lifecycle/task.toml
++++ b/tasks/mnamer-daemon-watch-lifecycle/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1"
++docker_image = "bdqnghi/deepswe:mnamer-daemon-watch-lifecycle"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/mnamer-daemon-watch-lifecycle/tests/Dockerfile b/tasks/mnamer-daemon-watch-lifecycle/tests/Dockerfile
+index f5c718f..be2668a 100644
+--- a/tasks/mnamer-daemon-watch-lifecycle/tests/Dockerfile
++++ b/tasks/mnamer-daemon-watch-lifecycle/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71jf6d7mtqaw5z1h69krrarx820dys-v1.1
++FROM bdqnghi/deepswe:mnamer-daemon-watch-lifecycle
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/mobly-grouped-test-barriers/task.toml b/tasks/mobly-grouped-test-barriers/task.toml
+index 66935fe..9b30dd9 100644
+--- a/tasks/mobly-grouped-test-barriers/task.toml
++++ b/tasks/mobly-grouped-test-barriers/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74b2m0tjfn59vq8btqrj774s821570-v1.1"
++docker_image = "bdqnghi/deepswe:mobly-grouped-test-barriers"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/mobly-grouped-test-barriers/tests/Dockerfile b/tasks/mobly-grouped-test-barriers/tests/Dockerfile
+index 77682ed..78751ba 100644
+--- a/tasks/mobly-grouped-test-barriers/tests/Dockerfile
++++ b/tasks/mobly-grouped-test-barriers/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74b2m0tjfn59vq8btqrj774s821570-v1.1
++FROM bdqnghi/deepswe:mobly-grouped-test-barriers
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/narwhals-rolling-window-suite/environment/Dockerfile b/tasks/narwhals-rolling-window-suite/environment/Dockerfile
+index d151129..836dec4 100644
+--- a/tasks/narwhals-rolling-window-suite/environment/Dockerfile
++++ b/tasks/narwhals-rolling-window-suite/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM public.ecr.aws/x8v8d7g8/mars-base:latest
++COPY constraints.txt /opt/deepswe-constraints.txt
++ENV PIP_CONSTRAINT=/opt/deepswe-constraints.txt UV_CONSTRAINT=/opt/deepswe-constraints.txt
+ WORKDIR /app
+ 
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+diff --git a/tasks/narwhals-rolling-window-suite/environment/constraints.txt b/tasks/narwhals-rolling-window-suite/environment/constraints.txt
+new file mode 100644
+index 0000000..870f591
+--- /dev/null
++++ b/tasks/narwhals-rolling-window-suite/environment/constraints.txt
+@@ -0,0 +1,87 @@
++anyio==4.12.0
++anysqlite==0.0.5
++argcomplete==3.6.3
++blinker==1.9.0
++build==1.3.0
++cachecontrol==0.14.4
++certifi==2025.11.12
++cffi==2.0.0
++charset_normalizer==3.4.4
++cleo==2.1.0
++click==8.3.1
++covdefaults==2.3.0
++coverage==7.14.1
++crashtest==0.4.1
++cryptography==46.0.3
++dep_logic==0.5.2
++distlib==0.4.0
++duckdb==1.5.3
++dulwich==0.21.7
++execnet==2.1.2
++fastjsonschema==2.21.2
++filelock==3.20.1
++findpython==0.7.1
++h11==0.16.0
++hishel==0.1.5
++httpcore==1.0.9
++httpx==0.28.1
++hypothesis==6.155.2
++id==1.5.0
++idna==3.11
++iniconfig==2.3.0
++installer==0.7.0
++jaraco.classes==3.4.0
++jeepney==0.9.0
++keyring==24.3.1
++markdown_it_py==4.0.0
++mdurl==0.1.2
++more_itertools==10.8.0
++msgpack==1.1.2
++numpy==2.4.6
++pandas==3.0.3
++pbs_installer==2025.12.17
++pdm==2.26.2
++pexpect==4.9.0
++pipx==1.8.0
++pkginfo==1.12.1.2
++platformdirs==4.5.1
++pluggy==1.6.0
++poetry==1.8.2
++poetry_plugin_export==1.8.0
++polars==1.39.3
++polars_runtime_32==1.39.3
++prettytable==3.17.0
++ptyprocess==0.7.0
++pyarrow==24.0.0
++pycparser==2.23
++pygments==2.19.2
++pyproject_hooks==1.2.0
++pytest==8.4.2
++pytest_cov==6.3.0
++pytest_env==1.2.0
++pytest_randomly==4.1.0
++pytest_timeout==2.4.0
++pytest_xdist==3.8.0
++python_dateutil==2.9.0.post0
++python_dotenv==1.2.1
++rapidfuzz==3.14.3
++requests==2.32.5
++requests_toolbelt==1.0.0
++resolvelib==1.2.1
++rich==14.2.0
++secretstorage==3.5.0
++shellingham==1.5.4
++six==1.17.0
++socksio==1.0.0
++sortedcontainers==2.4.0
++sqlframe==4.2.0
++sqlglot==30.8.0
++sqlparse==0.5.5
++tomlkit==0.13.3
++truststore==0.10.4
++typing_extensions==4.15.0
++unearth==0.18.1
++urllib3==2.6.2
++userpath==1.9.2
++virtualenv==20.35.4
++wcwidth==0.8.1
+diff --git a/tasks/narwhals-rolling-window-suite/task.toml b/tasks/narwhals-rolling-window-suite/task.toml
+index 3de4885..7306e87 100644
+--- a/tasks/narwhals-rolling-window-suite/task.toml
++++ b/tasks/narwhals-rolling-window-suite/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7987m8hz4g19ngkk2zfe3v4n82y0e2-v1.1"
++docker_image = "bdqnghi/deepswe:narwhals-rolling-window-suite"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/narwhals-rolling-window-suite/tests/Dockerfile b/tasks/narwhals-rolling-window-suite/tests/Dockerfile
+index e7473c1..055e180 100644
+--- a/tasks/narwhals-rolling-window-suite/tests/Dockerfile
++++ b/tasks/narwhals-rolling-window-suite/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7987m8hz4g19ngkk2zfe3v4n82y0e2-v1.1
++FROM bdqnghi/deepswe:narwhals-rolling-window-suite
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/numba-stencil-boundary-modes/environment/Dockerfile b/tasks/numba-stencil-boundary-modes/environment/Dockerfile
+index 8869a9c..a874769 100644
+--- a/tasks/numba-stencil-boundary-modes/environment/Dockerfile
++++ b/tasks/numba-stencil-boundary-modes/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM public.ecr.aws/x8v8d7g8/mars-base:latest
++COPY constraints.txt /opt/deepswe-constraints.txt
++ENV PIP_CONSTRAINT=/opt/deepswe-constraints.txt UV_CONSTRAINT=/opt/deepswe-constraints.txt
+ WORKDIR /app
+ 
+ # Git time-travel: clone, then make the repo's default branch point AT the base
+diff --git a/tasks/numba-stencil-boundary-modes/environment/constraints.txt b/tasks/numba-stencil-boundary-modes/environment/constraints.txt
+new file mode 100644
+index 0000000..34de03a
+--- /dev/null
++++ b/tasks/numba-stencil-boundary-modes/environment/constraints.txt
+@@ -0,0 +1,67 @@
++anyio==4.12.0
++anysqlite==0.0.5
++argcomplete==3.6.3
++blinker==1.9.0
++build==1.3.0
++cachecontrol==0.14.4
++certifi==2025.11.12
++cffi==2.0.0
++charset_normalizer==3.4.4
++cleo==2.1.0
++click==8.3.1
++crashtest==0.4.1
++cryptography==46.0.3
++dep_logic==0.5.2
++distlib==0.4.0
++dulwich==0.21.7
++fastjsonschema==2.21.2
++filelock==3.20.1
++findpython==0.7.1
++h11==0.16.0
++hishel==0.1.5
++httpcore==1.0.9
++httpx==0.28.1
++id==1.5.0
++idna==3.11
++iniconfig==2.3.0
++installer==0.7.0
++jaraco.classes==3.4.0
++jeepney==0.9.0
++keyring==24.3.1
++llvmlite==0.47.0
++markdown_it_py==4.0.0
++mdurl==0.1.2
++more_itertools==10.8.0
++msgpack==1.1.2
++numpy==1.26.4
++pbs_installer==2025.12.17
++pdm==2.26.2
++pexpect==4.9.0
++pipx==1.8.0
++pkginfo==1.12.1.2
++platformdirs==4.5.1
++pluggy==1.6.0
++poetry==1.8.2
++poetry_plugin_export==1.8.0
++ptyprocess==0.7.0
++pycparser==2.23
++pygments==2.19.2
++pyproject_hooks==1.2.0
++pytest==9.0.3
++python_dotenv==1.2.1
++rapidfuzz==3.14.3
++requests==2.32.5
++requests_toolbelt==1.0.0
++resolvelib==1.2.1
++rich==14.2.0
++scipy==1.17.1
++secretstorage==3.5.0
++shellingham==1.5.4
++socksio==1.0.0
++tomlkit==0.13.3
++truststore==0.10.4
++typing_extensions==4.15.0
++unearth==0.18.1
++urllib3==2.6.2
++userpath==1.9.2
++virtualenv==20.35.4
+diff --git a/tasks/numba-stencil-boundary-modes/task.toml b/tasks/numba-stencil-boundary-modes/task.toml
+index 3720fab..0951c44 100644
+--- a/tasks/numba-stencil-boundary-modes/task.toml
++++ b/tasks/numba-stencil-boundary-modes/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ag6w2nh5a47ta6bg7hj2mk1823qwj-v1.1"
++docker_image = "bdqnghi/deepswe:numba-stencil-boundary-modes"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/numba-stencil-boundary-modes/tests/Dockerfile b/tasks/numba-stencil-boundary-modes/tests/Dockerfile
+index a3d544e..e3cca11 100644
+--- a/tasks/numba-stencil-boundary-modes/tests/Dockerfile
++++ b/tasks/numba-stencil-boundary-modes/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ag6w2nh5a47ta6bg7hj2mk1823qwj-v1.1
++FROM bdqnghi/deepswe:numba-stencil-boundary-modes
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/obsidian-linter-auto-table-of-contents/task.toml b/tasks/obsidian-linter-auto-table-of-contents/task.toml
+index 353a30a..e161041 100644
+--- a/tasks/obsidian-linter-auto-table-of-contents/task.toml
++++ b/tasks/obsidian-linter-auto-table-of-contents/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74j15mp1vrxx737y8b47tc8h832a37-v1.1"
++docker_image = "bdqnghi/deepswe:obsidian-linter-auto-table-of-contents"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/obsidian-linter-auto-table-of-contents/tests/Dockerfile b/tasks/obsidian-linter-auto-table-of-contents/tests/Dockerfile
+index 6bc410d..2a3d7e2 100644
+--- a/tasks/obsidian-linter-auto-table-of-contents/tests/Dockerfile
++++ b/tasks/obsidian-linter-auto-table-of-contents/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74j15mp1vrxx737y8b47tc8h832a37-v1.1
++FROM bdqnghi/deepswe:obsidian-linter-auto-table-of-contents
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/obsidian-linter-link-format-conversion/task.toml b/tasks/obsidian-linter-link-format-conversion/task.toml
+index b30a6e9..e55127c 100644
+--- a/tasks/obsidian-linter-link-format-conversion/task.toml
++++ b/tasks/obsidian-linter-link-format-conversion/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7anfdjd1c4e5ejxncny0j1ed82xjm4-v1.1"
++docker_image = "bdqnghi/deepswe:obsidian-linter-link-format-conversion"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/obsidian-linter-link-format-conversion/tests/Dockerfile b/tasks/obsidian-linter-link-format-conversion/tests/Dockerfile
+index cca58f2..1c38e99 100644
+--- a/tasks/obsidian-linter-link-format-conversion/tests/Dockerfile
++++ b/tasks/obsidian-linter-link-format-conversion/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7anfdjd1c4e5ejxncny0j1ed82xjm4-v1.1
++FROM bdqnghi/deepswe:obsidian-linter-link-format-conversion
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/obsidian-linter-scoped-ignore-markers/task.toml b/tasks/obsidian-linter-scoped-ignore-markers/task.toml
+index b6d0815..62ac9f5 100644
+--- a/tasks/obsidian-linter-scoped-ignore-markers/task.toml
++++ b/tasks/obsidian-linter-scoped-ignore-markers/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fmf1y6r9ajpg3htmaj237h182vztd-v1.1"
++docker_image = "bdqnghi/deepswe:obsidian-linter-scoped-ignore-markers"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/obsidian-linter-scoped-ignore-markers/tests/Dockerfile b/tasks/obsidian-linter-scoped-ignore-markers/tests/Dockerfile
+index 4b3b711..51339a3 100644
+--- a/tasks/obsidian-linter-scoped-ignore-markers/tests/Dockerfile
++++ b/tasks/obsidian-linter-scoped-ignore-markers/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fmf1y6r9ajpg3htmaj237h182vztd-v1.1
++FROM bdqnghi/deepswe:obsidian-linter-scoped-ignore-markers
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/ofetch-per-origin-circuit-breaker/task.toml b/tasks/ofetch-per-origin-circuit-breaker/task.toml
+index 899391e..f1996df 100644
+--- a/tasks/ofetch-per-origin-circuit-breaker/task.toml
++++ b/tasks/ofetch-per-origin-circuit-breaker/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7aq6h38q4e91mragyvr8cd3n82xxxr-v1.1"
++docker_image = "bdqnghi/deepswe:ofetch-per-origin-circuit-breaker"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/ofetch-per-origin-circuit-breaker/tests/Dockerfile b/tasks/ofetch-per-origin-circuit-breaker/tests/Dockerfile
+index c3f36ac..f01f08b 100644
+--- a/tasks/ofetch-per-origin-circuit-breaker/tests/Dockerfile
++++ b/tasks/ofetch-per-origin-circuit-breaker/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7aq6h38q4e91mragyvr8cd3n82xxxr-v1.1
++FROM bdqnghi/deepswe:ofetch-per-origin-circuit-breaker
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/onedump-dump-encryption-pipeline/task.toml b/tasks/onedump-dump-encryption-pipeline/task.toml
+index bfffc31..c0cfccf 100644
+--- a/tasks/onedump-dump-encryption-pipeline/task.toml
++++ b/tasks/onedump-dump-encryption-pipeline/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73t6ych6s1a4vtkbgr61ecr1823tt2-v1.1"
++docker_image = "bdqnghi/deepswe:onedump-dump-encryption-pipeline"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/onedump-dump-encryption-pipeline/tests/Dockerfile b/tasks/onedump-dump-encryption-pipeline/tests/Dockerfile
+index ece4491..cf1011d 100644
+--- a/tasks/onedump-dump-encryption-pipeline/tests/Dockerfile
++++ b/tasks/onedump-dump-encryption-pipeline/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73t6ych6s1a4vtkbgr61ecr1823tt2-v1.1
++FROM bdqnghi/deepswe:onedump-dump-encryption-pipeline
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/opa-rego-rule-profiling/task.toml b/tasks/opa-rego-rule-profiling/task.toml
+index 8a4b04b..d45d393 100644
+--- a/tasks/opa-rego-rule-profiling/task.toml
++++ b/tasks/opa-rego-rule-profiling/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh78zjag0xnxppgym5v4sshav982y8s4-v1.1"
++docker_image = "bdqnghi/deepswe:opa-rego-rule-profiling"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/opa-rego-rule-profiling/tests/Dockerfile b/tasks/opa-rego-rule-profiling/tests/Dockerfile
+index e78227b..669aa92 100644
+--- a/tasks/opa-rego-rule-profiling/tests/Dockerfile
++++ b/tasks/opa-rego-rule-profiling/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh78zjag0xnxppgym5v4sshav982y8s4-v1.1
++FROM bdqnghi/deepswe:opa-rego-rule-profiling
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/opa-template-string-reconstruction/task.toml b/tasks/opa-template-string-reconstruction/task.toml
+index 98048de..81a6ad4 100644
+--- a/tasks/opa-template-string-reconstruction/task.toml
++++ b/tasks/opa-template-string-reconstruction/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7eq7eek21pjhv1zx8c2cmmed82yd7v-v1.1"
++docker_image = "bdqnghi/deepswe:opa-template-string-reconstruction"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/opa-template-string-reconstruction/tests/Dockerfile b/tasks/opa-template-string-reconstruction/tests/Dockerfile
+index 86bb577..e060770 100644
+--- a/tasks/opa-template-string-reconstruction/tests/Dockerfile
++++ b/tasks/opa-template-string-reconstruction/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7eq7eek21pjhv1zx8c2cmmed82yd7v-v1.1
++FROM bdqnghi/deepswe:opa-template-string-reconstruction
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/optique-conditional-option-dependencies/task.toml b/tasks/optique-conditional-option-dependencies/task.toml
+index e74bf9a..9980f7f 100644
+--- a/tasks/optique-conditional-option-dependencies/task.toml
++++ b/tasks/optique-conditional-option-dependencies/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vadftp8bjw2qzqjw8a0b9s82ytpj-v1.1"
++docker_image = "bdqnghi/deepswe:optique-conditional-option-dependencies"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/optique-conditional-option-dependencies/tests/Dockerfile b/tasks/optique-conditional-option-dependencies/tests/Dockerfile
+index 1571294..1ad2e45 100644
+--- a/tasks/optique-conditional-option-dependencies/tests/Dockerfile
++++ b/tasks/optique-conditional-option-dependencies/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh79vadftp8bjw2qzqjw8a0b9s82ytpj-v1.1
++FROM bdqnghi/deepswe:optique-conditional-option-dependencies
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/oxvg-structural-selector-preservation/environment/Dockerfile b/tasks/oxvg-structural-selector-preservation/environment/Dockerfile
+index 4d8f779..fad7cd0 100644
+--- a/tasks/oxvg-structural-selector-preservation/environment/Dockerfile
++++ b/tasks/oxvg-structural-selector-preservation/environment/Dockerfile
+@@ -22,7 +22,7 @@ RUN cargo fetch
+ # Reporter config lives OUTSIDE the repo (--config-file) so the model can't
+ # hijack it via .config/nextest.toml.
+ ARG NEXTEST_VERSION=0.9.97
+-RUN curl -LsSf "https://get.nexte.st/${NEXTEST_VERSION}/linux" | tar zxf - -C /usr/local/bin \
++RUN curl -LsSf "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-${NEXTEST_VERSION}/cargo-nextest-${NEXTEST_VERSION}-aarch64-unknown-linux-gnu.tar.gz" | tar zxf - -C /usr/local/bin \
+  && cargo nextest --version
+ RUN mkdir -p /opt/nextest \
+  && printf '[profile.junit]\nfail-fast = false\n\n[profile.junit.junit]\npath = "junit.xml"\n' > /opt/nextest/nextest.toml
+diff --git a/tasks/oxvg-structural-selector-preservation/task.toml b/tasks/oxvg-structural-selector-preservation/task.toml
+index f736711..f129dab 100644
+--- a/tasks/oxvg-structural-selector-preservation/task.toml
++++ b/tasks/oxvg-structural-selector-preservation/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh749pxv8w35vksyfhe7p8tg8x82p0vg-v1.1"
++docker_image = "bdqnghi/deepswe:oxvg-structural-selector-preservation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/oxvg-structural-selector-preservation/tests/Dockerfile b/tasks/oxvg-structural-selector-preservation/tests/Dockerfile
+index 8d26a6f..3d237d7 100644
+--- a/tasks/oxvg-structural-selector-preservation/tests/Dockerfile
++++ b/tasks/oxvg-structural-selector-preservation/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh749pxv8w35vksyfhe7p8tg8x82p0vg-v1.1
++FROM bdqnghi/deepswe:oxvg-structural-selector-preservation
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/participle-grammar-conflict-analysis/task.toml b/tasks/participle-grammar-conflict-analysis/task.toml
+index 54267ac..c860ba8 100644
+--- a/tasks/participle-grammar-conflict-analysis/task.toml
++++ b/tasks/participle-grammar-conflict-analysis/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74m2j63pskf6htk1sxxevvv1823hvd-v1.1"
++docker_image = "bdqnghi/deepswe:participle-grammar-conflict-analysis"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/participle-grammar-conflict-analysis/tests/Dockerfile b/tasks/participle-grammar-conflict-analysis/tests/Dockerfile
+index db71636..bf04e3b 100644
+--- a/tasks/participle-grammar-conflict-analysis/tests/Dockerfile
++++ b/tasks/participle-grammar-conflict-analysis/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74m2j63pskf6htk1sxxevvv1823hvd-v1.1
++FROM bdqnghi/deepswe:participle-grammar-conflict-analysis
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/pebble-durability-wait-apis/task.toml b/tasks/pebble-durability-wait-apis/task.toml
+index f82c802..809a136 100644
+--- a/tasks/pebble-durability-wait-apis/task.toml
++++ b/tasks/pebble-durability-wait-apis/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh786tyr77qk4ycrz24nm2kynh82zaam-v1.1"
++docker_image = "bdqnghi/deepswe:pebble-durability-wait-apis"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/pebble-durability-wait-apis/tests/Dockerfile b/tasks/pebble-durability-wait-apis/tests/Dockerfile
+index 8b9664d..3244400 100644
+--- a/tasks/pebble-durability-wait-apis/tests/Dockerfile
++++ b/tasks/pebble-durability-wait-apis/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh786tyr77qk4ycrz24nm2kynh82zaam-v1.1
++FROM bdqnghi/deepswe:pebble-durability-wait-apis
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/pest-character-class-coalescing/environment/Dockerfile b/tasks/pest-character-class-coalescing/environment/Dockerfile
+index 3467c04..198bd1e 100644
+--- a/tasks/pest-character-class-coalescing/environment/Dockerfile
++++ b/tasks/pest-character-class-coalescing/environment/Dockerfile
+@@ -22,7 +22,7 @@ RUN cargo fetch && cargo build --package pest_bootstrap
+ # Reporter config lives OUTSIDE the repo (--config-file) so the model can't
+ # hijack it via .config/nextest.toml.
+ ARG NEXTEST_VERSION=0.9.97
+-RUN curl -LsSf "https://get.nexte.st/${NEXTEST_VERSION}/linux" | tar zxf - -C /usr/local/bin \
++RUN curl -LsSf "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-${NEXTEST_VERSION}/cargo-nextest-${NEXTEST_VERSION}-aarch64-unknown-linux-gnu.tar.gz" | tar zxf - -C /usr/local/bin \
+  && cargo nextest --version
+ RUN mkdir -p /opt/nextest \
+  && printf '[profile.junit]\nfail-fast = false\n\n[profile.junit.junit]\npath = "junit.xml"\n' > /opt/nextest/nextest.toml
+diff --git a/tasks/pest-character-class-coalescing/task.toml b/tasks/pest-character-class-coalescing/task.toml
+index 8829569..eeb6f65 100644
+--- a/tasks/pest-character-class-coalescing/task.toml
++++ b/tasks/pest-character-class-coalescing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7bmp04pqht2pcvp8qce1afm582ph2j-v1.1"
++docker_image = "bdqnghi/deepswe:pest-character-class-coalescing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/pest-character-class-coalescing/tests/Dockerfile b/tasks/pest-character-class-coalescing/tests/Dockerfile
+index 30dc906..a6d06e1 100644
+--- a/tasks/pest-character-class-coalescing/tests/Dockerfile
++++ b/tasks/pest-character-class-coalescing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7bmp04pqht2pcvp8qce1afm582ph2j-v1.1
++FROM bdqnghi/deepswe:pest-character-class-coalescing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/prometheus-transactional-reload-status/task.toml b/tasks/prometheus-transactional-reload-status/task.toml
+index 354223c..3db7dc0 100644
+--- a/tasks/prometheus-transactional-reload-status/task.toml
++++ b/tasks/prometheus-transactional-reload-status/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7faaexjnnv9h4vt84e0r1v4d82qtv7-v1.1"
++docker_image = "bdqnghi/deepswe:prometheus-transactional-reload-status"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/prometheus-transactional-reload-status/tests/Dockerfile b/tasks/prometheus-transactional-reload-status/tests/Dockerfile
+index 6efa0a3..28764d0 100644
+--- a/tasks/prometheus-transactional-reload-status/tests/Dockerfile
++++ b/tasks/prometheus-transactional-reload-status/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7faaexjnnv9h4vt84e0r1v4d82qtv7-v1.1
++FROM bdqnghi/deepswe:prometheus-transactional-reload-status
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/prometheus-typed-label-sorting/task.toml b/tasks/prometheus-typed-label-sorting/task.toml
+index 940a76b..eccdf18 100644
+--- a/tasks/prometheus-typed-label-sorting/task.toml
++++ b/tasks/prometheus-typed-label-sorting/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh76dadw64v8013j689380xsg182yhfc-v1.1"
++docker_image = "bdqnghi/deepswe:prometheus-typed-label-sorting"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/prometheus-typed-label-sorting/tests/Dockerfile b/tasks/prometheus-typed-label-sorting/tests/Dockerfile
+index b27d493..d0129f6 100644
+--- a/tasks/prometheus-typed-label-sorting/tests/Dockerfile
++++ b/tasks/prometheus-typed-label-sorting/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh76dadw64v8013j689380xsg182yhfc-v1.1
++FROM bdqnghi/deepswe:prometheus-typed-label-sorting
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/psd-tools-blend-range-api/task.toml b/tasks/psd-tools-blend-range-api/task.toml
+index 44744d2..d160612 100644
+--- a/tasks/psd-tools-blend-range-api/task.toml
++++ b/tasks/psd-tools-blend-range-api/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72dq33t9djm894gqagmgpkhd82yvjv-v1.1"
++docker_image = "bdqnghi/deepswe:psd-tools-blend-range-api"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/psd-tools-blend-range-api/tests/Dockerfile b/tasks/psd-tools-blend-range-api/tests/Dockerfile
+index 946f2dc..48bc228 100644
+--- a/tasks/psd-tools-blend-range-api/tests/Dockerfile
++++ b/tasks/psd-tools-blend-range-api/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh72dq33t9djm894gqagmgpkhd82yvjv-v1.1
++FROM bdqnghi/deepswe:psd-tools-blend-range-api
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/pwntools-tube-multiplexing/task.toml b/tasks/pwntools-tube-multiplexing/task.toml
+index e3f6c08..da1038f 100644
+--- a/tasks/pwntools-tube-multiplexing/task.toml
++++ b/tasks/pwntools-tube-multiplexing/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74mb9dzz76a6zgdqmmf5mvk1833cnk-v1.1"
++docker_image = "bdqnghi/deepswe:pwntools-tube-multiplexing"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/pwntools-tube-multiplexing/tests/Dockerfile b/tasks/pwntools-tube-multiplexing/tests/Dockerfile
+index 668bd9c..e6ccae2 100644
+--- a/tasks/pwntools-tube-multiplexing/tests/Dockerfile
++++ b/tasks/pwntools-tube-multiplexing/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74mb9dzz76a6zgdqmmf5mvk1833cnk-v1.1
++FROM bdqnghi/deepswe:pwntools-tube-multiplexing
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/python-statemachine-state-data-scoping/task.toml b/tasks/python-statemachine-state-data-scoping/task.toml
+index 1860984..a557699 100644
+--- a/tasks/python-statemachine-state-data-scoping/task.toml
++++ b/tasks/python-statemachine-state-data-scoping/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh719np6e210pf8skawv132rw183pfyy-v1.1"
++docker_image = "bdqnghi/deepswe:python-statemachine-state-data-scoping"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/python-statemachine-state-data-scoping/tests/Dockerfile b/tasks/python-statemachine-state-data-scoping/tests/Dockerfile
+index 7d9e416..17b3a77 100644
+--- a/tasks/python-statemachine-state-data-scoping/tests/Dockerfile
++++ b/tasks/python-statemachine-state-data-scoping/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh719np6e210pf8skawv132rw183pfyy-v1.1
++FROM bdqnghi/deepswe:python-statemachine-state-data-scoping
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/query-persist-restored-query-state/task.toml b/tasks/query-persist-restored-query-state/task.toml
+index 1764225..382c23f 100644
+--- a/tasks/query-persist-restored-query-state/task.toml
++++ b/tasks/query-persist-restored-query-state/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh76g3pdaddrcg12k7jse0xrzn83a5fd-v1.1"
++docker_image = "bdqnghi/deepswe:query-persist-restored-query-state"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/query-persist-restored-query-state/tests/Dockerfile b/tasks/query-persist-restored-query-state/tests/Dockerfile
+index a150453..477281a 100644
+--- a/tasks/query-persist-restored-query-state/tests/Dockerfile
++++ b/tasks/query-persist-restored-query-state/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh76g3pdaddrcg12k7jse0xrzn83a5fd-v1.1
++FROM bdqnghi/deepswe:query-persist-restored-query-state
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/quill-shared-toolbar-focus/task.toml b/tasks/quill-shared-toolbar-focus/task.toml
+index d7458de..6ebbc15 100644
+--- a/tasks/quill-shared-toolbar-focus/task.toml
++++ b/tasks/quill-shared-toolbar-focus/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73sgee6751fmh72hwwctyscx832frj-v1.1"
++docker_image = "bdqnghi/deepswe:quill-shared-toolbar-focus"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/quill-shared-toolbar-focus/tests/Dockerfile b/tasks/quill-shared-toolbar-focus/tests/Dockerfile
+index 0462830..92a2325 100644
+--- a/tasks/quill-shared-toolbar-focus/tests/Dockerfile
++++ b/tasks/quill-shared-toolbar-focus/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73sgee6751fmh72hwwctyscx832frj-v1.1
++FROM bdqnghi/deepswe:quill-shared-toolbar-focus
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/returns-validated-error-accumulation/task.toml b/tasks/returns-validated-error-accumulation/task.toml
+index e97248c..41f7124 100644
+--- a/tasks/returns-validated-error-accumulation/task.toml
++++ b/tasks/returns-validated-error-accumulation/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh754n098chwgtm24jakheqsw5833ec6-v1.1"
++docker_image = "bdqnghi/deepswe:returns-validated-error-accumulation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/returns-validated-error-accumulation/tests/Dockerfile b/tasks/returns-validated-error-accumulation/tests/Dockerfile
+index e7b3e6e..442f3d0 100644
+--- a/tasks/returns-validated-error-accumulation/tests/Dockerfile
++++ b/tasks/returns-validated-error-accumulation/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh754n098chwgtm24jakheqsw5833ec6-v1.1
++FROM bdqnghi/deepswe:returns-validated-error-accumulation
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/scc-bounded-memory-spilling/task.toml b/tasks/scc-bounded-memory-spilling/task.toml
+index 45def82..1f01f1a 100644
+--- a/tasks/scc-bounded-memory-spilling/task.toml
++++ b/tasks/scc-bounded-memory-spilling/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71j0gr2axgn6v1f92cam6s6x82rkv6-v1.1"
++docker_image = "bdqnghi/deepswe:scc-bounded-memory-spilling"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/scc-bounded-memory-spilling/tests/Dockerfile b/tasks/scc-bounded-memory-spilling/tests/Dockerfile
+index aea187e..3b4fd32 100644
+--- a/tasks/scc-bounded-memory-spilling/tests/Dockerfile
++++ b/tasks/scc-bounded-memory-spilling/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71j0gr2axgn6v1f92cam6s6x82rkv6-v1.1
++FROM bdqnghi/deepswe:scc-bounded-memory-spilling
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/scriggo-method-declarations/task.toml b/tasks/scriggo-method-declarations/task.toml
+index 3a892e1..5cfa722 100644
+--- a/tasks/scriggo-method-declarations/task.toml
++++ b/tasks/scriggo-method-declarations/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7adk413brr6nnvzntz1qvb51833me1-v1.1"
++docker_image = "bdqnghi/deepswe:scriggo-method-declarations"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/scriggo-method-declarations/tests/Dockerfile b/tasks/scriggo-method-declarations/tests/Dockerfile
+index 1ecbe7e..7d04274 100644
+--- a/tasks/scriggo-method-declarations/tests/Dockerfile
++++ b/tasks/scriggo-method-declarations/tests/Dockerfile
+@@ -1,6 +1,9 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7adk413brr6nnvzntz1qvb51833me1-v1.1
++FROM bdqnghi/deepswe:scriggo-method-declarations
++# arm64 host: two float tests (Pow via math.Log asm, complex division) encode amd64 rounding; run the test
++# binaries cross-compiled for amd64 under the host's qemu binfmt so verdicts match the reference exactly.
++ENV GOARCH=amd64 CGO_ENABLED=0
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/skrub-duration-encoding/environment/Dockerfile b/tasks/skrub-duration-encoding/environment/Dockerfile
+index dd9ae85..c525bbe 100644
+--- a/tasks/skrub-duration-encoding/environment/Dockerfile
++++ b/tasks/skrub-duration-encoding/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM public.ecr.aws/x8v8d7g8/mars-base:latest
++COPY constraints.txt /opt/deepswe-constraints.txt
++ENV PIP_CONSTRAINT=/opt/deepswe-constraints.txt UV_CONSTRAINT=/opt/deepswe-constraints.txt
+ WORKDIR /app
+ 
+ # Git time-travel: clone, then make the repo's default branch point AT the base
+diff --git a/tasks/skrub-duration-encoding/environment/constraints.txt b/tasks/skrub-duration-encoding/environment/constraints.txt
+new file mode 100644
+index 0000000..821eed8
+--- /dev/null
++++ b/tasks/skrub-duration-encoding/environment/constraints.txt
+@@ -0,0 +1,113 @@
++alabaster==1.0.0
++alembic==1.18.4
++anyio==4.12.0
++anysqlite==0.0.5
++argcomplete==3.6.3
++babel==2.18.0
++blinker==1.9.0
++build==1.3.0
++cachecontrol==0.14.4
++certifi==2025.11.12
++cffi==2.0.0
++charset_normalizer==3.4.4
++cleo==2.1.0
++click==8.3.1
++colorlog==6.10.1
++contourpy==1.3.3
++coverage==7.14.1
++crashtest==0.4.1
++cryptography==46.0.3
++cycler==0.12.1
++dep_logic==0.5.2
++distlib==0.4.0
++docutils==0.22.4
++dulwich==0.21.7
++execnet==2.1.2
++fastjsonschema==2.21.2
++filelock==3.20.1
++findpython==0.7.1
++fonttools==4.63.0
++greenlet==3.5.1
++h11==0.16.0
++hishel==0.1.5
++httpcore==1.0.9
++httpx==0.28.1
++id==1.5.0
++idna==3.11
++imagesize==2.0.0
++iniconfig==2.3.0
++installer==0.7.0
++jaraco.classes==3.4.0
++jeepney==0.9.0
++jinja2==3.1.6
++joblib==1.5.3
++keyring==24.3.1
++kiwisolver==1.5.0
++mako==1.3.12
++markdown_it_py==4.0.0
++markupsafe==3.0.3
++matplotlib==3.10.9
++mdurl==0.1.2
++more_itertools==10.8.0
++msgpack==1.1.2
++narwhals==2.22.1
++numpy==2.4.6
++numpydoc==1.10.0
++optuna==4.9.0
++pandas==3.0.3
++pbs_installer==2025.12.17
++pdm==2.26.2
++pexpect==4.9.0
++pillow==12.2.0
++pipx==1.8.0
++pkginfo==1.12.1.2
++platformdirs==4.5.1
++plotly==6.8.0
++pluggy==1.6.0
++poetry==1.8.2
++poetry_plugin_export==1.8.0
++polars==1.39.3
++polars_runtime_32==1.39.3
++ptyprocess==0.7.0
++pyarrow==24.0.0
++pycparser==2.23
++pydot==4.0.1
++pygments==2.19.2
++pyparsing==3.3.2
++pyproject_hooks==1.2.0
++pytest==9.0.3
++pytest_cov==7.1.0
++pytest_xdist==3.8.0
++python_dateutil==2.9.0.post0
++python_dotenv==1.2.1
++pyyaml==6.0.3
++rapidfuzz==3.14.3
++requests==2.32.5
++requests_toolbelt==1.0.0
++resolvelib==1.2.1
++rich==14.2.0
++roman_numerals==4.1.0
++scikit_learn==1.9.0
++scipy==1.17.1
++secretstorage==3.5.0
++shellingham==1.5.4
++six==1.17.0
++snowballstemmer==3.1.1
++socksio==1.0.0
++sphinx==9.1.0
++sphinxcontrib_applehelp==2.0.0
++sphinxcontrib_devhelp==2.0.0
++sphinxcontrib_htmlhelp==2.1.0
++sphinxcontrib_jsmath==1.0.1
++sphinxcontrib_qthelp==2.0.0
++sphinxcontrib_serializinghtml==2.0.0
++sqlalchemy==2.0.50
++threadpoolctl==3.6.0
++tomlkit==0.13.3
++tqdm==4.68.2
++truststore==0.10.4
++typing_extensions==4.15.0
++unearth==0.18.1
++urllib3==2.6.2
++userpath==1.9.2
++virtualenv==20.35.4
+diff --git a/tasks/skrub-duration-encoding/task.toml b/tasks/skrub-duration-encoding/task.toml
+index 43b1fc1..1e4b9e9 100644
+--- a/tasks/skrub-duration-encoding/task.toml
++++ b/tasks/skrub-duration-encoding/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77y2107s6xkqyf61mj1dsm0983kmp1-v1.1"
++docker_image = "bdqnghi/deepswe:skrub-duration-encoding"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/skrub-duration-encoding/tests/Dockerfile b/tasks/skrub-duration-encoding/tests/Dockerfile
+index c0dd94e..65df79f 100644
+--- a/tasks/skrub-duration-encoding/tests/Dockerfile
++++ b/tasks/skrub-duration-encoding/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77y2107s6xkqyf61mj1dsm0983kmp1-v1.1
++FROM bdqnghi/deepswe:skrub-duration-encoding
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/sql-formatter-bigquery-pipe-formatting/task.toml b/tasks/sql-formatter-bigquery-pipe-formatting/task.toml
+index 20752f3..4abe508 100644
+--- a/tasks/sql-formatter-bigquery-pipe-formatting/task.toml
++++ b/tasks/sql-formatter-bigquery-pipe-formatting/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh712k0bfwxew9fvg12k70g59n83pw33-v1.1"
++docker_image = "bdqnghi/deepswe:sql-formatter-bigquery-pipe-formatting"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/sql-formatter-bigquery-pipe-formatting/tests/Dockerfile b/tasks/sql-formatter-bigquery-pipe-formatting/tests/Dockerfile
+index 39b814d..a2cffe5 100644
+--- a/tasks/sql-formatter-bigquery-pipe-formatting/tests/Dockerfile
++++ b/tasks/sql-formatter-bigquery-pipe-formatting/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh712k0bfwxew9fvg12k70g59n83pw33-v1.1
++FROM bdqnghi/deepswe:sql-formatter-bigquery-pipe-formatting
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/sqlfmt-create-table-ddl-formatting/task.toml b/tasks/sqlfmt-create-table-ddl-formatting/task.toml
+index 34cdf84..c38081d 100644
+--- a/tasks/sqlfmt-create-table-ddl-formatting/task.toml
++++ b/tasks/sqlfmt-create-table-ddl-formatting/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71t2fb7qvx4y0svvv77e5p3182hnvq-v1.1"
++docker_image = "bdqnghi/deepswe:sqlfmt-create-table-ddl-formatting"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/sqlfmt-create-table-ddl-formatting/tests/Dockerfile b/tasks/sqlfmt-create-table-ddl-formatting/tests/Dockerfile
+index 087bc15..e4e06f4 100644
+--- a/tasks/sqlfmt-create-table-ddl-formatting/tests/Dockerfile
++++ b/tasks/sqlfmt-create-table-ddl-formatting/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh71t2fb7qvx4y0svvv77e5p3182hnvq-v1.1
++FROM bdqnghi/deepswe:sqlfmt-create-table-ddl-formatting
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/sqlite-utils-safe-import-checkpoints/task.toml b/tasks/sqlite-utils-safe-import-checkpoints/task.toml
+index 07ef2e6..0f1cae9 100644
+--- a/tasks/sqlite-utils-safe-import-checkpoints/task.toml
++++ b/tasks/sqlite-utils-safe-import-checkpoints/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73xpqyc0vqx9prf3m106nqe5821dcb-v1.1"
++docker_image = "bdqnghi/deepswe:sqlite-utils-safe-import-checkpoints"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/sqlite-utils-safe-import-checkpoints/tests/Dockerfile b/tasks/sqlite-utils-safe-import-checkpoints/tests/Dockerfile
+index 8a6cf5f..81e34bf 100644
+--- a/tasks/sqlite-utils-safe-import-checkpoints/tests/Dockerfile
++++ b/tasks/sqlite-utils-safe-import-checkpoints/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73xpqyc0vqx9prf3m106nqe5821dcb-v1.1
++FROM bdqnghi/deepswe:sqlite-utils-safe-import-checkpoints
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/superjson-error-stack-serialization/task.toml b/tasks/superjson-error-stack-serialization/task.toml
+index 83fbe41..194c7ac 100644
+--- a/tasks/superjson-error-stack-serialization/task.toml
++++ b/tasks/superjson-error-stack-serialization/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh701jywhzgddknqwzsq6npjv98226tq-v1.1"
++docker_image = "bdqnghi/deepswe:superjson-error-stack-serialization"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/superjson-error-stack-serialization/tests/Dockerfile b/tasks/superjson-error-stack-serialization/tests/Dockerfile
+index 852c701..4b8b1a8 100644
+--- a/tasks/superjson-error-stack-serialization/tests/Dockerfile
++++ b/tasks/superjson-error-stack-serialization/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh701jywhzgddknqwzsq6npjv98226tq-v1.1
++FROM bdqnghi/deepswe:superjson-error-stack-serialization
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/task-task-graph-export/task.toml b/tasks/task-task-graph-export/task.toml
+index 81f0ab2..01eff09 100644
+--- a/tasks/task-task-graph-export/task.toml
++++ b/tasks/task-task-graph-export/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ejvdhks3x059j6jwfncaj4982yxrv-v1.1"
++docker_image = "bdqnghi/deepswe:task-task-graph-export"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/task-task-graph-export/tests/Dockerfile b/tasks/task-task-graph-export/tests/Dockerfile
+index 562723b..02f180f 100644
+--- a/tasks/task-task-graph-export/tests/Dockerfile
++++ b/tasks/task-task-graph-export/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ejvdhks3x059j6jwfncaj4982yxrv-v1.1
++FROM bdqnghi/deepswe:task-task-graph-export
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/tengo-callable-instance-isolation/task.toml b/tasks/tengo-callable-instance-isolation/task.toml
+index 222889c..644a327 100644
+--- a/tasks/tengo-callable-instance-isolation/task.toml
++++ b/tasks/tengo-callable-instance-isolation/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77n9t7ybdq9387d08jzdp1y183ffe6-v1.1"
++docker_image = "bdqnghi/deepswe:tengo-callable-instance-isolation"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/tengo-callable-instance-isolation/tests/Dockerfile b/tasks/tengo-callable-instance-isolation/tests/Dockerfile
+index fb4d60f..ac517b7 100644
+--- a/tasks/tengo-callable-instance-isolation/tests/Dockerfile
++++ b/tasks/tengo-callable-instance-isolation/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77n9t7ybdq9387d08jzdp1y183ffe6-v1.1
++FROM bdqnghi/deepswe:tengo-callable-instance-isolation
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/tengo-destructuring-bindings/task.toml b/tasks/tengo-destructuring-bindings/task.toml
+index 2a5abd5..22f916f 100644
+--- a/tasks/tengo-destructuring-bindings/task.toml
++++ b/tasks/tengo-destructuring-bindings/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ajwvesks1d5kkpeqx7y79sd8238zn-v1.1"
++docker_image = "bdqnghi/deepswe:tengo-destructuring-bindings"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/tengo-destructuring-bindings/tests/Dockerfile b/tasks/tengo-destructuring-bindings/tests/Dockerfile
+index d671845..b7917de 100644
+--- a/tasks/tengo-destructuring-bindings/tests/Dockerfile
++++ b/tasks/tengo-destructuring-bindings/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ajwvesks1d5kkpeqx7y79sd8238zn-v1.1
++FROM bdqnghi/deepswe:tengo-destructuring-bindings
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/termenv-preserve-ansi-resets/task.toml b/tasks/termenv-preserve-ansi-resets/task.toml
+index e06c44c..a604aa8 100644
+--- a/tasks/termenv-preserve-ansi-resets/task.toml
++++ b/tasks/termenv-preserve-ansi-resets/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh731cskx45z0t0961464d9ezx8220nt-v1.1"
++docker_image = "bdqnghi/deepswe:termenv-preserve-ansi-resets"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/termenv-preserve-ansi-resets/tests/Dockerfile b/tasks/termenv-preserve-ansi-resets/tests/Dockerfile
+index 79f5daa..c31273a 100644
+--- a/tasks/termenv-preserve-ansi-resets/tests/Dockerfile
++++ b/tasks/termenv-preserve-ansi-resets/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh731cskx45z0t0961464d9ezx8220nt-v1.1
++FROM bdqnghi/deepswe:termenv-preserve-ansi-resets
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/testem-bail-on-test-failure/task.toml b/tasks/testem-bail-on-test-failure/task.toml
+index 5e477ca..cf938e4 100644
+--- a/tasks/testem-bail-on-test-failure/task.toml
++++ b/tasks/testem-bail-on-test-failure/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77k18d31qx7jj0c7nyv0xd8s82cznp-v1.1"
++docker_image = "bdqnghi/deepswe:testem-bail-on-test-failure"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/testem-bail-on-test-failure/tests/Dockerfile b/tasks/testem-bail-on-test-failure/tests/Dockerfile
+index f0a0bee..d5286dc 100644
+--- a/tasks/testem-bail-on-test-failure/tests/Dockerfile
++++ b/tasks/testem-bail-on-test-failure/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77k18d31qx7jj0c7nyv0xd8s82cznp-v1.1
++FROM bdqnghi/deepswe:testem-bail-on-test-failure
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/testem-per-launcher-reports/task.toml b/tasks/testem-per-launcher-reports/task.toml
+index 3880bcd..a6123cd 100644
+--- a/tasks/testem-per-launcher-reports/task.toml
++++ b/tasks/testem-per-launcher-reports/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7322qjz1xfjspavxy0kamf9h83277p-v1.1"
++docker_image = "bdqnghi/deepswe:testem-per-launcher-reports"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/testem-per-launcher-reports/tests/Dockerfile b/tasks/testem-per-launcher-reports/tests/Dockerfile
+index 62f8ddc..edf24de 100644
+--- a/tasks/testem-per-launcher-reports/tests/Dockerfile
++++ b/tasks/testem-per-launcher-reports/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7322qjz1xfjspavxy0kamf9h83277p-v1.1
++FROM bdqnghi/deepswe:testem-per-launcher-reports
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/textual-kitty-key-phases/task.toml b/tasks/textual-kitty-key-phases/task.toml
+index 619086e..486ffa9 100644
+--- a/tasks/textual-kitty-key-phases/task.toml
++++ b/tasks/textual-kitty-key-phases/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7b36e22me6fzbav0na7kt14h82wk1m-v1.1"
++docker_image = "bdqnghi/deepswe:textual-kitty-key-phases"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/textual-kitty-key-phases/tests/Dockerfile b/tasks/textual-kitty-key-phases/tests/Dockerfile
+index 81c0da7..238af4e 100644
+--- a/tasks/textual-kitty-key-phases/tests/Dockerfile
++++ b/tasks/textual-kitty-key-phases/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7b36e22me6fzbav0na7kt14h82wk1m-v1.1
++FROM bdqnghi/deepswe:textual-kitty-key-phases
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/textual-richlog-follow-state/task.toml b/tasks/textual-richlog-follow-state/task.toml
+index 59c9043..0afa159 100644
+--- a/tasks/textual-richlog-follow-state/task.toml
++++ b/tasks/textual-richlog-follow-state/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70247kxfz01g03p1dpz9fqv183g47e-v1.1"
++docker_image = "bdqnghi/deepswe:textual-richlog-follow-state"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/textual-richlog-follow-state/tests/Dockerfile b/tasks/textual-richlog-follow-state/tests/Dockerfile
+index bac2b69..3bafdb4 100644
+--- a/tasks/textual-richlog-follow-state/tests/Dockerfile
++++ b/tasks/textual-richlog-follow-state/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70247kxfz01g03p1dpz9fqv183g47e-v1.1
++FROM bdqnghi/deepswe:textual-richlog-follow-state
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/tomlkit-toml-table-converters/task.toml b/tasks/tomlkit-toml-table-converters/task.toml
+index 3f8ad64..4c5defc 100644
+--- a/tasks/tomlkit-toml-table-converters/task.toml
++++ b/tasks/tomlkit-toml-table-converters/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ezsk4ze1jyjta967ypwnxhh83etpm-v1.1"
++docker_image = "bdqnghi/deepswe:tomlkit-toml-table-converters"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/tomlkit-toml-table-converters/tests/Dockerfile b/tasks/tomlkit-toml-table-converters/tests/Dockerfile
+index b6b838c..2359e96 100644
+--- a/tasks/tomlkit-toml-table-converters/tests/Dockerfile
++++ b/tasks/tomlkit-toml-table-converters/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7ezsk4ze1jyjta967ypwnxhh83etpm-v1.1
++FROM bdqnghi/deepswe:tomlkit-toml-table-converters
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/true-myth-iterable-collection-combinators/task.toml b/tasks/true-myth-iterable-collection-combinators/task.toml
+index 5895f06..96f9363 100644
+--- a/tasks/true-myth-iterable-collection-combinators/task.toml
++++ b/tasks/true-myth-iterable-collection-combinators/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74r2t7kdnt7h2efdk0hf5asx82zr0s-v1.1"
++docker_image = "bdqnghi/deepswe:true-myth-iterable-collection-combinators"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/true-myth-iterable-collection-combinators/tests/Dockerfile b/tasks/true-myth-iterable-collection-combinators/tests/Dockerfile
+index 5aa3434..90cb06b 100644
+--- a/tasks/true-myth-iterable-collection-combinators/tests/Dockerfile
++++ b/tasks/true-myth-iterable-collection-combinators/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh74r2t7kdnt7h2efdk0hf5asx82zr0s-v1.1
++FROM bdqnghi/deepswe:true-myth-iterable-collection-combinators
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/ts-pattern-match-each/task.toml b/tasks/ts-pattern-match-each/task.toml
+index 011ec3d..249a5cf 100644
+--- a/tasks/ts-pattern-match-each/task.toml
++++ b/tasks/ts-pattern-match-each/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh724kgmvy32trvakc1q6a6sa583fdx7-v1.1"
++docker_image = "bdqnghi/deepswe:ts-pattern-match-each"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/ts-pattern-match-each/tests/Dockerfile b/tasks/ts-pattern-match-each/tests/Dockerfile
+index f6c41f6..6d14ddd 100644
+--- a/tasks/ts-pattern-match-each/tests/Dockerfile
++++ b/tasks/ts-pattern-match-each/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh724kgmvy32trvakc1q6a6sa583fdx7-v1.1
++FROM bdqnghi/deepswe:ts-pattern-match-each
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/updo-policy-alerting/task.toml b/tasks/updo-policy-alerting/task.toml
+index a319aca..90a33a5 100644
+--- a/tasks/updo-policy-alerting/task.toml
++++ b/tasks/updo-policy-alerting/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dk7mmh6ewnyc9h46wyag19d831gmy-v1.1"
++docker_image = "bdqnghi/deepswe:updo-policy-alerting"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/updo-policy-alerting/tests/Dockerfile b/tasks/updo-policy-alerting/tests/Dockerfile
+index b5393dd..2fa7828 100644
+--- a/tasks/updo-policy-alerting/tests/Dockerfile
++++ b/tasks/updo-policy-alerting/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7dk7mmh6ewnyc9h46wyag19d831gmy-v1.1
++FROM bdqnghi/deepswe:updo-policy-alerting
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/valibot-recursive-schema-composition/task.toml b/tasks/valibot-recursive-schema-composition/task.toml
+index 5ff9c2a..c7815bb 100644
+--- a/tasks/valibot-recursive-schema-composition/task.toml
++++ b/tasks/valibot-recursive-schema-composition/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77krxpg096a66tm8s8ztcarn82zzyv-v1.1"
++docker_image = "bdqnghi/deepswe:valibot-recursive-schema-composition"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/valibot-recursive-schema-composition/tests/Dockerfile b/tasks/valibot-recursive-schema-composition/tests/Dockerfile
+index fbbb951..697197b 100644
+--- a/tasks/valibot-recursive-schema-composition/tests/Dockerfile
++++ b/tasks/valibot-recursive-schema-composition/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77krxpg096a66tm8s8ztcarn82zzyv-v1.1
++FROM bdqnghi/deepswe:valibot-recursive-schema-composition
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/vitest-duration-sharding/task.toml b/tasks/vitest-duration-sharding/task.toml
+index e39a7b3..d438cb5 100644
+--- a/tasks/vitest-duration-sharding/task.toml
++++ b/tasks/vitest-duration-sharding/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh788hvxvxaz825205djm3ctth822xms-v1.1"
++docker_image = "bdqnghi/deepswe:vitest-duration-sharding"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/vitest-duration-sharding/tests/Dockerfile b/tasks/vitest-duration-sharding/tests/Dockerfile
+index b0761fa..8aa93ec 100644
+--- a/tasks/vitest-duration-sharding/tests/Dockerfile
++++ b/tasks/vitest-duration-sharding/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh788hvxvxaz825205djm3ctth822xms-v1.1
++FROM bdqnghi/deepswe:vitest-duration-sharding
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/vulture-persistent-analysis-cache/task.toml b/tasks/vulture-persistent-analysis-cache/task.toml
+index 686a59a..b31522c 100644
+--- a/tasks/vulture-persistent-analysis-cache/task.toml
++++ b/tasks/vulture-persistent-analysis-cache/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7992s6336c7yhv34x198jqy182zpmt-v1.1"
++docker_image = "bdqnghi/deepswe:vulture-persistent-analysis-cache"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/vulture-persistent-analysis-cache/tests/Dockerfile b/tasks/vulture-persistent-analysis-cache/tests/Dockerfile
+index 789bf0f..371ce24 100644
+--- a/tasks/vulture-persistent-analysis-cache/tests/Dockerfile
++++ b/tasks/vulture-persistent-analysis-cache/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7992s6336c7yhv34x198jqy182zpmt-v1.1
++FROM bdqnghi/deepswe:vulture-persistent-analysis-cache
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/wasmi-trap-coredumps/environment/Dockerfile b/tasks/wasmi-trap-coredumps/environment/Dockerfile
+index b2d94f1..df8c754 100644
+--- a/tasks/wasmi-trap-coredumps/environment/Dockerfile
++++ b/tasks/wasmi-trap-coredumps/environment/Dockerfile
+@@ -22,7 +22,7 @@ RUN cargo fetch
+ # Reporter config lives OUTSIDE the repo (--config-file) so the model can't
+ # hijack it via .config/nextest.toml.
+ ARG NEXTEST_VERSION=0.9.97
+-RUN curl -LsSf "https://get.nexte.st/${NEXTEST_VERSION}/linux" | tar zxf - -C /usr/local/bin \
++RUN curl -LsSf "https://github.com/nextest-rs/nextest/releases/download/cargo-nextest-${NEXTEST_VERSION}/cargo-nextest-${NEXTEST_VERSION}-aarch64-unknown-linux-gnu.tar.gz" | tar zxf - -C /usr/local/bin \
+  && cargo nextest --version
+ RUN mkdir -p /opt/nextest \
+  && printf '[profile.junit]\nfail-fast = false\n\n[profile.junit.junit]\npath = "junit.xml"\n' > /opt/nextest/nextest.toml
+diff --git a/tasks/wasmi-trap-coredumps/task.toml b/tasks/wasmi-trap-coredumps/task.toml
+index 699d9aa..1a3c166 100644
+--- a/tasks/wasmi-trap-coredumps/task.toml
++++ b/tasks/wasmi-trap-coredumps/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70h37djmvc9ac48jeh25gwz582xgqv-v1.1"
++docker_image = "bdqnghi/deepswe:wasmi-trap-coredumps"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/wasmi-trap-coredumps/tests/Dockerfile b/tasks/wasmi-trap-coredumps/tests/Dockerfile
+index 86bc055..f527c5f 100644
+--- a/tasks/wasmi-trap-coredumps/tests/Dockerfile
++++ b/tasks/wasmi-trap-coredumps/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh70h37djmvc9ac48jeh25gwz582xgqv-v1.1
++FROM bdqnghi/deepswe:wasmi-trap-coredumps
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/wazero-multi-module-snapshots/task.toml b/tasks/wazero-multi-module-snapshots/task.toml
+index b6c10a9..6f2cd8e 100644
+--- a/tasks/wazero-multi-module-snapshots/task.toml
++++ b/tasks/wazero-multi-module-snapshots/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77sbk25h3f5383rz7xqx98th822fd4-v1.1"
++docker_image = "bdqnghi/deepswe:wazero-multi-module-snapshots"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/wazero-multi-module-snapshots/tests/Dockerfile b/tasks/wazero-multi-module-snapshots/tests/Dockerfile
+index 7fb41db..6d79d91 100644
+--- a/tasks/wazero-multi-module-snapshots/tests/Dockerfile
++++ b/tasks/wazero-multi-module-snapshots/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77sbk25h3f5383rz7xqx98th822fd4-v1.1
++FROM bdqnghi/deepswe:wazero-multi-module-snapshots
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/yaegi-go-embed-directives/task.toml b/tasks/yaegi-go-embed-directives/task.toml
+index 3555bdd..e8be20b 100644
+--- a/tasks/yaegi-go-embed-directives/task.toml
++++ b/tasks/yaegi-go-embed-directives/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73faxghpn90rtyxsrjmpjpsx83f4ws-v1.1"
++docker_image = "bdqnghi/deepswe:yaegi-go-embed-directives"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/yaegi-go-embed-directives/tests/Dockerfile b/tasks/yaegi-go-embed-directives/tests/Dockerfile
+index 22abdc5..0295c1b 100644
+--- a/tasks/yaegi-go-embed-directives/tests/Dockerfile
++++ b/tasks/yaegi-go-embed-directives/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh73faxghpn90rtyxsrjmpjpsx83f4ws-v1.1
++FROM bdqnghi/deepswe:yaegi-go-embed-directives
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/yjs-map-conflict-detection/task.toml b/tasks/yjs-map-conflict-detection/task.toml
+index 598f85e..d14fd5c 100644
+--- a/tasks/yjs-map-conflict-detection/task.toml
++++ b/tasks/yjs-map-conflict-detection/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fwz4nedevfex8ssk2p8xbt9836scp-v1.1"
++docker_image = "bdqnghi/deepswe:yjs-map-conflict-detection"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/yjs-map-conflict-detection/tests/Dockerfile b/tasks/yjs-map-conflict-detection/tests/Dockerfile
+index f31d41b..1000a2f 100644
+--- a/tasks/yjs-map-conflict-detection/tests/Dockerfile
++++ b/tasks/yjs-map-conflict-detection/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh7fwz4nedevfex8ssk2p8xbt9836scp-v1.1
++FROM bdqnghi/deepswe:yjs-map-conflict-detection
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch
+diff --git a/tasks/ytt-jsonpath-query-api/task.toml b/tasks/ytt-jsonpath-query-api/task.toml
+index 21abb82..7909d36 100644
+--- a/tasks/ytt-jsonpath-query-api/task.toml
++++ b/tasks/ytt-jsonpath-query-api/task.toml
+@@ -36,7 +36,7 @@ network_mode = "no-network"
+ timeout_sec = 10800.0
+ [environment]
+ build_timeout_sec = 1800.0
+-docker_image = "public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77w0w2z8qs6m904k2hs9eg058325j8-v1.1"
++docker_image = "bdqnghi/deepswe:ytt-jsonpath-query-api"
+ os = "linux"
+ cpus = 2
+ memory_mb = 8192
+diff --git a/tasks/ytt-jsonpath-query-api/tests/Dockerfile b/tasks/ytt-jsonpath-query-api/tests/Dockerfile
+index b694387..296e8db 100644
+--- a/tasks/ytt-jsonpath-query-api/tests/Dockerfile
++++ b/tasks/ytt-jsonpath-query-api/tests/Dockerfile
+@@ -1,6 +1,6 @@
+ # Verifier image: the pinned task image with the hidden tests baked in.
+ # tests/ is the build context; the agent never sees this container.
+-FROM public.ecr.aws/d3j8x8q7/swe-bench-202605:kh77w0w2z8qs6m904k2hs9eg058325j8-v1.1
++FROM bdqnghi/deepswe:ytt-jsonpath-query-api
+ 
+ COPY test.sh /tests/test.sh
+ COPY test.patch /tests/test.patch

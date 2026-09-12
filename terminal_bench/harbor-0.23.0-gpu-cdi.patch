@@ -1,0 +1,38 @@
+--- harbor/environments/docker/docker.py.orig	2026-09-12 11:07:43.884397979 -0700
++++ harbor/environments/docker/docker.py	2026-09-12 11:07:43.900910088 -0700
+@@ -322,6 +322,7 @@
+             windows=True,
+             mounted=True,
+             docker_compose=True,
++            gpus=True,  # local patch: NVIDIA GPUs passed through via CDI (nvidia.com/gpu=all)
+         )
+ 
+     @property
+@@ -511,6 +512,7 @@
+             memory_limit_mb=self._resource_limit_value(
+                 "memory", auto_mode=ResourceMode.LIMIT
+             ),
++            gpus=self._effective_gpus,
+         )
+ 
+     def _write_env_compose_file(self) -> Path:
+--- harbor/environments/docker/__init__.py.orig	2026-09-12 11:07:43.885841047 -0700
++++ harbor/environments/docker/__init__.py	2026-09-12 11:09:01.140872388 -0700
+@@ -40,6 +40,7 @@
+     cpu_limit: int | None = None,
+     memory_request_mb: int | None = None,
+     memory_limit_mb: int | None = None,
++    gpus: int = 0,
+ ) -> Path:
+     """Write a compose override for services.main resource requests/limits."""
+     resources: dict[str, dict[str, str]] = {}
+@@ -55,6 +56,9 @@
+     if memory_request_mb is not None:
+         reservations["memory"] = f"{memory_request_mb}M"
+ 
++    if gpus:
++        # local patch: hand the container the host NVIDIA GPU(s) through CDI (Docker Compose >= 2.24)
++        reservations["devices"] = [{"driver": "cdi", "device_ids": ["nvidia.com/gpu=all"], "capabilities": ["gpu"]}]
+     if reservations:
+         resources["reservations"] = reservations
+     if resources:
