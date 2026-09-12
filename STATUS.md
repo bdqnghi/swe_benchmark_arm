@@ -36,17 +36,33 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
 * ETL: `-fsigned-char`; betaflight: aarch64 entry in `mk/tools.mk`; WasmEdge: apt.llvm.org pinned out
   on arm64; EOL Debian archives
 * constraints that clash with a repo's own exact pins are dropped automatically and the build retried
+* eval scripts that hard-code `/usr/lib/jvm/java-N-openjdk-amd64` get a symlink to the arm64 JVM;
+  bazel gets netty-tcnative's `linux-aarch_64` native on `java.library.path`; baked wheelhouses
+  (`/opt/promax-wheelhouse/<id>`) and Bazel's repository cache are regenerated/transplanted; builds
+  retry on network-error signatures
 
-## Terminal-Bench 3.0 — 70/74 validated, 4 GPU tasks in progress
+## Terminal-Bench 3.0 — 71/74 validated; 2 tasks need H100 hardware; 1 in progress
 
 All 74 environment and 74 verifier images built and pushed. Harbor oracle passes on all 70 non-GPU
-tasks, including memcached-backdoor (x86-only upstream; arm64 Ghidra natives built from the bundled
-sources) and ico-path-patch (x86 service binary under qemu with multiarch libc). The 4 GPU tasks
-(fp8-rmsnorm-gemm, jax-speedrun-gpu, exam-pdf-eval, math-eval-grader) are being validated on the GB10
-through the Harbor CDI patch.
+tasks, including memcached-backdoor (upstream pins linux/amd64 for Ghidra; the arm64 image builds
+Ghidra's native decompiler/sleigh/demangler from the bundled sources) and ico-path-patch (x86 service
+binary under qemu with multiarch libc). GPU tasks, validated through the Harbor CDI patch on a GB10:
 
-## Terminal-Bench 4.0 — 63/66 validated, 3 GPU tasks in progress
+* exam-pdf-eval: passes (20/20) with torch 2.9.1+cu130 (torch 2.3.1 has no arm64 CUDA wheel).
+* math-eval-grader: rebuild in progress on a multi-arch base (`pytorch/pytorch:2.3.1-cuda12.1` is
+  amd64-only; the earlier "arm64" build had silently run under emulation).
+* fp8-rmsnorm-gemm and jax-speedrun-gpu: images built and pushed, but both tasks declare
+  `gpu_types = ["H100"]` and cannot pass on other hardware: the reference fp8 kernel uses Hopper-only
+  `wgmma` instructions, and the speedrun grader enforces an H100-calibrated wall-clock budget that the
+  GB10 exceeds. They need an arm64 Hopper host (e.g. GH200) for validation.
+
+coq-block-bound is being rebuilt on `bdqnghi/coq:8.18`, a multi-arch manifest joining the official
+amd64 `coqorg/coq:8.18` with an arm64 build of the same layout (`terminal_bench/bases/coq-8.18`),
+because the official image is amd64-only.
+
+## Terminal-Bench 4.0 — 63/66 validated; math-eval-grader and coq-block-bound rebuilds in progress
 
 All 66 environment and 66 verifier images built and pushed. Harbor oracle passes on all 63 non-GPU
 tasks (live-database-cutover is load-sensitive: it failed while the host was saturated and passed
-when run alone). GPU tasks fp8-rmsnorm-gemm, jax-speedrun-gpu, math-eval-grader follow the v3 run.
+when run alone). fp8-rmsnorm-gemm and jax-speedrun-gpu need H100 hardware (see 3.0);
+math-eval-grader and coq-block-bound follow the v3 rebuilds.

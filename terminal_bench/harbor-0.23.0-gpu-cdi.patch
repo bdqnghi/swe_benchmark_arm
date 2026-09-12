@@ -36,3 +36,22 @@
      if reservations:
          resources["reservations"] = reservations
      if resources:
+--- harbor/verifier/verifier.py.orig	2026-09-12 12:46:05.862427380 -0700
++++ harbor/verifier/verifier.py	2026-09-12 12:46:05.876192113 -0700
+@@ -254,6 +254,16 @@
+                     "Failed to download verifier directory from environment"
+                 ) from e
+ 
++        # local patch: some tasks lock /logs/verifier to root (chmod 700) inside the container; when Harbor itself runs
++        # unprivileged on the host the bind-mounted files are then unreadable. Re-open them before reading rewards.
++        try:
++            await self.environment.exec(
++                command=f"chmod -R a+rX {quote_shell_arg(str(env_paths.verifier_dir), self.environment.os)}",
++                user="root",
++            )
++        except Exception as exc:  # best effort
++            self.logger.debug(f"verifier dir chmod failed: {exc}")
++
+         if self.trial_paths.reward_json_path.exists():
+             rewards = self._parse_reward_json()
+         elif self.trial_paths.reward_text_path.exists():

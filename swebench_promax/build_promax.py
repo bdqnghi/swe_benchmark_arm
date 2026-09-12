@@ -47,6 +47,10 @@ def run(cmd, logfile, timeout=None):
         return subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT, timeout=timeout).returncode
 
 
+NET_ERRORS = ("curl 56", "GnuTLS recv error", "Could not resolve host", "Temporary failure in name resolution", "i/o timeout",
+              "TLS handshake timeout", "incomplete-download", "Read timed out", "Connection broken", "connection reset by peer",
+              "unexpected disconnect while reading sideband packet", "failed to resolve source metadata", "server misbehaving",
+              "Failed to fetch", "Unable to fetch some archives", "early EOF", "read tcp ", "dial tcp")
 TRANSIENT = ("toomanyrequests", "lookup registry-1.docker.io", "i/o timeout", "server misbehaving", "connection reset",
              "TLS handshake timeout", "EOF", "connection refused", "no such host", "temporary failure")
 
@@ -74,6 +78,8 @@ def sh(ref, cmd):
 
 BUILD_BACKENDS = {'calver', 'cmake', 'cython', 'editables', 'expandvars', 'flit-core', 'hatch-fancy-pypi-readme', 'hatch-vcs', 'hatchling', 'maturin', 'meson', 'meson-python', 'ninja', 'packaging', 'pathspec', 'pdm-backend', 'pip', 'poetry-core', 'pybind11', 'scikit-build-core', 'setuptools', 'setuptools-rust', 'setuptools-scm', 'trove-classifiers', 'versioneer', 'wheel'}
 
+INST_HOLDER = "@@INST@@"
+
 SNAPSHOT_PIPS = r"""
 for d in $(find / -xdev -maxdepth 7 -name '*.dist-info' -not -path '*/node_modules/*' 2>/dev/null); do
   if [ -f "$d/direct_url.json" ] && grep -q '"editable": *true' "$d/direct_url.json"; then continue; fi
@@ -93,7 +99,7 @@ cd / && find testbed \( -name Cargo.lock -o -name package-lock.json -o -name yar
 SNAPSHOT_CACHES = r"""
 cd / && ls -d root/.cache/deno root/.cache/huggingface root/.cargo/registry usr/local/cargo/registry \
   root/go/pkg/mod/cache/download usr/local/go/mod-cache/cache/download root/.m2/repository \
-  root/.gradle/caches/modules-2 root/.npm/_cacache usr/local/bin/docker-entrypoint.sh 2>/dev/null \
+  root/.gradle/caches/modules-2 root/.npm/_cacache usr/local/bin/docker-entrypoint.sh root/.cache/bazel/_bazel_root/cache/repos 2>/dev/null \
   | tar cf - --exclude='v8_code_cache_v2*' --exclude='registry/src' -T - 2>/dev/null
 """
 
@@ -117,6 +123,14 @@ def snapshot(src, wd):
                        stdout=f, stderr=subprocess.DEVNULL)
     if (wd / "locks.tar").stat().st_size < 1024:
         (wd / "locks.tar").unlink()
+    wh = sh(src, f"ls /opt/promax-wheelhouse/{INST_HOLDER} 2>/dev/null".replace(INST_HOLDER, wd.name))
+    pins = []
+    for fn in wh.split():
+        m = re.match(r"([A-Za-z0-9_.]+)-([0-9][^-]*)-(?:py|cp)", fn) or re.match(r"([A-Za-z0-9_.]+)-([0-9][^-]*)\.tar\.gz$", fn)
+        if m:
+            pins.append(f"{m.group(1).replace('_', '-')}=={m.group(2)}")
+    if pins:  # the eval script installs offline from this directory; rebuild it with aarch64 wheels
+        (wd / "wheelhouse.txt").write_text("\n".join(sorted(set(pins))) + "\n")
     with open(wd / "caches.tar", "wb") as f:
         subprocess.run(["docker", "run", "--rm", "--platform", "linux/amd64", "--entrypoint", "sh", src, "-c", SNAPSHOT_CACHES],
                        stdout=f, stderr=subprocess.DEVNULL)
@@ -129,13 +143,25 @@ def snapshot(src, wd):
 REPO_PRE_FIXES = {
     # arm64 apt.llvm.org snapshot of llvm-18 is older than Ubuntu's libllvm18 -> mixed sources break; take everything from apt.llvm.org
     # (apt.llvm.org's arm64 snapshot lacks parts of the set, e.g. libpolly-18-dev, so Ubuntu's libllvm18 gets mixed in and Breaks it)
-    "WasmEdge/WasmEdge": ['RUN printf "Package: *\\nPin: origin apt.llvm.org\\nPin-Priority: -1\\n" > /etc/apt/preferences.d/99-apt-llvm-org'],
+    "WasmEdge/WasmEdge": ['RUN printf "Package: *\\nPin: origin apt.llvm.org\\nPin-Priority: -1\\n" > /etc/apt/preferences.d/99-apt-llvm-org',
+                          # aarch64 char is unsigned: `char == -1` trips -Werror=tautological-constant-out-of-range-compare in vfs_io.h;
+                          # the recipe configures cmake, so the flag must be in place before it runs
+                          "ENV CXXFLAGS=-fsigned-char CFLAGS=-fsigned-char"],
 }
 
 # per-repository arm64 fixes appended after the recipe (repo -> extra Dockerfile lines)
 REPO_FIXES = {
     # aarch64 `char` is unsigned; ETL's tests narrow negative literals into char and only compile with x86's signed char
     "ETLCPP/etl": ['ENV CXXFLAGS=-fsigned-char CFLAGS=-fsigned-char'],
+    # the test classpath only carries netty-tcnative's linux-x86_64 BoringSSL jar; Netty's loader also accepts the native
+    # from java.library.path, so install the matching linux-aarch_64 build (version from the repo's MODULE.bazel)
+    "bazelbuild/bazel": ['RUN set -eux; V=$(grep -oE "netty-tcnative-boringssl-static:jar:linux-aarch_64:[0-9A-Za-z.]+" /testbed/MODULE.bazel | head -1 | awk -F: \'{print $NF}\'); '
+                         '[ -n "$V" ] || V=$(grep -oE "netty-tcnative-boringssl-static:jar:linux-x86_64:[0-9A-Za-z.]+" /testbed/MODULE.bazel | head -1 | awk -F: \'{print $NF}\'); '
+                         'curl -fsSL -o /tmp/tcn.jar "https://repo1.maven.org/maven2/io/netty/netty-tcnative-boringssl-static/$V/netty-tcnative-boringssl-static-$V-linux-aarch_64.jar" '
+                         '&& cd /tmp && unzip -o -j tcn.jar "META-INF/native/libnetty_tcnative_linux_aarch_64.so" -d /usr/lib/aarch64-linux-gnu/ && rm -f /tmp/tcn.jar '
+                         '&& ls -la /usr/lib/aarch64-linux-gnu/libnetty_tcnative_linux_aarch_64.so'],
+    # its eval script puts /usr/lib/x86_64-linux-gnu/pkgconfig on PKG_CONFIG_PATH
+    "bloomberg/blazingmq": ['RUN mkdir -p /usr/lib/x86_64-linux-gnu && ln -sfn /usr/lib/aarch64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig'],
     # mk/tools.mk errors at parse time for any host but linux-x86_64/macosx/windows, even for host unit tests
     "betaflight/betaflight": [
         r"""RUN cd /testbed && sed -i 's#^else ifeq ($(OSFAMILY), windows)#else ifeq ($(OSFAMILY)-$(ARCHFAMILY), linux-aarch64)\n  ARM_SDK_URL := https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-aarch64-arm-none-eabi.tar.xz\n  DL_CHECKSUM = 0\nelse ifeq ($(OSFAMILY), windows)#' mk/tools.mk && grep -q linux-aarch64 mk/tools.mk""",
@@ -145,7 +171,8 @@ REPO_FIXES = {
 # literal x86 paths baked into recipes that have a direct aarch64 counterpart
 ARCH_REPLACEMENTS = {"openjdk-amd64": "openjdk-arm64", "GOARCH=amd64": "GOARCH=arm64",
                      ".linux-amd64.tar.gz": ".linux-arm64.tar.gz",  # go.dev toolchain tarballs
-                     "TARGET_ARCH=x86_64": "TARGET_ARCH=arm64"}  # istio build convention
+                     "TARGET_ARCH=x86_64": "TARGET_ARCH=arm64",  # istio build convention
+                     "bazelisk-linux-amd64": "bazelisk-linux-arm64"}
 
 # pure-python fallback wheels on aarch64 that need a system library the x86_64 wheel bundles
 ARM64_APT_FIXES = {"soundfile": ["libsndfile1"]}
@@ -168,8 +195,7 @@ def apply_pins(wd, repo=""):
             if re.search(r"(bullseye|buster)", line):
                 # EOL Debian releases: deb.debian.org's security index still lists packages the pool no longer serves (404)
                 out.append("RUN set -eux; for f in /etc/apt/sources.list /etc/apt/sources.list.d/*; do [ -f \"$f\" ] || continue; "
-                           "sed -i -E 's#https?://(deb|security)\\.debian\\.org/debian-security#http://archive.debian.org/debian-security#g; "
-                           "s#https?://deb\\.debian\\.org/debian#http://archive.debian.org/debian#g' \"$f\"; done; "
+                           "sed -i -E '/debian-security/d; s#https?://deb\\.debian\\.org/debian#http://archive.debian.org/debian#g' \"$f\"; done; "
                            "echo 'Acquire::Check-Valid-Until \"false\";' > /etc/apt/apt.conf.d/99no-check-valid-until")
             out += REPO_PRE_FIXES.get(repo, [])
         if not locks_done and line.startswith("RUN") and re.search(r"git clone|git reset --hard|git checkout", line):
@@ -181,6 +207,14 @@ def apply_pins(wd, repo=""):
         out.append("RUN apt-get update && apt-get install -y --no-install-recommends " + " ".join(pkgs) + " && rm -rf /var/lib/apt/lists/*")
     if (wd / "caches.tar").exists():
         out.append("ADD caches.tar /")
+    if (wd / "wheelhouse.txt").exists():
+        out += ["COPY wheelhouse.txt /opt/promax-wheelhouse.txt",
+                # one download per pin: the baked wheelhouse may hold several versions of the same package
+                f"RUN mkdir -p /opt/promax-wheelhouse/{wd.name} && while read -r req; do [ -n \"$req\" ] || continue; "
+                f"env -u PIP_CONSTRAINT -u UV_CONSTRAINT pip download --no-deps --prefer-binary -d /opt/promax-wheelhouse/{wd.name} \"$req\"; "
+                f"done < /opt/promax-wheelhouse.txt"]
+    # eval scripts may hard-code the Debian/Ubuntu JVM path for amd64; alias it to the arm64 JVM(s) in the image
+    out.append("RUN for d in /usr/lib/jvm/java-*-openjdk-arm64; do [ -d \"$d\" ] && ln -sfn \"$d\" \"${d%-arm64}-amd64\"; done; true")
     out += REPO_FIXES.get(repo, [])
     df.write_text("\n".join(out) + "\n")
 
@@ -269,9 +303,15 @@ def build_instance(inst, args, status):
         rc = run(["docker", "build", "--platform", "linux/arm64", "--progress=plain", "-t", dst, str(wd)], logfile, timeout=args.timeout)
         if rc == 0:
             break
+        logtext = (wd.parent.parent / "logs" / f"{inst}.log").read_text(errors="ignore")
+        tail = logtext[-20000:]
+        if any(t in tail for t in NET_ERRORS):  # the host's DNS/network hiccups: wait and rebuild (cached layers make it cheap)
+            log(f"{inst}: build hit a network error; retrying in 2 min")
+            time.sleep(120)
+            continue
         # pip: a snapshot constraint contradicts the repo's own exact pin (the official image evidently installed something
         # else later). Drop the offending constraints and retry rather than fail the whole instance.
-        clash = set(re.findall(r"The user requested \(constraint\) ([A-Za-z0-9_.-]+)==", (wd.parent.parent / "logs" / f"{inst}.log").read_text(errors="ignore")))
+        clash = set(re.findall(r"The user requested \(constraint\) ([A-Za-z0-9_.-]+)==", logtext))
         cons_path = wd / "constraints.txt"
         if not clash or not cons_path.exists():
             break
