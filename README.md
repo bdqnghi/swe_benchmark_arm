@@ -18,6 +18,17 @@ All images are public on Docker Hub under the `bdqnghi` namespace.
 
 Terminal-Bench 3.0 and 4.0 are kept in separate repositories; a v4 run never pulls a v3 image.
 
+### Not validated: the four H100-only Terminal-Bench tasks
+
+The four unvalidated Terminal-Bench tasks are `fp8-rmsnorm-gemm` and `jax-speedrun-gpu`, in each of
+3.0 and 4.0. Both declare H100-only hardware (`gpu_types = ["H100"]`): the fp8 task's reference kernel
+uses Hopper-only `wgmma` instructions, and the speedrun task's grader enforces a wall-clock budget
+calibrated on an H100. They therefore cannot pass on the GB10 (Blackwell) this work was validated on,
+or on any non-Hopper GPU, and need an arm64 Hopper host such as a GH200. Their arm64 environment and
+verifier images are built and pushed like all the others (`bdqnghi/terminal-bench-v3:<task>`,
+`bdqnghi/terminal-bench-v4:<task>`, plus the `-verifier` tags); validation results from a GH200 would
+be welcome.
+
 Current status of the long-running items is tracked in [STATUS.md](STATUS.md).
 
 ## Host requirements
