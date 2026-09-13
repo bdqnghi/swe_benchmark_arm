@@ -133,6 +133,18 @@ def snapshot(src, wd):
                        stdout=f, stderr=subprocess.DEVNULL)
     if (wd / "locks.tar").stat().st_size < 1024:
         (wd / "locks.tar").unlink()
+    # versions of cargo-installed tools: `cargo install cargo-nextest` re-resolves to the newest release, whose MSRV can
+    # exceed the image's pinned rustc (nextest 0.9.144 needs 1.91; the official image has 0.9.126 on 1.90)
+    tools = sh(src, "for b in /usr/local/cargo/bin/cargo-* /root/.cargo/bin/cargo-*; do [ -x \"$b\" ] || continue; "
+                    "n=$(basename \"$b\"); case $n in cargo-nextest|cargo-insta|cargo-llvm-cov|cargo-deny|cargo-hack|cargo-audit|cargo-machete|cargo-binstall) "
+                    "\"$b\" ${n#cargo-} --version 2>/dev/null | head -1;; esac; done")
+    pins = {}
+    for line in tools.splitlines():
+        m = re.match(r"^(cargo-[\w-]+)\s+v?(\d+\.\d+\.\d+)", line.strip())
+        if m:
+            pins[m.group(1)] = m.group(2)
+    if pins:
+        (wd / "cargo_tools.txt").write_text("".join(f"{k}=={v}\n" for k, v in sorted(pins.items())))
     wh = sh(src, f"ls /opt/promax-wheelhouse/{INST_HOLDER} 2>/dev/null".replace(INST_HOLDER, wd.name))
     pins = []
     for fn in wh.split():
@@ -211,6 +223,10 @@ REPO_FIXES = {
         'pip install --no-deps --force-reinstall /tmp/ocvwheel/opencv_python_headless-*.whl; cd /; rm -rf /tmp/ocv /tmp/ocvwheel; '
         'python -c "import cv2, importlib.metadata as m; bi = cv2.getBuildInformation(); assert \'arotene\' not in bi and \'KleidiCV\' not in bi, bi; print(m.version(\'opencv-python-headless\'))"; fi',
     ],
+    # cargo's #[cargo_test] macro probes `cargo +stable` at compile time and panics if it fails; the official image gained
+    # a `stable` toolchain as a side effect of rustup auto-installing it during the online build (settings: default
+    # 1.92.0 + stable-x86_64). Install it explicitly so the offline eval finds it.
+    "rust-lang/cargo": ['RUN set -e; rustup toolchain list | grep -q "^stable-" || rustup toolchain install stable --profile minimal; rustup toolchain list | grep "^stable-"'],
     # its eval script puts /usr/lib/x86_64-linux-gnu/pkgconfig on PKG_CONFIG_PATH
     "bloomberg/blazingmq": ['RUN mkdir -p /usr/lib/x86_64-linux-gnu && ln -sfn /usr/lib/aarch64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig'],
     # mk/tools.mk errors at parse time for any host but linux-x86_64/macosx/windows, even for host unit tests
@@ -242,6 +258,15 @@ def apply_pins(wd, repo=""):
     # still serves them when fetched by SHA
     text = re.sub(r"git (reset --hard|checkout) ([0-9a-f]{40})\b(?! \|\|)",
                   r"(git \1 \2 || (git fetch origin \2 && git \1 \2))", text)
+    # `pip install --upgrade setuptools` now lands setuptools>=82, which dropped pkg_resources; packages the official image
+    # pinned (e.g. hypothesis, older google-auth) still import it at runtime, so cap the unversioned upgrade
+    text = re.sub(r"(pip3? install[^\n]*?)\bsetuptools\b(?![<>=!~\[-])", r'\1"setuptools<82"', text)
+    # Ubuntu's multilib packages exist for x86 only (32-bit i686 support); arm64 has no equivalent and needs none
+    text = "\n".join(re.sub(r"\s+(gcc|g\+\+)-multilib\b", "", l) if "apt-get install" in l else l for l in text.split("\n"))
+    if (wd / "cargo_tools.txt").exists():
+        for line in (wd / "cargo_tools.txt").read_text().split():
+            tool, ver = line.split("==")
+            text = re.sub(rf"cargo install {re.escape(tool)}\b(?![^\n&|;]*--version)", f"cargo install {tool} --version {ver}", text)
     lines = text.splitlines()
     out = []
     locks_done = not (wd / "locks.tar").exists()
@@ -280,7 +305,30 @@ def apply_pins(wd, repo=""):
     # eval scripts may hard-code the Debian/Ubuntu JVM path for amd64; alias it to the arm64 JVM(s) in the image
     out.append("RUN for d in /usr/lib/jvm/java-*-openjdk-arm64; do [ -d \"$d\" ] && ln -sfn \"$d\" \"${d%-arm64}-amd64\"; done; true")
     out += REPO_FIXES.get(repo, [])
+    warm = bazel_warmup(EVAL.get(wd.name, {}).get("eval_script", "")) if repo != "bazelbuild/bazel" else None  # bazel's recipe fetches itself
+    if warm:
+        out.append(warm)
     df.write_text("\n".join(out) + "\n")
+
+
+def bazel_warmup(eval_script):
+    """Eval scripts that run Bazel offline need the output base warmed: the official images carry ~1.5 GB of fetched
+    external repositories (git_repository rules such as angular's dev-infra bypass the repository cache) and compiled
+    outputs that no recipe step creates. Run the eval's own test targets once at build time, with network; a failing
+    test (exit 3) is fine, a fetch/build failure (exit 1) is not."""
+    cmds = []
+    for line in eval_script.replace("\\\n", " ").splitlines():  # join shell continuation lines
+        t = line.strip()
+        if t.startswith("#") or not re.search(r"\b(bazel|bazelisk)\b|\bpnpm\b.*\btest\b", t) or " test" not in f" {t}":
+            continue
+        targets = [x for x in t.split() if x.startswith(("//", "@"))]
+        if not targets:
+            continue
+        runner = "pnpm exec bazelisk" if t.startswith(("pnpm", "yarn")) else ("bazelisk" if "bazelisk" in t else "bazel")
+        cmds.append(f"{runner} test {' '.join(targets)}; rc=$?; [ $rc -eq 0 ] || [ $rc -eq 3 ] || [ $rc -eq 4 ]")
+    if not cmds:
+        return None
+    return "RUN cd /testbed && " + " && ".join(f"({c})" for c in cmds)
 
 
 def hub_tag_exists(repo, tag):
@@ -301,7 +349,7 @@ def resolve_base(ref):
     maven:3.9.6-eclipse-temurin-17-jammy never did)."""
     base, skip_until = detect_base(ref)
     repo, _, tag = base.partition(":")
-    if tag and not hub_tag_exists(repo, tag):
+    if tag and "." not in repo.split("/")[0] and not hub_tag_exists(repo, tag):  # Docker Hub images only
         for alt in (re.sub(r"-(jammy|noble|focal|bookworm|bullseye|buster|trixie)$", "", tag),):
             if alt != tag and hub_tag_exists(repo, alt):
                 return f"{repo}:{alt}", skip_until
@@ -319,6 +367,8 @@ def detect_base(ref):
     env = dict(re.findall(r"(?:ENV|ARG) (\w+)=(\S+)", hist))
     labels = json.loads(subprocess.run(["docker", "inspect", "--format", "{{json .Config.Labels}}", ref],
                                        capture_output=True, text=True).stdout or "null") or {}
+    if "NVIDIA_PYTORCH_VERSION" in env:  # NVIDIA NGC PyTorch container (multi-arch on nvcr.io); its build scripts are not in the history
+        return f"nvcr.io/nvidia/pytorch:{env['NVIDIA_PYTORCH_VERSION']}-py3", r"^ARG NVIDIA_BUILD_REF="
     if labels.get("io.istio.repo") == "https://github.com/istio/tools" and labels.get("io.istio.version"):
         # istio build-tools image (multi-arch on gcr.io); its rootfs arrives via COPY layers history cannot replay.
         # The task author's own steps start at `ENV TZ=Etc/UTC`.
