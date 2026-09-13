@@ -12,9 +12,9 @@ All images are public on Docker Hub under the `bdqnghi` namespace.
 | SWE-bench Pro (scaleapi) | 731 | `bdqnghi/sweap-images:<dockerhub_tag>` + 69 base images | 731/731 gold patches pass with the official harness |
 | DeepSWE (datacurve) | 113 | `bdqnghi/deepswe:<task_id>` | 113/113 oracle (reference solution) pass under Pier/Harbor |
 | ProgramBench (facebookresearch) | 200 | `bdqnghi/<org>_1776_<repo>.<sha>:task_cleanroom_v6` | toolchain/package parity with the official images on all 200; end-to-end `programbench eval` gold runs pass (e.g. cmatrix, quickjs) |
-| SWE-Bench-ProMax | 170 | `bdqnghi/swebench-promax:<instance_id>` | gold patch validated with the official `test_run.py` before each push (see status below) |
-| Terminal-Bench 3.0 | 74 | `bdqnghi/terminal-bench-v3:<task>` and `:<task>-verifier` | Harbor oracle pass on all tasks incl. the 4 GPU tasks (see status below) |
-| Terminal-Bench 4.0 | 66 | `bdqnghi/terminal-bench-v4:<task>` and `:<task>-verifier` | Harbor oracle pass on all tasks incl. the 3 GPU tasks (see status below) |
+| SWE-Bench-ProMax | 170 | `bdqnghi/swebench-promax:<instance_id>` | 170/170 gold patches pass with the official `test_run.py` (offline) |
+| Terminal-Bench 3.0 | 74 | `bdqnghi/terminal-bench-v3:<task>` and `:<task>-verifier` | Harbor oracle pass on 72/74; fp8-rmsnorm-gemm and jax-speedrun-gpu need H100 hardware |
+| Terminal-Bench 4.0 | 66 | `bdqnghi/terminal-bench-v4:<task>` and `:<task>-verifier` | Harbor oracle pass on 64/66; the same two tasks need H100 hardware |
 
 Terminal-Bench 3.0 and 4.0 are kept in separate repositories; a v4 run never pulls a v3 image.
 
@@ -23,8 +23,10 @@ Current status of the long-running items is tracked in [STATUS.md](STATUS.md).
 ## Host requirements
 
 * Docker with BuildKit, Compose v2.24+ (v5 used here).
-* `qemu-user-static` binfmt registered with the `F` flag. Three tasks ship x86-64 artefacts that are
-  analysed or executed under emulation inside otherwise native images (see deviations).
+* `qemu-user-static` binfmt registered with the `F` flag (`docker run --privileged --rm tonistiigi/binfmt
+  --install amd64`; on a DGX Spark this is not persistent across reboots, and the FEX handler that remains
+  cannot run x86 containers). Three tasks ship x86-64 artefacts that are analysed or executed under
+  emulation inside otherwise native images (see deviations).
 * For GPU tasks: NVIDIA driver with CDI devices (`nvidia.com/gpu=all`), plus the Harbor patch in
   `terminal_bench/harbor-0.23.0-gpu-cdi.patch`.
 * Raise Docker's default `nofile` soft limit (this host shipped 1024, which made MongoDB drop

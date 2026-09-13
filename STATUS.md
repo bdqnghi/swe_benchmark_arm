@@ -1,6 +1,6 @@
 # Validation status
 
-Last updated: 2026-09-12 (in progress items are marked).
+Last updated: 2026-09-13. All benchmarks complete except the four H100-only Terminal-Bench tasks.
 
 ## SWE-bench Pro — complete
 
@@ -26,10 +26,11 @@ libjansson/libyaml, ripgrep for six others) and were fixed (`parity_fixups.json`
 `programbench eval` with gold submissions passes on arm64 (cmatrix solved; quickjs 3035/3036, the one
 failure being a directory-order-dependent test).
 
-## SWE-Bench-ProMax — in progress
+## SWE-Bench-ProMax — complete
 
-Each image is gold-validated with the official `test_run.py` (offline) before being pushed.
-Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
+170/170 images built natively, gold-validated with the official `test_run.py` (offline) and pushed
+(`bdqnghi/swebench-promax:<instance_id>`, verified against the Docker Hub tag list). The per-repository
+arm64 rules live in `build_promax.py`:
 
 * maven/eclipse-temurin/istio base detection, `openjdk-amd64` -> `openjdk-arm64`, `GOARCH`, Go
   toolchain tarballs, `TARGET_ARCH`
