@@ -50,6 +50,21 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
 * timing-sensitive gold tests (fprime `PosixRawTimeTest` 25 us threshold, bazel
   `RemoteExecutionServiceTest` interrupt race) fail only while the host is saturated by parallel builds
   and pass when validated alone
+* albumentations: `test_scale[mask]` asserts the exact bytes of a bilinear `cv2.resize`; the aarch64
+  opencv-python wheels from 4.13 route it through Arm's KleidiCV HAL, which rounds 2.5 up where the x86
+  wheel (no HAL, with or without IPP) gives 2. The image rebuilds the identical opencv-python-headless
+  release from its git tag with `-DWITH_CAROTENE=OFF -DWITH_KLEIDICV=OFF`; the generic path then matches
+  x86 exactly (the 4.12 aarch64 wheel, Carotene only, already did).
+* deepeval: the lockfile pins `pysqlite3-binary` (x86-64-only wheels, no sdist); the same module is built
+  from the `pysqlite3` sdist at the locked version and registered under the binary distribution's name.
+* hummingbot: Cython stays pinned to the official version (3.2.4); Cython 3.3 emits numpy-2.3 API calls
+  that the pinned numpy 2.2.6 headers lack.
+* generic: setup.py files importing `pkg_resources` get `setuptools<82` as a pip build constraint; base
+  tags are checked on Docker Hub and fall back to the tag without the distro codename (nacos:
+  `maven:3.9.6-eclipse-temurin-17-jammy` never existed); base commits force-pushed out of every branch
+  are fetched by SHA (gallery-dl); `ENV` values containing flag-style tokens are re-quoted (hibernate's
+  `GRADLE_OPTS`); `torchvision`/`torchaudio` `+cpu` pins are stripped on aarch64 (the CPU index has no
+  such local version there).
 * WasmEdge `WasiTest.*Socket*`: the poll tests write until EAGAIN, expect a 100 ms timeout, have the
   peer drain, then expect writability; whether that holds depends on the kernel's TCP buffer
   autotuning. Under Linux 6.17's 32 MB `tcp_rmem` ceiling they fail intermittently on the official

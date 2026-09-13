@@ -83,7 +83,9 @@ def sh(ref, cmd):
                           capture_output=True, text=True).stdout
 
 
-BUILD_BACKENDS = {'calver', 'cmake', 'cython', 'editables', 'expandvars', 'flit-core', 'hatch-fancy-pypi-readme', 'hatch-vcs', 'hatchling', 'maturin', 'meson', 'meson-python', 'ninja', 'packaging', 'pathspec', 'pdm-backend', 'pip', 'poetry-core', 'pybind11', 'scikit-build-core', 'setuptools', 'setuptools-rust', 'setuptools-scm', 'trove-classifiers', 'versioneer', 'wheel'}
+# (cython is deliberately NOT excluded: it is a code generator whose output must match the pinned numpy headers,
+#  e.g. Cython 3.3 emits numpy-2.3 API calls that numpy 2.2.6 lacks)
+BUILD_BACKENDS = {'calver', 'cmake', 'editables', 'expandvars', 'flit-core', 'hatch-fancy-pypi-readme', 'hatch-vcs', 'hatchling', 'maturin', 'meson', 'meson-python', 'ninja', 'packaging', 'pathspec', 'pdm-backend', 'pip', 'poetry-core', 'pybind11', 'scikit-build-core', 'setuptools', 'setuptools-rust', 'setuptools-scm', 'trove-classifiers', 'versioneer', 'wheel'}
 
 INST_HOLDER = "@@INST@@"
 
@@ -157,6 +159,21 @@ REPO_PRE_FIXES = {
                           "ENV CXXFLAGS=-fsigned-char CFLAGS=-fsigned-char"],
 }
 
+# per-repository fixes inserted right after the clone (they can read the checked-out lockfiles)
+REPO_POST_CLONE_FIXES = {
+    # pysqlite3-binary ships x86_64-only wheels (no sdist); build the identical module from the pysqlite3 sdist at the
+    # locked version and register it under the binary distribution's name so `poetry install` treats it as satisfied
+    "confident-ai/deepeval": [
+        'RUN V=$(grep -A1 \'name = "pysqlite3-binary"\' /testbed/poetry.lock | grep -oE \'version = "[^"]+"\' | cut -d\'"\' -f2); '
+        # the binary package carries .postN re-releases the sdist does not; register the lock's exact version string
+        'if [ -n "$V" ]; then pip install --no-cache-dir "pysqlite3==${V%%.post*}" && V="$V" python3 -c \'import importlib.metadata as m, shutil, pathlib, re, os; '
+        'd = m.distribution("pysqlite3"); src = pathlib.Path(str(d._path)); dst = src.with_name("pysqlite3_binary-" + os.environ["V"] + ".dist-info"); '
+        'shutil.copytree(src, dst); p = dst / "METADATA"; t = re.sub(r"^Name: pysqlite3$", "Name: pysqlite3-binary", p.read_text(), flags=re.M); '
+        'p.write_text(re.sub(r"^Version: .*$", "Version: " + os.environ["V"], t, flags=re.M)); '
+        '(dst / "RECORD").write_text(""); print("pysqlite3-binary", m.version("pysqlite3-binary"))\'; fi',
+    ],
+}
+
 # per-repository arm64 fixes appended after the recipe (repo -> extra Dockerfile lines)
 REPO_FIXES = {
     # aarch64 `char` is unsigned; ETL's tests narrow negative literals into char and only compile with x86's signed char
@@ -181,6 +198,19 @@ REPO_FIXES = {
     # U64 Logger Tests (#4262)"): make the array U64 so the values match the format.
     "nasa/fprime": ['RUN f=/testbed/Fw/Logger/test/ut/LoggerRules.cpp; if [ -f "$f" ] && grep -q "U32 ra\\[10\\];" "$f" && grep -q "%lu" "$f"; '
                     'then sed -i "s/U32 ra\\[10\\];/U64 ra[10];/" "$f" && grep -n "U64 ra\\[10\\]" "$f"; fi'],
+    # tests/functional/test_functional.py::test_scale asserts the exact bytes of a bilinear cv2.resize; the aarch64
+    # opencv-python wheels (4.13+) route it through the KleidiCV HAL, which rounds 2.5 -> 3 where the x86 wheel gives 2.
+    # Rebuild the very same opencv-python-headless release from its git tag without the ARM HALs (Carotene, KleidiCV):
+    # the generic code path then matches the x86 result (verified: 4.13.0.92 -> identical arrays).
+    "albumentations-team/albumentations": [
+        'RUN set -eux; if [ "$(uname -m)" = "aarch64" ]; then V=$(python -c "import importlib.metadata as m; print(m.version(\'opencv-python-headless\'))"); T=${V##*.}; '
+        'apt-get update && apt-get install -y --no-install-recommends cmake ninja-build && rm -rf /var/lib/apt/lists/*; '
+        'git clone -q --depth 1 --branch "$T" --recurse-submodules --shallow-submodules https://github.com/opencv/opencv-python /tmp/ocv; cd /tmp/ocv; '
+        'CMAKE_ARGS="-DWITH_CAROTENE=OFF -DWITH_KLEIDICV=OFF" CMAKE_BUILD_PARALLEL_LEVEL=$(nproc) ENABLE_HEADLESS=1 ENABLE_CONTRIB=0 '
+        'env -u PIP_CONSTRAINT -u UV_CONSTRAINT pip wheel --no-cache-dir --no-deps -w /tmp/ocvwheel .; '
+        'pip install --no-deps --force-reinstall /tmp/ocvwheel/opencv_python_headless-*.whl; cd /; rm -rf /tmp/ocv /tmp/ocvwheel; '
+        'python -c "import cv2, importlib.metadata as m; bi = cv2.getBuildInformation(); assert \'arotene\' not in bi and \'KleidiCV\' not in bi, bi; print(m.version(\'opencv-python-headless\'))"; fi',
+    ],
     # its eval script puts /usr/lib/x86_64-linux-gnu/pkgconfig on PKG_CONFIG_PATH
     "bloomberg/blazingmq": ['RUN mkdir -p /usr/lib/x86_64-linux-gnu && ln -sfn /usr/lib/aarch64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig'],
     # mk/tools.mk errors at parse time for any host but linux-x86_64/macosx/windows, even for host unit tests
@@ -205,6 +235,13 @@ def apply_pins(wd, repo=""):
     text = df.read_text()
     for old, new in ARCH_REPLACEMENTS.items():
         text = text.replace(old, new)
+    # download.pytorch.org/whl/cpu ships torch 2.x+cpu for aarch64 but torchvision/torchaudio only as plain versions
+    # (their aarch64 wheels are CPU-only anyway)
+    text = re.sub(r"\b(torchvision|torchaudio)==(\d[\d.]*)\+cpu\b", r"\1==\2", text)
+    # commits that were force-pushed away since the official build are no longer reachable from any branch, but GitHub
+    # still serves them when fetched by SHA
+    text = re.sub(r"git (reset --hard|checkout) ([0-9a-f]{40})\b(?! \|\|)",
+                  r"(git \1 \2 || (git fetch origin \2 && git \1 \2))", text)
     lines = text.splitlines()
     out = []
     locks_done = not (wd / "locks.tar").exists()
@@ -222,6 +259,12 @@ def apply_pins(wd, repo=""):
         if not locks_done and line.startswith("RUN") and re.search(r"git clone|git reset --hard|git checkout", line):
             out.append("ADD locks.tar /")
             locks_done = True
+            out += REPO_POST_CLONE_FIXES.get(repo, [])
+            # setup.py files that import pkg_resources cannot build with setuptools>=82 (removed in 2026), which pip's
+            # isolated build env otherwise fetches; constrain the build env for such repos (file stays empty elsewhere)
+            out += ['RUN if grep -qs "pkg_resources" /testbed/setup.py; then echo "setuptools<82" > /opt/promax-build-constraints.txt; '
+                    'else : > /opt/promax-build-constraints.txt; fi',
+                    "ENV PIP_BUILD_CONSTRAINT=/opt/promax-build-constraints.txt"]
     cons = {l.split("==")[0].lower().replace("_", "-") for l in (wd / "constraints.txt").read_text().split()}
     pkgs = sorted({p for name, ps in ARM64_APT_FIXES.items() if name in cons for p in ps})
     if pkgs:  # appended last so the (slow) earlier layers stay cacheable
@@ -238,6 +281,31 @@ def apply_pins(wd, repo=""):
     out.append("RUN for d in /usr/lib/jvm/java-*-openjdk-arm64; do [ -d \"$d\" ] && ln -sfn \"$d\" \"${d%-arm64}-amd64\"; done; true")
     out += REPO_FIXES.get(repo, [])
     df.write_text("\n".join(out) + "\n")
+
+
+def hub_tag_exists(repo, tag):
+    """Docker Hub tag lookup (no pull-rate cost). Unknown on network failure -> assume it exists."""
+    ns_repo = repo if "/" in repo else f"library/{repo}"
+    try:
+        r = subprocess.run(["curl", "-fsSL", "--max-time", "20", f"https://hub.docker.com/v2/repositories/{ns_repo}/tags/{tag}"],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            return True
+        return "404" not in (r.stderr + r.stdout)
+    except Exception:
+        return True
+
+
+def resolve_base(ref):
+    """detect_base + fall back to the tag without the distro codename (e.g. maven:3.9.6-eclipse-temurin-17 exists,
+    maven:3.9.6-eclipse-temurin-17-jammy never did)."""
+    base, skip_until = detect_base(ref)
+    repo, _, tag = base.partition(":")
+    if tag and not hub_tag_exists(repo, tag):
+        for alt in (re.sub(r"-(jammy|noble|focal|bookworm|bullseye|buster|trixie)$", "", tag),):
+            if alt != tag and hub_tag_exists(repo, alt):
+                return f"{repo}:{alt}", skip_until
+    return base, skip_until
 
 
 def detect_base(ref):
@@ -300,7 +368,7 @@ def build_instance(inst, args, status):
             log(f"{inst}: FAILED (pull)")
             status.set(inst, ok=False, error="pull")
             return False
-        base, skip_until = detect_base(src)
+        base, skip_until = resolve_base(src)
         if not base:
             log(f"{inst}: FAILED (unknown base)")
             status.set(inst, ok=False, error="base")
@@ -326,6 +394,10 @@ def build_instance(inst, args, status):
             break
         logtext = (wd.parent.parent / "logs" / f"{inst}.log").read_text(errors="ignore")
         tail = logtext[-20000:]
+        if re.search(r"failed to resolve source metadata for \S+: \S+: not found", tail):
+            log(f"{inst}: FAILED (base image tag does not exist) see {logfile}")
+            status.set(inst, ok=False, error="base-tag")
+            return False
         if any(t in tail for t in NET_ERRORS):  # the host's DNS/network hiccups: wait and rebuild (cached layers make it cheap)
             log(f"{inst}: build hit a network error; retrying in 2 min")
             time.sleep(120)
