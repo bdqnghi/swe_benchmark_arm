@@ -65,6 +65,21 @@ Progress and the per-repository arm64 fixes are tracked by `build_promax.py`:
   are fetched by SHA (gallery-dl); `ENV` values containing flag-style tokens are re-quoted (hibernate's
   `GRADLE_OPTS`); `torchvision`/`torchaudio` `+cpu` pins are stripped on aarch64 (the CPU index has no
   such local version there).
+* angular (25 instances): the evals run Bazel offline and rely on a pre-warmed output base that the official
+  images carry (~1.5 GB of fetched repositories such as the `dev-infra` git_repository, plus compiled
+  outputs). The pipeline fetches each eval's own targets at build time (honouring the eval's
+  `--output_user_root` when it sets one) and builds them best-effort. Google Chrome's amd64-only apt
+  repository is replaced by Debian's chromium. The one eval with browser tests (`acceptance_web`) needs
+  `rules_browsers`, which ships browsers only for linux-x86_64, macOS and Windows: `arm64_browsers.sh`
+  adds a linux_arm64 branch to the fetched rules and points the browser repositories at Debian's arm64
+  chromium, chromedriver and firefox-esr through Bazel repository overrides (`.bazelrc.user`). Both the
+  chromium and firefox variants pass.
+* verl: the official image is an NVIDIA NGC PyTorch container (24.08) whose build scripts are not in
+  the history; the arm64 image starts from the multi-arch `nvcr.io/nvidia/pytorch:24.08-py3`.
+* cargo: `gcc-multilib` is x86-only and dropped; cargo's test macro probes `cargo +stable`, so the
+  `stable` toolchain the official image acquired as a side effect is installed explicitly.
+* cargo-installed tools (`cargo-nextest`, `cargo-insta`) are pinned to the official image's versions
+  (the newest nextest needs a newer rustc than the pinned one).
 * WasmEdge `WasiTest.*Socket*`: the poll tests write until EAGAIN, expect a 100 ms timeout, have the
   peer drain, then expect writability; whether that holds depends on the kernel's TCP buffer
   autotuning. Under Linux 6.17's 32 MB `tcp_rmem` ceiling they fail intermittently on the official

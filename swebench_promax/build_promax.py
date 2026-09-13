@@ -8,7 +8,7 @@ rust / eclipse-temurin ...). We detect that base from the image and reconstruct 
 (test_run.py) takes the image from `image_name` in swe-bench-promax.json, so a rewritten copy of that file is
 written to swe-bench-promax.arm64.json.
 """
-import argparse, shlex, contextlib, json, os, re, subprocess, sys, threading, time
+import argparse, shlex, shutil, contextlib, json, os, re, subprocess, sys, threading, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -57,7 +57,8 @@ def run(cmd, logfile, timeout=None):
 NET_ERRORS = ("curl 56", "GnuTLS recv error", "Could not resolve host", "Temporary failure in name resolution", "i/o timeout",
               "TLS handshake timeout", "incomplete-download", "Read timed out", "Connection broken", "connection reset by peer",
               "unexpected disconnect while reading sideband packet", "failed to resolve source metadata", "server misbehaving",
-              "Failed to fetch", "Unable to fetch some archives", "early EOF", "read tcp ", "dial tcp")
+              "Failed to fetch", "Unable to fetch some archives", "early EOF", "read tcp ", "dial tcp",
+              "ERR_SOCKET_TIMEOUT", "Socket timeout", "ECONNRESET", "ETIMEDOUT", "EAI_AGAIN")
 TRANSIENT = ("toomanyrequests", "lookup registry-1.docker.io", "i/o timeout", "server misbehaving", "connection reset",
              "TLS handshake timeout", "EOF", "connection refused", "no such host", "temporary failure")
 
@@ -263,6 +264,10 @@ def apply_pins(wd, repo=""):
     text = re.sub(r"(pip3? install[^\n]*?)\bsetuptools\b(?![<>=!~\[-])", r'\1"setuptools<82"', text)
     # Ubuntu's multilib packages exist for x86 only (32-bit i686 support); arm64 has no equivalent and needs none
     text = "\n".join(re.sub(r"\s+(gcc|g\+\+)-multilib\b", "", l) if "apt-get install" in l else l for l in text.split("\n"))
+    # Google Chrome's apt repository is amd64-only; Debian's chromium is the same browser for headless test runs
+    text = "\n".join("RUN apt-get update && apt-get install -y --no-install-recommends chromium && rm -rf /var/lib/apt/lists/* "
+                      "&& ln -sf /usr/bin/chromium /usr/bin/google-chrome-stable && ln -sf /usr/bin/chromium /usr/bin/google-chrome"
+                      if l.startswith("RUN") and "dl.google.com/linux/chrome/deb" in l else l for l in text.split("\n"))
     if (wd / "cargo_tools.txt").exists():
         for line in (wd / "cargo_tools.txt").read_text().split():
             tool, ver = line.split("==")
@@ -307,15 +312,16 @@ def apply_pins(wd, repo=""):
     out += REPO_FIXES.get(repo, [])
     warm = bazel_warmup(EVAL.get(wd.name, {}).get("eval_script", "")) if repo != "bazelbuild/bazel" else None  # bazel's recipe fetches itself
     if warm:
-        out.append(warm)
+        shutil.copy(ROOT / "arm64_browsers.sh", wd / "arm64_browsers.sh")
+        out += ["COPY arm64_browsers.sh /opt/arm64_browsers.sh", warm]
     df.write_text("\n".join(out) + "\n")
 
 
 def bazel_warmup(eval_script):
     """Eval scripts that run Bazel offline need the output base warmed: the official images carry ~1.5 GB of fetched
     external repositories (git_repository rules such as angular's dev-infra bypass the repository cache) and compiled
-    outputs that no recipe step creates. Run the eval's own test targets once at build time, with network; a failing
-    test (exit 3) is fine, a fetch/build failure (exit 1) is not."""
+    outputs that no recipe step creates. Fetch the eval's own test targets at build time, with network, then build and
+    run them best-effort so as much of the compiled output as possible is cached too."""
     cmds = []
     for line in eval_script.replace("\\\n", " ").splitlines():  # join shell continuation lines
         t = line.strip()
@@ -325,7 +331,19 @@ def bazel_warmup(eval_script):
         if not targets:
             continue
         runner = "pnpm exec bazelisk" if t.startswith(("pnpm", "yarn")) else ("bazelisk" if "bazelisk" in t else "bazel")
-        cmds.append(f"{runner} test {' '.join(targets)}; rc=$?; [ $rc -eq 0 ] || [ $rc -eq 3 ] || [ $rc -eq 4 ]")
+        # fetch must succeed (that is what the offline eval needs); the build/test is best effort because at the base
+        # commit a target may legitimately not compile yet (the gold patch fixes it)
+        # Bazel startup options (e.g. --output_user_root=/tmp/...) select the output base; the eval's warmed state must
+        # live in the same place, so carry them over (the official images ship that exact directory populated)
+        startup = " ".join(x for x in t.split(" test ")[0].split() if x.startswith("--output_user_root="))
+        for var in re.findall(r"\$\{?(\w+)\}?", startup):  # resolve shell variables the eval script assigns itself
+            val = re.search(rf"^\s*(?:local |export |declare \S+ )?{var}=[\"']?([^\s\"']+)", eval_script, re.M)
+            if val:
+                startup = re.sub(rf"\$\{{?{var}\}}?", val.group(1), startup)
+        startup = startup.replace('"', "")
+        runner = f"{runner} {startup}".strip()
+        tg = " ".join(targets)  # first fetch may fail on arm64 browser targets: it materialises rules_browsers for arm64_browsers.sh
+        cmds.append(f"({runner} fetch {tg} || true) && bash /opt/arm64_browsers.sh && {runner} fetch {tg} && ({runner} test {tg} || true)")
     if not cmds:
         return None
     return "RUN cd /testbed && " + " && ".join(f"({c})" for c in cmds)
@@ -348,6 +366,7 @@ def resolve_base(ref):
     """detect_base + fall back to the tag without the distro codename (e.g. maven:3.9.6-eclipse-temurin-17 exists,
     maven:3.9.6-eclipse-temurin-17-jammy never did)."""
     base, skip_until = detect_base(ref)
+    base = base.rstrip("-")  # no distro codename detected (e.g. /etc/os-release without VERSION_CODENAME) -> plain version tag
     repo, _, tag = base.partition(":")
     if tag and "." not in repo.split("/")[0] and not hub_tag_exists(repo, tag):  # Docker Hub images only
         for alt in (re.sub(r"-(jammy|noble|focal|bookworm|bullseye|buster|trixie)$", "", tag),):
