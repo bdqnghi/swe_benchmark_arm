@@ -1,0 +1,21 @@
+{
+ "reward": "0.0",
+ "tests_reward": "1.0",
+ "relevant": 19,
+ "full_p2f": 0,
+ "full_m2f": 0,
+ "filtered_summary": {
+  "pass_to_pass": 0,
+  "pass_to_fail": 0,
+  "pass_to_missing": 0,
+  "fail_to_pass": 0,
+  "fail_to_fail": 0,
+  "fail_to_missing": 0,
+  "missing_to_pass": 0,
+  "missing_to_fail": 0
+ },
+ "relevant_passed_after": 0,
+ "image": "ghcr.io/scaleapi/swe-atlas netdata 813d (official)",
+ "platform": "NOT a completed official run: the qemu run of the official image timed out after 7800 s (baseline alone took 67 min); equivalence established by analysis",
+ "note": "Upstream verifier bug (architecture-independent): the relevant tests live in the standalone harness tests/rrdhost-system-info-unittest.c. run_script.sh first configures /build with the default CMake generator (Unix Makefiles, no -G), then, because ninja is installed (it is in the official image too), rebuilds that dir with \"ninja -C build\", which fails (\"loading build.ninja: No such file\"); the harness then cannot link and is skipped, so no relevant test runs and tests_reward is 1 vacuously. Same cmake 3.22.1, ninja and scripts in the official image."
+}

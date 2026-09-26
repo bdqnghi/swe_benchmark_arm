@@ -1,0 +1,21 @@
+{
+ "reward": "0.0",
+ "tests_reward": "1.0",
+ "relevant": 4,
+ "full_p2f": 0,
+ "full_m2f": 0,
+ "filtered_summary": {
+  "pass_to_pass": 0,
+  "pass_to_fail": 0,
+  "pass_to_missing": 0,
+  "fail_to_pass": 0,
+  "fail_to_fail": 0,
+  "fail_to_missing": 0,
+  "missing_to_pass": 0,
+  "missing_to_fail": 0
+ },
+ "relevant_passed_after": 0,
+ "image": "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_simple-login_app_69391d8d1ce51c407be1e533_1.0@sha256:312f4320950e218babc8cab47a2c3617582d3c0fcc44859e1e95536539a712f5",
+ "platform": "linux/amd64 (qemu)",
+ "note": "Upstream quirk: run_script.sh calls python3 -m pytest, which resolves to /opt/venv/bin/python3 (the rubric venv, no pytest): 'No module named pytest' on the official amd64 image too, so no test runs and tests_reward is 1 vacuously."
+}

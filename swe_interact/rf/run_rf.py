@@ -40,7 +40,7 @@ def one(task, args):
         B.log(f"{task}: done previously")
         return True
     if not bstat(name).get("pushed") or args.force_base:
-        B.wait_for_disk(task, 120)
+        B.wait_for_disk(task, 110)
         B.log(f"{task}: building base {ref}")
         t0 = time.time()
         r = subprocess.run([sys.executable, "-u", str(HERE / "build_rf_base.py"), task, "--push", "--keep-official"],

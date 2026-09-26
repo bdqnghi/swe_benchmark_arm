@@ -28,6 +28,16 @@ for t in tasks:
         detail = f"tests_reward={val.get('tests_reward')} relevant={val.get('relevant')} p2f={val.get('full_p2f')} m2f={val.get('full_m2f')}"
     elif val:
         detail = f"reward={val.get('reward')}"
+    if fam == "rf" and val:
+        if val.get("matches_official_amd64"):
+            offp = ROOT / "rules" / t / "official_amd64_validation.json"
+            how = "as official" if "NOT a completed" not in (json.load(open(offp)).get("platform", "") if offp.exists() else "") else "upstream, by analysis"
+            kind = ("no-op pass" if str(val.get("tests_reward")) == "1.0" else "always-fail") + f" ({how})"
+        elif v.get("validated"):
+            kind = "genuine"
+        else:
+            kind = "failing"
+        detail = f"{kind}; " + detail
     base = bst.get(B.rf_base_name(t), {}) if fam == "rf" else {}
     rows.append((t, fam, bool(v.get("built")), v.get("validated"), bool(v.get("pushed")),
                  (base.get("pushed") if fam == "rf" else ""), detail, v.get("error") or ""))

@@ -1,0 +1,21 @@
+{
+ "reward": "0.0",
+ "tests_reward": "1.0",
+ "relevant": 42,
+ "full_p2f": 0,
+ "full_m2f": 0,
+ "filtered_summary": {
+  "pass_to_pass": 0,
+  "pass_to_fail": 0,
+  "pass_to_missing": 0,
+  "fail_to_pass": 0,
+  "fail_to_fail": 0,
+  "fail_to_missing": 0,
+  "missing_to_pass": 0,
+  "missing_to_fail": 0
+ },
+ "relevant_passed_after": 0,
+ "image": "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_secdev_scapy_69d196f015a150488265afb7_1.0@sha256:fbe2d0aef1129b37a45dc6e8ce85e715f150c1c45a0575d30d0364499d5ea6f9",
+ "platform": "linux/amd64 (qemu)",
+ "note": "Upstream quirk (same as the other scapy tasks): /opt/venv (CPython 3.12) first on PATH; scapy's UTscapy at this commit does not run under 3.12, so no relevant test runs on the official image either and tests_reward is 1 vacuously."
+}

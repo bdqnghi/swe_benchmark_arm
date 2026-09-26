@@ -22,7 +22,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SRC = Path(os.environ.get("SWE_INTERACT_SRC", "/home/nghibui/codes/tib/third_party/swe-interact"))
+# a pristine export of upstream b32f98c (`git archive b32f98c | tar -x -C work/upstream`): the shared checkout may
+# have swe-interact-arm64.patch applied, and the rules here rewrite the upstream files
+SRC = Path(os.environ.get("SWE_INTERACT_SRC", str(Path(__file__).resolve().parent / "work" / "upstream")))
+UPSTREAM_CHECKOUT = os.environ.get("SWE_INTERACT_CHECKOUT", "/home/nghibui/codes/tib/third_party/swe-interact")
+if not (SRC / "data").exists() and "SWE_INTERACT_SRC" not in os.environ:
+    SRC.mkdir(parents=True, exist_ok=True)
+    subprocess.run(f"git -C {UPSTREAM_CHECKOUT} archive b32f98c | tar -x -C {SRC}", shell=True, check=True)
 TASKS = SRC / "data" / "multiturn"
 NS = "bdqnghi/swe-interact"
 BASE_NS = "bdqnghi/swe-interact-base"

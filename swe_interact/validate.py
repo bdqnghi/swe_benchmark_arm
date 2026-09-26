@@ -20,7 +20,9 @@ import argparse, json, os, re, subprocess, sys, time, uuid
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SRC = Path(os.environ.get("SWE_INTERACT_SRC", "/home/nghibui/codes/tib/third_party/swe-interact"))
+# a pristine export of upstream b32f98c (`git archive b32f98c | tar -x -C work/upstream`): the shared checkout may
+# have swe-interact-arm64.patch applied, and the rules here rewrite the upstream files
+SRC = Path(os.environ.get("SWE_INTERACT_SRC", str(Path(__file__).resolve().parent / "work" / "upstream")))
 TASKS = SRC / "data" / "multiturn"
 
 

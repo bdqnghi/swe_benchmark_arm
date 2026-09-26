@@ -150,6 +150,9 @@ def transplant(container, touched, owned, ctx, report):
     go_tools = {}
     rust = {}
     node_platform = []
+    dropped_set = set()
+    cargo_target_dropped = set()
+    added_set = set()
     dists = defaultdict(dict)       # site dir -> {name: version}
     direct = {}                     # site dir/name -> direct_url json
     pth = defaultdict(list)
@@ -164,6 +167,9 @@ def transplant(container, touched, owned, ctx, report):
             continue
         if name.startswith(DROP_PREFIX) or (name + "/").startswith(DROP_PREFIX):
             continue
+        if re.search(r"(^|/)target/(release|debug)(/|$)", name):
+            cargo_target_dropped.add(name.split("/target/")[0] + "/target")
+            continue  # cargo build output: architecture-specific, rebuilt by the tests
         rm_ = re.match(r"^(.*rustup)/toolchains/([^/]+)$", name)
         if rm_ and m.isdir():
             rust["home"], _ = rm_.group(1), rust.setdefault("toolchains", []).append(rm_.group(2))
@@ -198,10 +204,26 @@ def transplant(container, touched, owned, ctx, report):
         if name in owned and not name.startswith("etc/"):
             dropped_owned += 1
             continue
+        if m.islnk():
+            tgt = m.linkname.lstrip("./")
+            if tgt in dropped_set:
+                continue  # hard link to a dropped (architecture-specific) file
+            if tgt not in added_set:
+                # target not in the transplant (base layer or filtered): store the content as a regular file
+                data = tin.extractfile(m).read()
+                if is_elf(data[:8]) and not keep_elf(name):
+                    elf.append(name)
+                    continue
+                ti = tarfile.TarInfo(m.name)
+                ti.size, ti.mode, ti.uid, ti.gid, ti.mtime = len(data), m.mode, m.uid, m.gid, m.mtime
+                out.addfile(ti, io.BytesIO(data))
+                added_set.add(name)
+                continue
         if m.isfile():
             data = tin.extractfile(m).read()
             if is_elf(data[:8]) and not keep_elf(name):
                 elf.append(name)
+                dropped_set.add(name)
                 gi = go_buildinfo(data)
                 if gi:
                     go_tools[name] = gi
@@ -209,13 +231,14 @@ def transplant(container, touched, owned, ctx, report):
             if b"x86_64-linux-gnu" in data[:2_000_000] and len(x86_text) < 400:
                 x86_text.append(name)
             out.addfile(m, io.BytesIO(data))
+            added_set.add(name)
         else:
             out.addfile(m)
         kept[name.split("/")[0]] += 1
     tin.close()
     exp.unlink()
     out.close()
-    report.update(elf_dropped=elf, go_tools=go_tools, rust=rust, node_platform=node_platform, dpkg_owned_dropped=dropped_owned, site_dropped=dict(dropped_site),
+    report.update(cargo_target_dropped=sorted(cargo_target_dropped), elf_dropped=elf, go_tools=go_tools, rust=rust, node_platform=node_platform, dpkg_owned_dropped=dropped_owned, site_dropped=dict(dropped_site),
                   x86_text_files=x86_text, kept_top=dict(kept))
     return dists, direct, pth
 
@@ -382,6 +405,12 @@ def render(report, ctx, repo):
         interp = info["interpreter"]
         if not interp or site in uv_sites:
             continue
+        vm = re.match(r"^(.*)/lib/python(\d+\.\d+)/site-packages$", site)
+        if vm and vm.group(1) not in ("usr/local", "usr"):
+            # a virtualenv: its interpreter (a copied ELF or a link into a dropped tree) may be gone; recreate it
+            pre, pv = "/" + vm.group(1), vm.group(2)
+            L.append(f"RUN [ -x {pre}/bin/python ] || (command -v python{pv} >/dev/null && python{pv} -m venv {pre}) "
+                     f"|| (curl -LsSf https://astral.sh/uv/install.sh | sh && /root/.local/bin/uv venv --seed {pre} --python {pv})")
         req = f"py-{re.sub(r'[^A-Za-z0-9]+', '_', site)}.txt"
         pins = [f"{n}=={v}" for n, v in sorted(info["dists"].items()) if n not in info["local"]]
         (ctx / req).write_text("\n".join(pins) + "\n")
@@ -391,6 +420,14 @@ def render(report, ctx, repo):
         # some pinned versions ship x86-64 wheels only (e.g. cryptography 2.9): build those from source
         L.append(f"RUN {pipi} || (apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y "
                  f"--no-install-recommends build-essential libssl-dev libffi-dev pkg-config cargo && {pipi})")
+        pg = next(((n, v) for n, v in info["dists"].items() if n.lower().replace("_", "-") == "psycopg2-binary"), None)
+        if pg:
+            # the aarch64 psycopg2-binary wheels of older releases bundle libpq 9.6, which cannot do SCRAM auth (the
+            # x86-64 wheel bundles libpq 14); build the same release against the distro libpq instead
+            L.append(f"RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "
+                     f"libpq-dev gcc && {interp} -m pip install --no-cache-dir --no-deps --force-reinstall --break-system-packages "
+                     f"--no-binary psycopg2-binary psycopg2-binary=={pg[1]} && rm -rf /var/lib/apt/lists/* "
+                     f"&& {interp} -c 'import psycopg2; assert psycopg2.__libpq_version__ >= 100000, psycopg2.__libpq_version__'")
         for nm, url in info["local"].items():
             path = url.replace("file://", "") if url else ""
             if path:
