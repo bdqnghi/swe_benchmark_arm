@@ -564,11 +564,37 @@
   "family": "rf",
   "image": "bdqnghi/swe-interact:rf_task-694b4b99829f00e24fd11885",
   "built": true,
-  "validated": null,
-  "pushed": false,
+  "validated": true,
+  "pushed": true,
   "error": null,
   "build_s": 24,
-  "ts": "2026-09-26T09:04:29"
+  "ts": "2026-09-26T09:18:20",
+  "validation": {
+   "solution": true,
+   "solve_rc": 0,
+   "solve_s": 0,
+   "test_rc": 0,
+   "test_s": 787,
+   "reward": "0.0",
+   "tests_reward": "1.0",
+   "relevant": 35,
+   "full_p2f": 0,
+   "full_m2f": 0,
+   "filtered_summary": {
+    "pass_to_pass": 0,
+    "pass_to_fail": 0,
+    "pass_to_missing": 0,
+    "fail_to_pass": 0,
+    "fail_to_fail": 0,
+    "fail_to_missing": 0,
+    "missing_to_pass": 35,
+    "missing_to_fail": 0
+   },
+   "relevant_passed_after": 35,
+   "ok": true
+  },
+  "validate_s": 789,
+  "digest": "sha256:937e24ee5d75fb32fa5c100edf68eee7c9fc8d34e57639b589d43507d0583e51"
  },
  "rf_task-694b4b99829f00e24fd11889": {
   "family": "rf",

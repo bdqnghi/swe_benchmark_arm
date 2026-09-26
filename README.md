@@ -113,8 +113,8 @@ agent and verifier as root to match E2B. Details: `swe_together/NOTES.md`.
 
 ### SWE-Interact
 
-Use the arm64 task tree `swe_interact/tasks_arm64/` (or apply `swe_interact/swe-interact-arm64.patch` to
-SWE-Interact commit `b32f98c`) and run Harbor on local Docker instead of Modal:
+Apply `swe_interact/swe-interact-arm64.patch` to SWE-Interact commit `b32f98c` (or generate the arm64 task
+tree with `swe_interact/make_tree.py`) and run Harbor on local Docker instead of Modal:
 `harbor run -p <abs path> -e docker --no-force-build`. Multi-step runs on Harbor 0.23.0 need
 `swe_interact/harbor-0.23.0-multistep-log-ownership.patch`. One SWE-bench-Pro task image drops `instance_`
 from its tag to stay under Docker's 128-character limit; `swe_interact/status.json` has every exact name.
