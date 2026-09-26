@@ -1,0 +1,2053 @@
+{
+ "agent-swarm-task-4a881b": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 77,
+  "error": null,
+  "deviations": [
+   "bun pinned to 1.3.14",
+   "npm -g pnpm -> pnpm@10.34.1",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "ts": "2026-09-26T05:03:26",
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 270,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:39e6dc25c89a2919668fc57eaef64e85435761ce0924940d837c088fce45878a\"]"
+ },
+ "agent-swarm-task-ea4bd8": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 390,
+  "error": null,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "ts": "2026-09-26T05:03:27",
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 139,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:713c7b9e7cf5dfde42cf3b9505250262dc11b0af1de9512028333994d48d8e0f\"]"
+ },
+ "amytis-task-e3714e": {
+  "built": true,
+  "build_seconds": 198,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:21:26",
+  "validated": true,
+  "reward": 1.0,
+  "validate_seconds": 71,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:99ddcc89dabe61071365ae75399eb8c01e9d242736ccb756c6dff7811d46efbc\"]",
+  "mode": "gold",
+  "validated_as": "image USER (agent), first run"
+ },
+ "arr-monitor-add-processes-flag": {
+  "built": true,
+  "build_seconds": 333,
+  "deviations": [
+   "pip constraints from official image (1 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:06:47",
+  "validated": true,
+  "reward": 1.0,
+  "validate_seconds": 3,
+  "mode": "gold",
+  "validated_as": "root",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:1ce4df0ee5a6ab3fae3ee1c43c19319b0e3c62805f2e029da14ce1ad77069ea8\"]"
+ },
+ "banodoco-video-perf-optimize": {
+  "built": true,
+  "build_seconds": 185,
+  "deviations": [
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:15:56",
+  "validated": true,
+  "reward": 0.0,
+  "validate_seconds": 5,
+  "mode": "baseline",
+  "validated_as": "root",
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:4b0b10d479bd152abaf8ffcc0c10d2fcf5de4965387e5fede075b036563c6f09\"]"
+ },
+ "cli-fix-2026-0": {
+  "built": true,
+  "build_seconds": 132,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:05:01",
+  "validated": true,
+  "reward": 0.93,
+  "validate_seconds": 27,
+  "mode": "gold",
+  "validated_as": "root",
+  "official_reward": 0.93,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.93 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a6f8280024ef2ba1f5a3bf9b50c99414e0b6e294ea0cc9f9fac07b6d11c3dd20\"]"
+ },
+ "cli-task-0ec2e9": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:21:26",
+  "validated": true,
+  "reward": 1.0,
+  "validate_seconds": 59,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:053bf44e2ba8e10d63537e1ba86027b551133d05e80075f60b6005915cbd5df7\"]",
+  "mode": "gold",
+  "validated_as": "image USER (agent), first run"
+ },
+ "cli-task-19def0": {
+  "built": true,
+  "build_seconds": 122,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:06:46",
+  "validated": true,
+  "reward": 1.0,
+  "validate_seconds": 30,
+  "mode": "gold",
+  "validated_as": "root",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:bc6eb115296b07f3b6964d28ea0e6012a35efb5bdf2508f9f7d20f452fe57e48\"]"
+ },
+ "cli-task-2026-0": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x3)",
+   "pip constraints from official image (1 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:15:50",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 17,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:abb473bd84476f9cefccdda994cdb085c6a6f2c6e8d958b696573bf48f766375\"]"
+ },
+ "cli-task-2a55af": {
+  "built": true,
+  "build_seconds": 547,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:43:02",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 27,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:fa91b7d8a0c428cf8df1d96b936e87197abb3bd7dae1a839ce463c316e6d5acd\"]"
+ },
+ "cli-task-2c3e30": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 255,
+  "error": null,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "ts": "2026-09-26T05:03:24",
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 48,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:1ffaa10e22d757e80072c45b61c2a3fe9ced5f2c5fb22df3ff391fac40aa82f6\"]"
+ },
+ "cli-task-2f5833": {
+  "built": true,
+  "build_seconds": 664,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T04:59:20",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 5,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:fbd748fa9a7a90bba6eb54c51ce3abacda1a332843c97affb838dbe89988933f\"]"
+ },
+ "cli-task-30159a": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:04:50",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 11,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a83ab29f7b44b465ba86e8dde16c78e73335bd69e614812241db354996caaacc\"]"
+ },
+ "cli-task-32ba47": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:05:20",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 28,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:e8ab431041b5290cd12253562415b8e0c1e1fb24299db40bb242236e2e0de9a7\"]"
+ },
+ "cli-task-33e050": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:08:25",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 40,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:5d2724ae4f534d4ccee2a9a33ac4a498189eb32d54784b3ff14a1a816e15c745\"]"
+ },
+ "cli-task-408b8c": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 57,
+  "error": null,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "ts": "2026-09-26T05:15:48",
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 58,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:fd82296aa360bcbf8ac150a2d562676359c2e9d43e21942ee777453c8bf5c3ac\"]"
+ },
+ "cli-task-4a9dde": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:25:55",
+  "validated": true,
+  "reward": 0.8,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.8,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.8 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:4ff43720d41ff912d4b48df4454f028009f809a8ed68e1e1e41e5fe6e8257965\"]"
+ },
+ "cli-task-577e8c": {
+  "built": true,
+  "build_seconds": 0,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:27",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 29,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f2c32df9de14d571d4828a0c69a2fe1085bcc5f3371ec9c36009d18a21005339\"]"
+ },
+ "cli-task-5a69ca": {
+  "built": true,
+  "build_seconds": 172,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:17:32",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 31,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:06d32c02cde316b6face463cbbed4066fc35972b3d111cfd3e55446f04b2dc34\"]"
+ },
+ "cli-task-70c88c": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 1518,
+  "error": null,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)",
+   "Go tarball sha256: go1.25.9 linux-arm64 checksum (x1)"
+  ],
+  "ts": "2026-09-26T07:32:03",
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 20,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ba8297781b6aba295c373827b24e3765653169fd83087bd1f04dc967023d269b\"]"
+ },
+ "cli-task-726de6": {
+  "built": true,
+  "build_seconds": 176,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:57:05",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 6,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:c2d84a751e5701d8742542b03ae97451d644aa22ea6feb26f85a17c2f01ab53e\"]"
+ },
+ "cli-task-aa4038": {
+  "built": true,
+  "build_seconds": 1,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:20:58",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 15,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f202b469f3ec40990a7eae34a3669842b5abcfd8b41d80cabb93de832a917055\"]"
+ },
+ "cli-task-b12319": {
+  "built": true,
+  "build_seconds": 99,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:00:31",
+  "validated": true,
+  "reward": 0.525,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 56,
+  "official_reward": 0.525,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.525 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": ""
+ },
+ "cli-task-b3d2dd": {
+  "built": true,
+  "build_seconds": 1,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:58:52",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 22,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f8658dd5378a4292e960ce496da197e64dfbce2dc1215a17e9752efea2479c6d\"]"
+ },
+ "cli-task-c01017": {
+  "built": true,
+  "build_seconds": 1,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:00:27",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 30,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:558702189148a710677d4de185f2c9ef21d730e60c800d94b254bc07207c0c13\"]"
+ },
+ "cli-task-c425e4": {
+  "built": true,
+  "build_seconds": 105,
+  "deviations": [],
+  "error": null,
+  "ts": "2026-09-26T05:20:07",
+  "validated": true,
+  "reward": 0.7,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 6,
+  "official_reward": 0.7,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.7 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d414e05bf0cb78aabf3c81d1c2e3e749281abeb2e6a0a3d98a192ac88a1c84dc\"]"
+ },
+ "cli-task-c4c7e9": {
+  "built": true,
+  "build_seconds": 234,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:02:30",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 5,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:0244e91d5e028f2a3a15b59867cf4f55907d2c87d707edda59c72e6b8952f226\"]"
+ },
+ "cli-task-cd4662": {
+  "built": true,
+  "build_seconds": 1812,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:07:28",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 22,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:95e54972cc4ad9092aa9a3a5a1c1f1291dd644d7396eab792c9c1f216faeb759\"]"
+ },
+ "cli-task-cf32cb": {
+  "built": true,
+  "build_seconds": 493,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x3)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:27:06",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 3,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:5eb4452f06c7adc4107d9214d1817ebad8abea15c0369c50d471eb3b6a2a54f9\"]"
+ },
+ "cli-task-dbd2bf": {
+  "built": true,
+  "build_seconds": 462,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:06:44",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 4,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:7f5e0a0887e5e1d35d03c3d05d7fbd3c35314d69335d6ef3fd719784f62b499f\"]"
+ },
+ "cli-task-e5813e": {
+  "built": true,
+  "build_seconds": 239,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:06:09",
+  "validated": true,
+  "reward": 0.8,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 10,
+  "official_reward": 0.8,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.8 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ccdb4250f91df4f8a1114d08417b722c83ceaaf80d82bdfcde7479dcda7a1ec2\"]"
+ },
+ "cli-task-ea3f8f": {
+  "built": true,
+  "build_seconds": 1394,
+  "deviations": [
+   "Go toolchain tarball: same version, arm64 build (go.dev/dl and dl.google.com) (x1)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:52:09",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 40,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:0a786f44d938c3a27165fb5798080564e0ed3900f6048b424038db51f0e10547\"]"
+ },
+ "comfyui-gemma3-sliding-window": {
+  "built": true,
+  "build_seconds": 19,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:33:34",
+  "validated": true,
+  "reward": 0.55,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 9,
+  "official_reward": 0.55,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.55 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d3af97c34bcdfc06b0c210bbd0fddf091e1b4aaef1b11799e1daa68196d58d30\"]"
+ },
+ "comfyui-jina-clip-v2-full": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 1309,
+  "error": null,
+  "deviations": [
+   "download.pytorch.org/whl/cpu has no aarch64 torchvision 0.21.0+cpu; its aarch64 0.21.0 wheel is the CPU build (x1)",
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (50 pins)"
+  ],
+  "ts": "2026-09-26T08:25:29",
+  "reward": 0.428,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 21,
+  "official_reward": 0.428,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.428 equals the official amd64 image's",
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:5170595d912c5e453e177d91049fc7b6f8a72f3c41e509ee08c98e5eb5a3ed80\"]"
+ },
+ "comfyui-lumina-axes-lens": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 669,
+  "error": null,
+  "deviations": [
+   "download.pytorch.org/whl/cpu has no aarch64 torchvision 0.21.0+cpu; its aarch64 0.21.0 wheel is the CPU build (x1)",
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (50 pins)"
+  ],
+  "ts": "2026-09-26T08:36:45",
+  "reward": 0.49,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 5,
+  "official_reward": 0.49,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.49 equals the official amd64 image's",
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:fd66dde4a5caf43b454582ce0e55ac0165d8a866041775919f4feac705b2c39e\"]"
+ },
+ "comfyui-lumina2-lora-prefix": {
+  "built": true,
+  "build_seconds": 8,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:37:10",
+  "validated": true,
+  "reward": 0.76,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 33,
+  "official_reward": 0.76,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.76 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ca39a46c1c9d5e8f17051e852b79a376cb47d8d885fd15e48d57527c83125d08\"]"
+ },
+ "comfyui-newbie-lumina-refactor": {
+  "built": true,
+  "validated": true,
+  "pushed": true,
+  "build_seconds": 1709,
+  "error": null,
+  "deviations": [
+   "download.pytorch.org/whl/cpu has no aarch64 torchvision 0.21.0+cpu; its aarch64 0.21.0 wheel is the CPU build (x1)",
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (50 pins)"
+  ],
+  "ts": "2026-09-26T08:29:26",
+  "reward": 0.21,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 16,
+  "official_reward": 0.21,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.21 equals the official amd64 image's",
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:8442ba1c9b0f2fa6d3d428757536cc13bb3b6ffa06852e66a563b4f841bca904\"]"
+ },
+ "comfyui-triton-windows-amd-fix": {
+  "built": true,
+  "build_seconds": 10,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest -> bdqnghi/swe-together-base:comfyui-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:46:01",
+  "validated": true,
+  "reward": 0.75,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.75,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.75 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f35f823711c119d9cbf50d0445ffb0573de0e9c1d0ffff08ddf0e877d5470f67\"]"
+ },
+ "dataclaw-anonymizer-tests": {
+  "built": true,
+  "build_seconds": 116,
+  "deviations": [
+   "pip constraints from official image (25 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:21:28",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:3c5f1ed799fd32f8e49b7ef7b64d1d7d4ca201496c94277a2d1d898dced02dc4\"]"
+ },
+ "dataclaw-test-coverage-fix": {
+  "built": true,
+  "build_seconds": 1040,
+  "deviations": [
+   "pip constraints from official image (31 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:26:30",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:9074b186ffac6892f14eb66e6b3cf8bcebef1e625e1724269d9f95a4daa37178\"]"
+ },
+ "dataclaw-windows-path-fix": {
+  "built": true,
+  "build_seconds": 526,
+  "deviations": [
+   "pip constraints from official image (22 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:28",
+  "validated": true,
+  "reward": 0.712,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 4,
+  "official_reward": 0.712,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.712 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:c28907001ad03d04563ffea2b12ae43339e4949a5f63cd6cb001904090ea907d\"]"
+ },
+ "desloppify-treesitter-plugins": {
+  "built": true,
+  "build_seconds": 747,
+  "deviations": [
+   "pip constraints from official image (17 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:36:35",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 2,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:8df951a889497314d05fce16ff64697ffd00e5f4badece97ce9a76a514684f42\"]"
+ },
+ "desloppify-zone-classification": {
+  "built": true,
+  "build_seconds": 134,
+  "deviations": [
+   "pip constraints from official image (6 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:02:43",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:0c1823162252ec2e06d8e2a315f0803da7166bca6914b8487e89b057f43254d5\"]"
+ },
+ "gemini-voyager-task-16a5c7": {
+  "built": true,
+  "build_seconds": 1431,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:59:47",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 251,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:5c6c7c610b04aa2304a3ea069635ffa8e5a669a4e78bc639ca3cb3b018a2d382\"]"
+ },
+ "gemini-voyager-task-4a5730": {
+  "built": true,
+  "build_seconds": 671,
+  "deviations": [
+   "bun pinned to 1.3.14",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T07:44:33",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 104,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d0a253e1e26553a20cd15853cefa3f51dcace836f1098ed0edadff33656e4984\"]"
+ },
+ "gemini-voyager-task-4bddaf": {
+  "built": true,
+  "build_seconds": 213,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:28",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 134,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:cae688f433121cdc9dc173147c297cf198aa13a0ba96a5dbbedc9188c0bc3b6c\"]"
+ },
+ "gemini-voyager-task-64c72f": {
+  "built": true,
+  "build_seconds": 761,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:04:47",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 254,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:8159c94a794b8aa1b6bda2e7af43d97af839a6ceae0d6f1fc66d14dedc4effc5\"]"
+ },
+ "gemini-voyager-task-72a86c": {
+  "built": true,
+  "build_seconds": 1638,
+  "deviations": [
+   "bun pinned to 1.3.14",
+   "nodejs pinned to 20.20.2-1nodesource1",
+   "pip constraints from official image (1 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:38:08",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 187,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:754e8657096bf5afe94aa94aa045b96e55f8c065792f5ed0531f91d591119c14\"]"
+ },
+ "gemini-voyager-task-aa88f5": {
+  "built": true,
+  "build_seconds": 339,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:03:38",
+  "validated": true,
+  "reward": 0.8,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 205,
+  "official_reward": 0.8,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.8 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ad7a1680be6e844a5219fbfc01ad75060cb971edac7e418ee0cd246ac7ef9734\"]"
+ },
+ "gemini-voyager-task-c5c01d": {
+  "built": true,
+  "build_seconds": 423,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:36:28",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 182,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a72248bd1b9b00c29a0cab7839b2e4986aaecc7870ae090ac4586ca198e49936\"]"
+ },
+ "gemini-voyager-task-f519c2": {
+  "built": true,
+  "build_seconds": 185,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:00:47",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 179,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:998b4ce9dc74bc24d794ce3bfea5a95f7cf04633f8e74996dca112f43bfcec26\"]"
+ },
+ "hyperswitch-8008": {
+  "built": true,
+  "build_seconds": 9,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:28",
+  "validated": true,
+  "reward": 0.75,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 38,
+  "official_reward": 0.75,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.75 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:35b4f3c51e1cb5bfc23ef2428fa2abd01c48e942f4bfd6ec745530660b895036\"]"
+ },
+ "hyperswitch-8084": {
+  "built": true,
+  "build_seconds": 12,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:11:14",
+  "validated": true,
+  "reward": 0.55,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 87,
+  "official_reward": 0.55,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.55 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:144542e50f9d1797eb14453db170a34d8cdbcdf9978d6f1f014fa9a3e446cf61\"]"
+ },
+ "hyperswitch-8338": {
+  "built": true,
+  "build_seconds": 18,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T05:20:04",
+  "validated": true,
+  "reward": 0.53,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 127,
+  "official_reward": 0.53,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.53 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:45a11087b7f0db6113bbd0233e8e11afa4e00cc07b58d27382c7f5600d35d179\"]"
+ },
+ "hyperswitch-8377": {
+  "built": true,
+  "build_seconds": 23,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:29",
+  "validated": true,
+  "reward": 0.36,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 61,
+  "official_reward": 0.36,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.36 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:491c9161ab2160f57a106489cf333f8b986d5cee58a2479a1c2f5309f8a04bc4\"]"
+ },
+ "hyperswitch-8389": {
+  "built": true,
+  "build_seconds": 22,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:29",
+  "validated": true,
+  "reward": 0.64,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 38,
+  "official_reward": 0.64,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.64 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:42bd32e629728332bfb05afa58793b690260f13ebc4930051085eab6217cd26c\"]"
+ },
+ "hyperswitch-9063": {
+  "built": true,
+  "build_seconds": 10,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:30",
+  "validated": true,
+  "reward": 0.33,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 23,
+  "official_reward": 0.33,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.33 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:23c3ab0143198c8827d1e75337989ca2e8da1fcbb61353eef09834be47473bc9\"]"
+ },
+ "hyperswitch-9430": {
+  "built": true,
+  "build_seconds": 18,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:54:30",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 26,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:9bf52c9c380bf0e91f8951e29bebb64d3e1ba45a86e77c5823f5160fc82b677b\"]"
+ },
+ "hyperswitch-9437": {
+  "built": true,
+  "build_seconds": 9,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:00:15",
+  "validated": true,
+  "reward": 0.21,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 68,
+  "official_reward": 0.21,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.21 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:e2b1c6f6b82effb4b1984fd05bdc58b7bd58b276c3d81cded39915de6b949575\"]"
+ },
+ "hyperswitch-9465": {
+  "built": true,
+  "build_seconds": 16,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest -> bdqnghi/swe-together-base:hyperswitch-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:21:40",
+  "validated": true,
+  "reward": 0.2,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 58,
+  "official_reward": 0.2,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.2 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:84ca7d01ce41d0e3ed444d81324306c773e7aaa7a0ec413b9df9a2f741b3cf3f\"]"
+ },
+ "light-protocol-implement-7adad1": {
+  "built": true,
+  "build_seconds": 569,
+  "deviations": [
+   "pip constraints from official image (2 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:37:54",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 15,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:18a79b4cd27f37fcc8ac47c5bbf836a4753eab266e309b7cab11851d70c29dcb\"]"
+ },
+ "lock-code-manager-fix-7c955a": {
+  "built": true,
+  "build_seconds": 553,
+  "deviations": [
+   "pip constraints from official image (155 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:09:59",
+  "validated": true,
+  "reward": 0.55,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 4,
+  "official_reward": 0.55,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.55 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ae19ad630f943d4c72c4f3a5bce1f2037d0ce22f14daf7cc7aaa82eb3e871301\"]"
+ },
+ "mlx-lm-mambacache": {
+  "built": true,
+  "build_seconds": 601,
+  "deviations": [
+   "pip constraints from official image (35 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:39:57",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 3,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:84296223d0652cb00e0ae19bf43ba17f25705f051ffcdb30827394088bd68ba7\"]"
+ },
+ "no-magic-task-ce67d5": {
+  "built": true,
+  "build_seconds": 101,
+  "deviations": [],
+  "error": null,
+  "ts": "2026-09-26T08:19:07",
+  "validated": true,
+  "reward": 0.2,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.2,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.2 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:568ec3819626a892dd09df05f6a898d00ce90d5826a42764cc44111595b46740\"]"
+ },
+ "nunchaku-quantize-bugfix": {
+  "built": true,
+  "build_seconds": 215,
+  "deviations": [
+   "pip constraints from official image (11 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:41:04",
+  "validated": true,
+  "reward": 0.682,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 62,
+  "official_reward": 0.682,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.682 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a7c7431857e1dc2fa008fb7fee278a5d7d974851867259ed506f8c07e01fa44d\"]"
+ },
+ "nunchaku-svdq-reconstruction": {
+  "built": true,
+  "build_seconds": 1306,
+  "deviations": [
+   "pip constraints from official image (11 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:44:20",
+  "validated": true,
+  "reward": 0.85,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 4,
+  "official_reward": 0.85,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.85 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:3e2ca7cf91a507da74b44f70ba700d1ff5448d48779cd8bba8a876b0ec8fd9f9\"]"
+ },
+ "openclaw-security-review-flow": {
+  "built": true,
+  "build_seconds": 1648,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "npm -g typescript@5 -> typescript@5.9.3",
+   "nodejs pinned to 22.22.3-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:51:46",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:5fb12cd0e0d12d9f9094cdf7d4afd232da01ea3d275057d298b74555d02f53ae\"]"
+ },
+ "pi-mono-auto-0467b78e": {
+  "built": true,
+  "build_seconds": 28,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:42:12",
+  "validated": true,
+  "reward": 0.048,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 90,
+  "official_reward": 0.048,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.048 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:73baa7adb603d944b1025ddbe44292a7ee2c1b2de6e557dd3e82dee847c330cb\"]"
+ },
+ "pi-mono-auto-0750e8eb": {
+  "built": true,
+  "build_seconds": 26,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:39:07",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 2,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:15b736bf1f0dcafcc9e9f61c9630d484a23bdec88282c7d271f87ecddb60fd3c\"]"
+ },
+ "pi-mono-auto-0fa6d7bd": {
+  "built": true,
+  "build_seconds": 26,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:42:40",
+  "validated": true,
+  "reward": 0.32,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 176,
+  "official_reward": 0.32,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.32 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:3e5b4c7150bf867460c1e192dfbdf66e0771582b4ea6918eb57da7b04708da90\"]"
+ },
+ "pi-mono-auto-1b58dd4f": {
+  "built": true,
+  "build_seconds": 33,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:41:57",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 171,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:9348da8d6d75fd558f6645e9d98e8fa3c8a1484f983b7832149773da49ffe134\"]"
+ },
+ "pi-mono-auto-41636ae5": {
+  "built": true,
+  "build_seconds": 25,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:45:00",
+  "validated": true,
+  "reward": 0.52,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 133,
+  "official_reward": 0.52,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.52 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:efeca8ad4152d599f07ba179f7e6662ada5f45b3844fff7b54d97fef1b998d9c\"]"
+ },
+ "pi-mono-auto-4439324b": {
+  "built": true,
+  "build_seconds": 30,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:54:15",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 141,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:82cfc8bd3c01a9736aa2266ed3b4e22dbf33bcf90fedf49d4740347e6448aaa7\"]"
+ },
+ "pi-mono-auto-6f8288bb": {
+  "built": true,
+  "build_seconds": 19,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:42:49",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 13,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:702d342a4c634305d905b8d62f38540339cbb9c3e32fa22d5b4c5f732e1eac16\"]"
+ },
+ "pi-mono-auto-90748a5d": {
+  "built": true,
+  "build_seconds": 31,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:43:36",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 134,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:0f08eed96362e59fe769287ba045e5ad7dc8092fc69f4909c91bd999da349f2f\"]"
+ },
+ "pi-mono-auto-93c17d3b": {
+  "built": true,
+  "build_seconds": 36,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:44:10",
+  "validated": true,
+  "reward": 0.865,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 145,
+  "official_reward": 0.865,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.865 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:3661b9ef084142ebac9bdc2bee86fd8212180fe65d9870dec2d28e0a0e85459c\"]"
+ },
+ "pi-mono-auto-95de1efe": {
+  "built": true,
+  "build_seconds": 32,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:46:44",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 144,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:2eff4ce940dae8c0768b0a21939b75f1ca4b4e49edfba0b36f22ed66285ca2ba\"]"
+ },
+ "pi-mono-auto-a4fca584": {
+  "built": true,
+  "build_seconds": 30,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:49:44",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 129,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:2065818789602d3614139e619b1ec0d563be0f3290396aed5c61bec912d957e7\"]"
+ },
+ "pi-mono-auto-cad40af4": {
+  "built": true,
+  "build_seconds": 41,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:48:29",
+  "validated": true,
+  "reward": 0.4,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 187,
+  "official_reward": 0.4,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.4 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:006843ff2bf5dd5aab0e9e4cf74a0dac3db89911b34eed6518353c21a7f9deb5\"]"
+ },
+ "pi-mono-auto-cbb62cbe": {
+  "built": true,
+  "build_seconds": 16,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:45:55",
+  "validated": true,
+  "reward": 0.85,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 7,
+  "official_reward": 0.85,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.85 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:09e1f1096a5e3ed8e2daa0df83f8b7d527312f2532465c62ffeb03485c718bea\"]"
+ },
+ "pi-mono-auto-d3b2130d": {
+  "built": true,
+  "build_seconds": 274,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:12:32",
+  "validated": true,
+  "reward": 0.1,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 139,
+  "official_reward": 0.1,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.1 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a8ac821374dd0f586f0e12e45685a61d8403b40693a604a32b3903b60ad147b3\"]"
+ },
+ "pi-mono-auto-d8c68afc": {
+  "built": true,
+  "build_seconds": 32,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:50:58",
+  "validated": true,
+  "reward": 0.84,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 215,
+  "official_reward": 0.84,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.84 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d8085fdc7b42544bf45d691d91ea9cb18cdf34244c5d805c0266b4fa1d5eb961\"]"
+ },
+ "pi-mono-auto-e86a388c": {
+  "built": true,
+  "build_seconds": 29,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:52:23",
+  "validated": true,
+  "reward": 0.084,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 197,
+  "official_reward": 0.084,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.084 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:070867e2754a2efa994088bddf15a5a4d861a5f1909642d9aa7277ffa389e1a5\"]"
+ },
+ "pi-mono-auto-ec7037ba": {
+  "built": true,
+  "build_seconds": 37,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:53:18",
+  "validated": true,
+  "reward": 0.5,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 148,
+  "official_reward": 0.5,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.5 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d93ff09bc0d0bdecfab81ff1cb88abfc4c8ba73723e539e34c7a28941a722b2e\"]"
+ },
+ "pi-mono-auto-fcb17499": {
+  "built": true,
+  "build_seconds": 29,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:54:20",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 207,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:912b17c34e27c0827bedec2e3c2ff629782f1daf3f2d2095768ab2eceed47a07\"]"
+ },
+ "pi-mono-extensions-event-refactor": {
+  "built": true,
+  "build_seconds": 227,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:04:15",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 147,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f64a981241f486be7dbb5c349b041d0185bc0acf33aa44c93d0f36c4202bf601\"]"
+ },
+ "pi-mono-foreign-toolcall-fix": {
+  "built": true,
+  "build_seconds": 1,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:54:21",
+  "validated": true,
+  "reward": 0.7,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 230,
+  "official_reward": 0.7,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.7 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:82cfc8bd3c01a9736aa2266ed3b4e22dbf33bcf90fedf49d4740347e6448aaa7\"]"
+ },
+ "pi-mono-keybinding-scope": {
+  "built": true,
+  "build_seconds": 36,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:55:44",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 225,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:e7cd201df808ef53d4cce55ce4531fce0fb182378d195994a6c5c2da4eda53e8\"]"
+ },
+ "pi-mono-parallel-tool-stall": {
+  "built": true,
+  "build_seconds": 40,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:55:42",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 288,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:1145e812640653e4a2d10ee519a0aed8b5e18de105e4d1cc1827a19aedaafa86\"]"
+ },
+ "pi-mono-tool-execution-write-error": {
+  "built": true,
+  "build_seconds": 49,
+  "deviations": [
+   "npm -g tsx@4 -> tsx@4.22.4",
+   "nodejs pinned to 20.20.2-1nodesource1"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:07:12",
+  "validated": true,
+  "reward": 0.36,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 217,
+  "official_reward": 0.36,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.36 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:90e5b8ce0418943a42313c9b9b5d186b8119d2b0b5cbf9fb7aaeb66aad85f38c\"]"
+ },
+ "qwen3-moe-gguf-dequant": {
+  "built": true,
+  "build_seconds": 144,
+  "deviations": [
+   "pip constraints from official image (14 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:00:12",
+  "validated": true,
+  "reward": 0.668,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 13,
+  "official_reward": 0.668,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.668 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:59ef88c681cdf58b6123887dcbefe3397386a084a8e97bb578c9c4ec190562cf\"]"
+ },
+ "reigh-medialightbox-refactor": {
+  "built": true,
+  "build_seconds": 46,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:56:02",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a2641957c3f865c35368b0079b11ed11d061e3dc41c43a7a4999dc64b5fc84d6\"]"
+ },
+ "reigh-preset-data-flow": {
+  "built": true,
+  "build_seconds": 33,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:56:38",
+  "validated": true,
+  "reward": 0.15,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 2,
+  "official_reward": 0.15,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.15 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:3cdd11382d603bbe55f36f22a1e8b4a4442eba65759b64c91e38afbe30d70af0\"]"
+ },
+ "reigh-radix-props-cleanup": {
+  "built": true,
+  "build_seconds": 42,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:56:49",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 3,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f04361368db0a47c5ad10ce78293b82bae0e0817df5da355a53dd3fe4f4fe376\"]"
+ },
+ "reigh-stroke-overlay-refactor": {
+  "built": true,
+  "build_seconds": 34,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:57:23",
+  "validated": true,
+  "reward": 0.05,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 2,
+  "official_reward": 0.05,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.05 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:1503373b25692ca4061904bb348f0b523949196dce3c5e90887371cec010431d\"]"
+ },
+ "reigh-taskspane-lightbox-bug": {
+  "built": true,
+  "build_seconds": 32,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:57:36",
+  "validated": true,
+  "reward": 0.1,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.1,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.1 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:830fcf9d7fbc7034c096a3f797ca1856167cc51f9a6ba4a971919408b0e61466\"]"
+ },
+ "reigh-timeline-mode-cleanup": {
+  "built": true,
+  "build_seconds": 31,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:58:39",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 25,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:f02539d4a69d7f7e7c491cf2e6d0f523a8cfa93ab2ff33d527cc978bfb850681\"]"
+ },
+ "reigh-timeline-multiselect": {
+  "built": true,
+  "build_seconds": 50,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest -> bdqnghi/swe-together-base:reigh-dev (arm64 reconstruction of the private base)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T08:58:37",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 15,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:1604545ccc26a1babf4b2543f4040347f2cf6c3cbdfd0bee29b6af580d6b00b3\"]"
+ },
+ "rudel-task-468289": {
+  "built": true,
+  "build_seconds": 1248,
+  "deviations": [
+   "bun pinned to 1.3.14",
+   "pip constraints from official image (1 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:15:22",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 233,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:ef3b1a15496c26a1a031686393cedf036d271d8dc1fc99e964158e333c44e16c\"]"
+ },
+ "rudel-task-491983": {
+  "built": true,
+  "build_seconds": 524,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:05:42",
+  "validated": true,
+  "reward": 0.8,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 296,
+  "official_reward": 0.8,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.8 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:d957671173369daec70c19bb3342f5d66b4088219324a7d382e45968c6b9782a\"]"
+ },
+ "rudel-task-8e0bd6": {
+  "built": true,
+  "build_seconds": 709,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:20:09",
+  "validated": true,
+  "reward": 0.65,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 320,
+  "official_reward": 0.65,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.65 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:4e5bec770e22bea43e031db79fedb0fa410af7e691cf994227f20cf68d751aa9\"]"
+ },
+ "rudel-task-d1ddb8": {
+  "built": true,
+  "build_seconds": 471,
+  "deviations": [
+   "bun pinned to 1.3.14"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:06:19",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 231,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:edc00212a7932cf8599cd898d23b7afbf240393bb0eb87e08bc270f389e5ea7b\"]"
+ },
+ "sd-scripts-fp8-lumina": {
+  "built": true,
+  "build_seconds": 8,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest -> bdqnghi/swe-together-base:sd-scripts-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (55 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:01:40",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 15,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:bfcd696e8a35bfbaf941b6e01354b11686e3dbec255e8dc0d783a7d69c8418aa\"]"
+ },
+ "sd-scripts-multiresolution-compat": {
+  "built": true,
+  "build_seconds": 8,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest -> bdqnghi/swe-together-base:sd-scripts-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (55 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:00:19",
+  "validated": true,
+  "reward": 1.0,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 20,
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a01f8756b57fceee273443b5e57308d0d113b7304af96b2536f22132385a1ccd\"]"
+ },
+ "sd-scripts-reg-image-dedup": {
+  "built": true,
+  "build_seconds": 8,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest -> bdqnghi/swe-together-base:sd-scripts-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (55 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:07:52",
+  "validated": true,
+  "reward": 0.85,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 15,
+  "official_reward": 0.85,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.85 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a88476fcc7c91ea2b86db95a81741c8d9905d1463007c64cf0754e56de54acac\"]"
+ },
+ "sd-scripts-sdxl-multires-dedup": {
+  "built": true,
+  "build_seconds": 9,
+  "deviations": [
+   "FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest -> bdqnghi/swe-together-base:sd-scripts-dev (arm64 reconstruction of the private base)",
+   "pip constraints from official image (55 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:03:15",
+  "validated": true,
+  "reward": 0.4,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 30,
+  "official_reward": 0.4,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.4 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:9d2971cc1b7a36d2c3b5574d5ba9416df9044a667f3d643cfc747695560e717a\"]"
+ },
+ "triton-msvc-c4267-warnings": {
+  "built": true,
+  "build_seconds": 119,
+  "deviations": [],
+  "error": null,
+  "ts": "2026-09-26T09:01:18",
+  "validated": true,
+  "reward": 0.52,
+  "mode": "gold",
+  "validated_as": "root",
+  "validate_seconds": 31,
+  "official_reward": 0.52,
+  "official_error": null,
+  "matches_official": true,
+  "note": "gold reward 0.52 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:a91df111cdb8d5523e2352fd5ed129e2e9b4a948d67f76d481f44a8e82496f22\"]"
+ },
+ "unsloth-idefics3-finetune": {
+  "built": true,
+  "build_seconds": 219,
+  "deviations": [
+   "download.pytorch.org/whl/cpu has no aarch64 2.5.1+cpu wheel; its aarch64 2.5.1 wheel is the CPU build (x1)",
+   "same for torchvision 0.20.1 (x1)",
+   "pip constraints from official image (63 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T09:02:24",
+  "validated": true,
+  "reward": 0.0,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 1,
+  "official_reward": 0.0,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.0 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:baa76e261a37273d13fcb3fc01dd59431708ada7d892951baab539db6739cd0a\"]"
+ },
+ "vibecomfy-mcp-pr-integration": {
+  "built": true,
+  "build_seconds": 1729,
+  "deviations": [
+   "pip constraints from official image (25 pins)"
+  ],
+  "error": null,
+  "ts": "2026-09-26T06:49:24",
+  "validated": true,
+  "reward": 0.162,
+  "mode": "baseline",
+  "validated_as": "root",
+  "validate_seconds": 2,
+  "official_reward": 0.162,
+  "official_error": null,
+  "matches_official": true,
+  "note": "baseline reward 0.162 equals the official amd64 image's",
+  "pushed": true,
+  "repo_digests": "[\"bdqnghi/swe-together@sha256:2a2a2e38f5d7ee6be5a8717d3bf1fe41847b1b928413b3670c294be627e53e2d\"]"
+ }
+}

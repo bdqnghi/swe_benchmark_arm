@@ -1,0 +1,1390 @@
+{
+ "dpkg": {
+  "adduser": "3.137ubuntu1",
+  "apt": "2.8.3",
+  "asciinema": "2.4.0-1",
+  "base-files": "13ubuntu10.4",
+  "base-passwd": "3.6.3build1",
+  "bash": "5.2.21-2ubuntu4",
+  "binutils": "2.42-4ubuntu2.10",
+  "binutils-common": "2.42-4ubuntu2.10",
+  "binutils-x86-64-linux-gnu": "2.42-4ubuntu2.10",
+  "bsdutils": "1:2.39.3-9ubuntu6.5",
+  "build-essential": "12.10ubuntu1",
+  "bzip2": "1.0.8-5.1build0.1",
+  "ca-certificates": "20240203",
+  "coreutils": "9.4-3ubuntu6.2",
+  "cpp": "4:13.2.0-7ubuntu1",
+  "cpp-13": "13.3.0-6ubuntu2~24.04.1",
+  "cpp-13-x86-64-linux-gnu": "13.3.0-6ubuntu2~24.04.1",
+  "cpp-x86-64-linux-gnu": "4:13.2.0-7ubuntu1",
+  "curl": "8.5.0-2ubuntu10.9",
+  "dash": "0.5.12-6ubuntu5",
+  "dbus": "1.14.10-4ubuntu4.1",
+  "dbus-bin": "1.14.10-4ubuntu4.1",
+  "dbus-daemon": "1.14.10-4ubuntu4.1",
+  "dbus-session-bus-common": "1.14.10-4ubuntu4.1",
+  "dbus-system-bus-common": "1.14.10-4ubuntu4.1",
+  "debconf": "1.5.86ubuntu1",
+  "debianutils": "5.17build1",
+  "diffutils": "1:3.10-1build1",
+  "dirmngr": "2.4.4-2ubuntu17.4",
+  "distro-info-data": "0.60ubuntu0.6",
+  "dpkg": "1.22.6ubuntu6.6",
+  "dpkg-dev": "1.22.6ubuntu6.6",
+  "e2fsprogs": "1.47.0-2.4~exp1ubuntu4.1",
+  "findutils": "4.9.0-5build1",
+  "g++": "4:13.2.0-7ubuntu1",
+  "g++-13": "13.3.0-6ubuntu2~24.04.1",
+  "g++-13-x86-64-linux-gnu": "13.3.0-6ubuntu2~24.04.1",
+  "g++-x86-64-linux-gnu": "4:13.2.0-7ubuntu1",
+  "gcc": "4:13.2.0-7ubuntu1",
+  "gcc-13": "13.3.0-6ubuntu2~24.04.1",
+  "gcc-13-base": "13.3.0-6ubuntu2~24.04.1",
+  "gcc-13-x86-64-linux-gnu": "13.3.0-6ubuntu2~24.04.1",
+  "gcc-14-base": "14.2.0-4ubuntu2~24.04.1",
+  "gcc-x86-64-linux-gnu": "4:13.2.0-7ubuntu1",
+  "gir1.2-girepository-2.0": "1.80.1-1",
+  "gir1.2-glib-2.0": "2.80.0-6ubuntu3.8",
+  "gir1.2-packagekitglib-1.0": "1.2.8-2ubuntu1.5",
+  "git": "1:2.43.0-1ubuntu7.3",
+  "git-man": "1:2.43.0-1ubuntu7.3",
+  "gnupg": "2.4.4-2ubuntu17.4",
+  "gnupg-utils": "2.4.4-2ubuntu17.4",
+  "gpg": "2.4.4-2ubuntu17.4",
+  "gpg-agent": "2.4.4-2ubuntu17.4",
+  "gpgconf": "2.4.4-2ubuntu17.4",
+  "gpgsm": "2.4.4-2ubuntu17.4",
+  "gpgv": "2.4.4-2ubuntu17.4",
+  "grep": "3.11-4build1",
+  "gzip": "1.12-1ubuntu3.1",
+  "hostname": "3.23+nmu2ubuntu2",
+  "init-system-helpers": "1.66ubuntu1",
+  "iso-codes": "4.16.0-1",
+  "keyboxd": "2.4.4-2ubuntu17.4",
+  "libacl1": "2.3.2-1build1.1",
+  "libapparmor1": "4.0.1really4.0.1-0ubuntu0.24.04.7",
+  "libappstream5": "1.0.2-1build6",
+  "libapt-pkg6.0t64": "2.8.3",
+  "libargon2-1": "0~20190702+dfsg-4build1",
+  "libasan8": "14.2.0-4ubuntu2~24.04.1",
+  "libassuan0": "2.5.6-1build1",
+  "libatomic1": "14.2.0-4ubuntu2~24.04.1",
+  "libattr1": "1:2.5.2-1build1.1",
+  "libaudit-common": "1:3.1.2-2.1build1.1",
+  "libaudit1": "1:3.1.2-2.1build1.1",
+  "libbinutils": "2.42-4ubuntu2.10",
+  "libblkid1": "2.39.3-9ubuntu6.5",
+  "libbrotli1": "1.1.0-2build2",
+  "libbz2-1.0": "1.0.8-5.1build0.1",
+  "libc-bin": "2.39-0ubuntu8.7",
+  "libc-dev-bin": "2.39-0ubuntu8.7",
+  "libc6": "2.39-0ubuntu8.7",
+  "libc6-dev": "2.39-0ubuntu8.7",
+  "libcap-ng0": "0.8.4-2build2",
+  "libcap2": "1:2.66-5ubuntu2.4",
+  "libcap2-bin": "1:2.66-5ubuntu2.4",
+  "libcc1-0": "14.2.0-4ubuntu2~24.04.1",
+  "libcom-err2": "1.47.0-2.4~exp1ubuntu4.1",
+  "libcrypt-dev": "1:4.4.36-4build1",
+  "libcrypt1": "1:4.4.36-4build1",
+  "libcryptsetup12": "2:2.7.0-1ubuntu4.2",
+  "libctf-nobfd0": "2.42-4ubuntu2.10",
+  "libctf0": "2.42-4ubuntu2.10",
+  "libcurl3t64-gnutls": "8.5.0-2ubuntu10.9",
+  "libcurl4t64": "8.5.0-2ubuntu10.9",
+  "libdb5.3t64": "5.3.28+dfsg2-7",
+  "libdbus-1-3": "1.14.10-4ubuntu4.1",
+  "libdebconfclient0": "0.271ubuntu3",
+  "libdevmapper1.02.1": "2:1.02.185-3ubuntu3.2",
+  "libdpkg-perl": "1.22.6ubuntu6.6",
+  "libduktape207": "2.7.0+tests-0ubuntu3",
+  "libdw1t64": "0.190-1.1ubuntu0.1",
+  "libelf1t64": "0.190-1.1ubuntu0.1",
+  "liberror-perl": "0.17029-2",
+  "libevent-core-2.1-7t64": "2.1.12-stable-9ubuntu2",
+  "libexpat1": "2.6.1-2ubuntu0.4",
+  "libexpat1-dev": "2.6.1-2ubuntu0.4",
+  "libext2fs2t64": "1.47.0-2.4~exp1ubuntu4.1",
+  "libfdisk1": "2.39.3-9ubuntu6.5",
+  "libffi8": "3.4.6-1build1",
+  "libgcc-13-dev": "13.3.0-6ubuntu2~24.04.1",
+  "libgcc-s1": "14.2.0-4ubuntu2~24.04.1",
+  "libgcrypt20": "1.10.3-2build1",
+  "libgdbm-compat4t64": "1.23-5.1build1",
+  "libgdbm6t64": "1.23-5.1build1",
+  "libgirepository-1.0-1": "1.80.1-1",
+  "libglib2.0-0t64": "2.80.0-6ubuntu3.8",
+  "libglib2.0-bin": "2.80.0-6ubuntu3.8",
+  "libglib2.0-data": "2.80.0-6ubuntu3.8",
+  "libgmp10": "2:6.3.0+dfsg-2ubuntu6.1",
+  "libgnutls30t64": "3.8.3-1.1ubuntu3.5",
+  "libgomp1": "14.2.0-4ubuntu2~24.04.1",
+  "libgpg-error0": "1.47-3build2.1",
+  "libgprofng0": "2.42-4ubuntu2.10",
+  "libgssapi-krb5-2": "1.20.1-6ubuntu2.6",
+  "libgstreamer1.0-0": "1.24.2-1ubuntu0.1",
+  "libhogweed6t64": "3.9.1-2.2build1.1",
+  "libhwasan0": "14.2.0-4ubuntu2~24.04.1",
+  "libicu74": "74.2-1ubuntu3.1",
+  "libidn2-0": "2.3.7-2build1.1",
+  "libisl23": "0.26-3build1.1",
+  "libitm1": "14.2.0-4ubuntu2~24.04.1",
+  "libjansson4": "2.14-2build2",
+  "libjson-c5": "0.17-1build1",
+  "libk5crypto3": "1.20.1-6ubuntu2.6",
+  "libkeyutils1": "1.6.3-3build1",
+  "libkmod2": "31+20240202-2ubuntu7.2",
+  "libkrb5-3": "1.20.1-6ubuntu2.6",
+  "libkrb5support0": "1.20.1-6ubuntu2.6",
+  "libksba8": "1.6.6-1build1",
+  "libldap2": "2.6.10+dfsg-0ubuntu0.24.04.1",
+  "liblsan0": "14.2.0-4ubuntu2~24.04.1",
+  "liblz4-1": "1.9.4-1build1.1",
+  "liblzma5": "5.6.1+really5.4.5-1ubuntu0.3",
+  "libmd0": "1.1.0-2build1.1",
+  "libmount1": "2.39.3-9ubuntu6.5",
+  "libmpc3": "1.3.1-1build1.1",
+  "libmpfr6": "4.2.1-1build1.1",
+  "libncursesw6": "6.4+20240113-1ubuntu2",
+  "libnettle8t64": "3.9.1-2.2build1.1",
+  "libnghttp2-14": "1.59.0-1ubuntu0.3",
+  "libnpth0t64": "1.6-3.1build1",
+  "libp11-kit0": "0.25.3-4ubuntu2.1",
+  "libpackagekit-glib2-18": "1.2.8-2ubuntu1.5",
+  "libpam-modules": "1.5.3-5ubuntu5.5",
+  "libpam-modules-bin": "1.5.3-5ubuntu5.5",
+  "libpam-runtime": "1.5.3-5ubuntu5.5",
+  "libpam-systemd": "255.4-1ubuntu8.15",
+  "libpam0g": "1.5.3-5ubuntu5.5",
+  "libpcre2-8-0": "10.42-4ubuntu2.1",
+  "libperl5.38t64": "5.38.2-3.2ubuntu0.2",
+  "libpolkit-agent-1-0": "124-2ubuntu1.24.04.3",
+  "libpolkit-gobject-1-0": "124-2ubuntu1.24.04.3",
+  "libproc2-0": "2:4.0.4-4ubuntu3.2",
+  "libpsl5t64": "0.21.2-1.1build1",
+  "libpython3-stdlib": "3.12.3-0ubuntu2.1",
+  "libpython3.12-minimal": "3.12.3-1ubuntu0.13",
+  "libpython3.12-stdlib": "3.12.3-1ubuntu0.13",
+  "libpython3.13": "3.13.13-1+noble1",
+  "libpython3.13-dev": "3.13.13-1+noble1",
+  "libpython3.13-stdlib": "3.13.13-1+noble1",
+  "libquadmath0": "14.2.0-4ubuntu2~24.04.1",
+  "libreadline8t64": "8.2-4build1",
+  "librtmp1": "2.4+20151223.gitfa8646d.1-2build7",
+  "libsasl2-2": "2.1.28+dfsg1-5ubuntu3.1",
+  "libsasl2-modules-db": "2.1.28+dfsg1-5ubuntu3.1",
+  "libseccomp2": "2.5.5-1ubuntu3.1",
+  "libselinux1": "3.5-2ubuntu2.1",
+  "libsemanage-common": "3.5-1build5",
+  "libsemanage2": "3.5-1build5",
+  "libsepol2": "3.5-2build1",
+  "libsframe1": "2.42-4ubuntu2.10",
+  "libsmartcols1": "2.39.3-9ubuntu6.5",
+  "libsqlite3-0": "3.45.1-1ubuntu2.5",
+  "libss2": "1.47.0-2.4~exp1ubuntu4.1",
+  "libssh-4": "0.10.6-2ubuntu0.4",
+  "libssl3t64": "3.0.13-0ubuntu3.9",
+  "libstdc++-13-dev": "13.3.0-6ubuntu2~24.04.1",
+  "libstdc++6": "14.2.0-4ubuntu2~24.04.1",
+  "libstemmer0d": "2.2.0-4build1",
+  "libsystemd-shared": "255.4-1ubuntu8.15",
+  "libsystemd0": "255.4-1ubuntu8.15",
+  "libtasn1-6": "4.19.0-3ubuntu0.24.04.2",
+  "libtinfo6": "6.4+20240113-1ubuntu2",
+  "libtsan2": "14.2.0-4ubuntu2~24.04.1",
+  "libubsan1": "14.2.0-4ubuntu2~24.04.1",
+  "libudev1": "255.4-1ubuntu8.15",
+  "libunistring5": "1.1-2build1.1",
+  "libunwind8": "1.6.2-3build1.1",
+  "libutempter0": "1.2.1-3build1",
+  "libuuid1": "2.39.3-9ubuntu6.5",
+  "libxml2": "2.9.14+dfsg-1.3ubuntu3.7",
+  "libxmlb2": "0.3.18-1",
+  "libxxhash0": "0.8.2-2build1",
+  "libyaml-0-2": "0.2.5-1build1",
+  "libzstd1": "1.5.5+dfsg2-2build1.1",
+  "linux-libc-dev": "6.8.0-124.124",
+  "login": "1:4.13+dfsg1-4ubuntu3.2",
+  "logsave": "1.47.0-2.4~exp1ubuntu4.1",
+  "lsb-release": "12.0-2",
+  "lto-disabled-list": "47",
+  "make": "4.3-4.1build2",
+  "mawk": "1.3.4.20240123-1build1",
+  "media-types": "10.1.0",
+  "mount": "2.39.3-9ubuntu6.5",
+  "ncurses-base": "6.4+20240113-1ubuntu2",
+  "ncurses-bin": "6.4+20240113-1ubuntu2",
+  "netbase": "6.4",
+  "openssl": "3.0.13-0ubuntu3.9",
+  "packagekit": "1.2.8-2ubuntu1.5",
+  "passwd": "1:4.13+dfsg1-4ubuntu3.2",
+  "patch": "2.7.6-7build3",
+  "perl": "5.38.2-3.2ubuntu0.2",
+  "perl-base": "5.38.2-3.2ubuntu0.2",
+  "perl-modules-5.38": "5.38.2-3.2ubuntu0.2",
+  "pinentry-curses": "1.2.1-3ubuntu5",
+  "polkitd": "124-2ubuntu1.24.04.3",
+  "procps": "2:4.0.4-4ubuntu3.2",
+  "python-apt-common": "2.7.7ubuntu5.2",
+  "python3": "3.12.3-0ubuntu2.1",
+  "python3-apt": "2.7.7ubuntu5.2",
+  "python3-blinker": "1.7.0-1",
+  "python3-cffi-backend": "1.16.0-2build1",
+  "python3-cryptography": "41.0.7-4ubuntu0.4",
+  "python3-dbus": "1.3.2-5build3",
+  "python3-distro": "1.9.0-1",
+  "python3-gi": "3.48.2-1",
+  "python3-httplib2": "0.20.4-3",
+  "python3-jwt": "2.7.0-1ubuntu0.1",
+  "python3-launchpadlib": "1.11.0-6",
+  "python3-lazr.restfulclient": "0.14.6-1",
+  "python3-lazr.uri": "1.0.6-3",
+  "python3-minimal": "3.12.3-0ubuntu2.1",
+  "python3-oauthlib": "3.2.2-1",
+  "python3-pkg-resources": "68.1.2-2ubuntu1.2",
+  "python3-pyparsing": "3.1.1-1",
+  "python3-six": "1.16.0-4",
+  "python3-software-properties": "0.99.49.4",
+  "python3-wadllib": "1.3.6-5",
+  "python3.12": "3.12.3-1ubuntu0.13",
+  "python3.12-minimal": "3.12.3-1ubuntu0.13",
+  "python3.13": "3.13.13-1+noble1",
+  "python3.13-dev": "3.13.13-1+noble1",
+  "python3.13-venv": "3.13.13-1+noble1",
+  "readline-common": "8.2-4build1",
+  "rpcsvc-proto": "1.4.2-0ubuntu7",
+  "sed": "4.9-2ubuntu0.24.04.1",
+  "sensible-utils": "0.0.22",
+  "sgml-base": "1.31",
+  "software-properties-common": "0.99.49.4",
+  "systemd": "255.4-1ubuntu8.15",
+  "systemd-dev": "255.4-1ubuntu8.15",
+  "systemd-sysv": "255.4-1ubuntu8.15",
+  "sysvinit-utils": "3.08-6ubuntu3",
+  "tar": "1.35+dfsg-3build1",
+  "tmux": "3.4-1ubuntu0.1",
+  "tzdata": "2026a-0ubuntu0.24.04.1",
+  "ubuntu-keyring": "2023.11.28.1",
+  "unminimize": "0.2.1",
+  "util-linux": "2.39.3-9ubuntu6.5",
+  "xml-core": "0.19",
+  "xz-utils": "5.6.1+really5.4.5-1ubuntu0.3",
+  "zlib1g": "1:1.3.dfsg-3.1ubuntu2.1"
+ },
+ "image": "ghcr.io/togetherbench/multi-user-turn-codebench/lock-code-manager-fix-7c955a:12a0f58f0525",
+ "npm_global": {},
+ "platform": "linux/amd64",
+ "pythons": {
+  "/usr/bin/python3": {
+   "dists": [
+    {
+     "direct_url": null,
+     "name": "launchpadlib",
+     "path": "/usr/lib/python3/dist-packages/launchpadlib-1.11.0.egg-info",
+     "version": "1.11.0"
+    },
+    {
+     "direct_url": null,
+     "name": "asciinema",
+     "path": "/usr/lib/python3/dist-packages/asciinema-2.4.0.dist-info",
+     "version": "2.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "wadllib",
+     "path": "/usr/lib/python3/dist-packages/wadllib-1.3.6.egg-info",
+     "version": "1.3.6"
+    },
+    {
+     "direct_url": null,
+     "name": "six",
+     "path": "/usr/lib/python3/dist-packages/six-1.16.0.egg-info",
+     "version": "1.16.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pyparsing",
+     "path": "/usr/lib/python3/dist-packages/pyparsing-3.1.1.dist-info",
+     "version": "3.1.1"
+    },
+    {
+     "direct_url": null,
+     "name": "oauthlib",
+     "path": "/usr/lib/python3/dist-packages/oauthlib-3.2.2.egg-info",
+     "version": "3.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "lazr.restfulclient",
+     "path": "/usr/lib/python3/dist-packages/lazr.restfulclient-0.14.6.egg-info",
+     "version": "0.14.6"
+    },
+    {
+     "direct_url": null,
+     "name": "distro",
+     "path": "/usr/lib/python3/dist-packages/distro-1.9.0.dist-info",
+     "version": "1.9.0"
+    },
+    {
+     "direct_url": null,
+     "name": "PyGObject",
+     "path": "/usr/lib/python3/dist-packages/PyGObject-3.48.2.egg-info",
+     "version": "3.48.2"
+    },
+    {
+     "direct_url": null,
+     "name": "python-apt",
+     "path": "/usr/lib/python3/dist-packages/python_apt-2.7.7+ubuntu5.2.egg-info",
+     "version": "2.7.7+ubuntu5.2"
+    },
+    {
+     "direct_url": null,
+     "name": "blinker",
+     "path": "/usr/lib/python3/dist-packages/blinker-1.7.0.dist-info",
+     "version": "1.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "cryptography",
+     "path": "/usr/lib/python3/dist-packages/cryptography.egg-info",
+     "version": "41.0.7"
+    },
+    {
+     "direct_url": null,
+     "name": "cryptography",
+     "path": "/usr/lib/python3/dist-packages/cryptography-41.0.7.dist-info",
+     "version": "41.0.7"
+    },
+    {
+     "direct_url": null,
+     "name": "lazr.uri",
+     "path": "/usr/lib/python3/dist-packages/lazr.uri-1.0.6.egg-info",
+     "version": "1.0.6"
+    },
+    {
+     "direct_url": null,
+     "name": "dbus-python",
+     "path": "/usr/lib/python3/dist-packages/dbus_python-1.3.2.egg-info",
+     "version": "1.3.2"
+    },
+    {
+     "direct_url": null,
+     "name": "httplib2",
+     "path": "/usr/lib/python3/dist-packages/httplib2-0.20.4.dist-info",
+     "version": "0.20.4"
+    },
+    {
+     "direct_url": null,
+     "name": "PyJWT",
+     "path": "/usr/lib/python3/dist-packages/PyJWT-2.7.0.dist-info",
+     "version": "2.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": null,
+     "path": "/usr/lib/python3.12/dist-packages/asciinema-2.4.0.dist-info",
+     "version": null
+    }
+   ],
+   "prefix": "/usr",
+   "version": "3.12.3"
+  },
+  "/venv/bin/python": {
+   "dists": [
+    {
+     "direct_url": null,
+     "name": "pytest-xdist",
+     "path": "/venv/lib/python3.13/site-packages/pytest_xdist-3.8.0.dist-info",
+     "version": "3.8.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pycares",
+     "path": "/venv/lib/python3.13/site-packages/pycares-5.0.1.dist-info",
+     "version": "5.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "josepy",
+     "path": "/venv/lib/python3.13/site-packages/josepy-2.2.0.dist-info",
+     "version": "2.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohasupervisor",
+     "path": "/venv/lib/python3.13/site-packages/aiohasupervisor-0.3.3.dist-info",
+     "version": "0.3.3"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohttp-fast-zlib",
+     "path": "/venv/lib/python3.13/site-packages/aiohttp_fast_zlib-0.3.0.dist-info",
+     "version": "0.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytz",
+     "path": "/venv/lib/python3.13/site-packages/pytz-2026.2.dist-info",
+     "version": "2026.2"
+    },
+    {
+     "direct_url": null,
+     "name": "mock-open",
+     "path": "/venv/lib/python3.13/site-packages/mock_open-1.4.0.dist-info",
+     "version": "1.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohappyeyeballs",
+     "path": "/venv/lib/python3.13/site-packages/aiohappyeyeballs-2.6.2.dist-info",
+     "version": "2.6.2"
+    },
+    {
+     "direct_url": null,
+     "name": "homeassistant",
+     "path": "/venv/lib/python3.13/site-packages/homeassistant-2026.2.3.dist-info",
+     "version": "2026.2.3"
+    },
+    {
+     "direct_url": null,
+     "name": "dbus-fast",
+     "path": "/venv/lib/python3.13/site-packages/dbus_fast-5.0.22.dist-info",
+     "version": "5.0.22"
+    },
+    {
+     "direct_url": null,
+     "name": "python-slugify",
+     "path": "/venv/lib/python3.13/site-packages/python_slugify-8.0.4.dist-info",
+     "version": "8.0.4"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-github-actions-annotate-failures",
+     "path": "/venv/lib/python3.13/site-packages/pytest_github_actions_annotate_failures-0.3.0.dist-info",
+     "version": "0.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pydantic",
+     "path": "/venv/lib/python3.13/site-packages/pydantic-2.12.2.dist-info",
+     "version": "2.12.2"
+    },
+    {
+     "direct_url": null,
+     "name": "aiodns",
+     "path": "/venv/lib/python3.13/site-packages/aiodns-4.0.0.dist-info",
+     "version": "4.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "bluetooth-auto-recovery",
+     "path": "/venv/lib/python3.13/site-packages/bluetooth_auto_recovery-1.6.4.dist-info",
+     "version": "1.6.4"
+    },
+    {
+     "direct_url": null,
+     "name": "virtualenv",
+     "path": "/venv/lib/python3.13/site-packages/virtualenv-21.4.2.dist-info",
+     "version": "21.4.2"
+    },
+    {
+     "direct_url": null,
+     "name": "btsocket",
+     "path": "/venv/lib/python3.13/site-packages/btsocket-0.3.0.dist-info",
+     "version": "0.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest",
+     "path": "/venv/lib/python3.13/site-packages/pytest-9.0.0.dist-info",
+     "version": "9.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "voluptuous-serialize",
+     "path": "/venv/lib/python3.13/site-packages/voluptuous_serialize-2.7.0.dist-info",
+     "version": "2.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "ciso8601",
+     "path": "/venv/lib/python3.13/site-packages/ciso8601-2.3.3.dist-info",
+     "version": "2.3.3"
+    },
+    {
+     "direct_url": null,
+     "name": "h11",
+     "path": "/venv/lib/python3.13/site-packages/h11-0.16.0.dist-info",
+     "version": "0.16.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pipdeptree",
+     "path": "/venv/lib/python3.13/site-packages/pipdeptree-2.26.1.dist-info",
+     "version": "2.26.1"
+    },
+    {
+     "direct_url": null,
+     "name": "syrupy",
+     "path": "/venv/lib/python3.13/site-packages/syrupy-5.0.0.dist-info",
+     "version": "5.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "ifaddr",
+     "path": "/venv/lib/python3.13/site-packages/ifaddr-0.2.0.dist-info",
+     "version": "0.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "six",
+     "path": "/venv/lib/python3.13/site-packages/six-1.17.0.dist-info",
+     "version": "1.17.0"
+    },
+    {
+     "direct_url": null,
+     "name": "requests-mock",
+     "path": "/venv/lib/python3.13/site-packages/requests_mock-1.12.1.dist-info",
+     "version": "1.12.1"
+    },
+    {
+     "direct_url": null,
+     "name": "multidict",
+     "path": "/venv/lib/python3.13/site-packages/multidict-6.7.1.dist-info",
+     "version": "6.7.1"
+    },
+    {
+     "direct_url": null,
+     "name": "mashumaro",
+     "path": "/venv/lib/python3.13/site-packages/mashumaro-3.22.dist-info",
+     "version": "3.22"
+    },
+    {
+     "direct_url": null,
+     "name": "Pygments",
+     "path": "/venv/lib/python3.13/site-packages/pygments-2.20.0.dist-info",
+     "version": "2.20.0"
+    },
+    {
+     "direct_url": null,
+     "name": "usb-devices",
+     "path": "/venv/lib/python3.13/site-packages/usb_devices-0.5.1.dist-info",
+     "version": "0.5.1"
+    },
+    {
+     "direct_url": null,
+     "name": "webrtc-models",
+     "path": "/venv/lib/python3.13/site-packages/webrtc_models-0.3.0.dist-info",
+     "version": "0.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "voluptuous-openapi",
+     "path": "/venv/lib/python3.13/site-packages/voluptuous_openapi-0.2.0.dist-info",
+     "version": "0.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "iniconfig",
+     "path": "/venv/lib/python3.13/site-packages/iniconfig-2.3.0.dist-info",
+     "version": "2.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "standard-chunk",
+     "path": "/venv/lib/python3.13/site-packages/standard_chunk-3.13.0.dist-info",
+     "version": "3.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "freezegun",
+     "path": "/venv/lib/python3.13/site-packages/freezegun-1.5.2.dist-info",
+     "version": "1.5.2"
+    },
+    {
+     "direct_url": null,
+     "name": "jmespath",
+     "path": "/venv/lib/python3.13/site-packages/jmespath-1.1.0.dist-info",
+     "version": "1.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "bluetooth-data-tools",
+     "path": "/venv/lib/python3.13/site-packages/bluetooth_data_tools-1.28.4.dist-info",
+     "version": "1.28.4"
+    },
+    {
+     "direct_url": null,
+     "name": "fnvhash",
+     "path": "/venv/lib/python3.13/site-packages/fnvhash-0.2.1.dist-info",
+     "version": "0.2.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pillow",
+     "path": "/venv/lib/python3.13/site-packages/pillow-12.0.0.dist-info",
+     "version": "12.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "numpy",
+     "path": "/venv/lib/python3.13/site-packages/numpy-2.3.2.dist-info",
+     "version": "2.3.2"
+    },
+    {
+     "direct_url": null,
+     "name": "python-dateutil",
+     "path": "/venv/lib/python3.13/site-packages/python_dateutil-2.9.0.post0.dist-info",
+     "version": "2.9.0.post0"
+    },
+    {
+     "direct_url": null,
+     "name": "ulid-transform",
+     "path": "/venv/lib/python3.13/site-packages/ulid_transform-1.5.2.dist-info",
+     "version": "1.5.2"
+    },
+    {
+     "direct_url": null,
+     "name": "filelock",
+     "path": "/venv/lib/python3.13/site-packages/filelock-3.29.1.dist-info",
+     "version": "3.29.1"
+    },
+    {
+     "direct_url": null,
+     "name": "awesomeversion",
+     "path": "/venv/lib/python3.13/site-packages/awesomeversion-25.8.0.dist-info",
+     "version": "25.8.0"
+    },
+    {
+     "direct_url": null,
+     "name": "dill",
+     "path": "/venv/lib/python3.13/site-packages/dill-0.4.1.dist-info",
+     "version": "0.4.1"
+    },
+    {
+     "direct_url": null,
+     "name": "MarkupSafe",
+     "path": "/venv/lib/python3.13/site-packages/markupsafe-3.0.3.dist-info",
+     "version": "3.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "tomlkit",
+     "path": "/venv/lib/python3.13/site-packages/tomlkit-0.15.0.dist-info",
+     "version": "0.15.0"
+    },
+    {
+     "direct_url": null,
+     "name": "boto3",
+     "path": "/venv/lib/python3.13/site-packages/boto3-1.43.24.dist-info",
+     "version": "1.43.24"
+    },
+    {
+     "direct_url": null,
+     "name": "debugpy",
+     "path": "/venv/lib/python3.13/site-packages/debugpy-1.8.20.dist-info",
+     "version": "1.8.20"
+    },
+    {
+     "direct_url": null,
+     "name": "grpcio",
+     "path": "/venv/lib/python3.13/site-packages/grpcio-1.81.0.dist-info",
+     "version": "1.81.0"
+    },
+    {
+     "direct_url": null,
+     "name": "uv",
+     "path": "/venv/lib/python3.13/site-packages/uv-0.9.26.dist-info",
+     "version": "0.9.26"
+    },
+    {
+     "direct_url": null,
+     "name": "orjson",
+     "path": "/venv/lib/python3.13/site-packages/orjson-3.11.5.dist-info",
+     "version": "3.11.5"
+    },
+    {
+     "direct_url": null,
+     "name": "propcache",
+     "path": "/venv/lib/python3.13/site-packages/propcache-0.4.1.dist-info",
+     "version": "0.4.1"
+    },
+    {
+     "direct_url": null,
+     "name": "idna",
+     "path": "/venv/lib/python3.13/site-packages/idna-3.18.dist-info",
+     "version": "3.18"
+    },
+    {
+     "direct_url": null,
+     "name": "mccabe",
+     "path": "/venv/lib/python3.13/site-packages/mccabe-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "greenlet",
+     "path": "/venv/lib/python3.13/site-packages/greenlet-3.5.1.dist-info",
+     "version": "3.5.1"
+    },
+    {
+     "direct_url": null,
+     "name": "standard-telnetlib",
+     "path": "/venv/lib/python3.13/site-packages/standard_telnetlib-3.13.0.dist-info",
+     "version": "3.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "colorlog",
+     "path": "/venv/lib/python3.13/site-packages/colorlog-6.10.1.dist-info",
+     "version": "6.10.1"
+    },
+    {
+     "direct_url": null,
+     "name": "cfgv",
+     "path": "/venv/lib/python3.13/site-packages/cfgv-3.5.0.dist-info",
+     "version": "3.5.0"
+    },
+    {
+     "direct_url": null,
+     "name": "voluptuous",
+     "path": "/venv/lib/python3.13/site-packages/voluptuous-0.15.2.dist-info",
+     "version": "0.15.2"
+    },
+    {
+     "direct_url": null,
+     "name": "pyRFC3339",
+     "path": "/venv/lib/python3.13/site-packages/pyrfc3339-2.1.0.dist-info",
+     "version": "2.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "PyJWT",
+     "path": "/venv/lib/python3.13/site-packages/PyJWT-2.10.1.dist-info",
+     "version": "2.10.1"
+    },
+    {
+     "direct_url": null,
+     "name": "acme",
+     "path": "/venv/lib/python3.13/site-packages/acme-5.2.2.dist-info",
+     "version": "5.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "pylint-strict-informational",
+     "path": "/venv/lib/python3.13/site-packages/pylint_strict_informational-0.1.dist-info",
+     "version": "0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "habluetooth",
+     "path": "/venv/lib/python3.13/site-packages/habluetooth-6.1.0.dist-info",
+     "version": "6.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "async-timeout",
+     "path": "/venv/lib/python3.13/site-packages/async_timeout-5.0.1.dist-info",
+     "version": "5.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "hass-nabucasa",
+     "path": "/venv/lib/python3.13/site-packages/hass_nabucasa-1.12.0.dist-info",
+     "version": "1.12.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-unordered",
+     "path": "/venv/lib/python3.13/site-packages/pytest_unordered-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pre_commit",
+     "path": "/venv/lib/python3.13/site-packages/pre_commit-4.5.1.dist-info",
+     "version": "4.5.1"
+    },
+    {
+     "direct_url": null,
+     "name": "tzdata",
+     "path": "/venv/lib/python3.13/site-packages/tzdata-2026.2.dist-info",
+     "version": "2026.2"
+    },
+    {
+     "direct_url": null,
+     "name": "distlib",
+     "path": "/venv/lib/python3.13/site-packages/distlib-0.4.1.dist-info",
+     "version": "0.4.1"
+    },
+    {
+     "direct_url": null,
+     "name": "boolean.py",
+     "path": "/venv/lib/python3.13/site-packages/boolean_py-5.0.dist-info",
+     "version": "5.0"
+    },
+    {
+     "direct_url": null,
+     "name": "coverage",
+     "path": "/venv/lib/python3.13/site-packages/coverage-7.10.6.dist-info",
+     "version": "7.10.6"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-sugar",
+     "path": "/venv/lib/python3.13/site-packages/pytest_sugar-1.0.0.dist-info",
+     "version": "1.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "botocore",
+     "path": "/venv/lib/python3.13/site-packages/botocore-1.43.24.dist-info",
+     "version": "1.43.24"
+    },
+    {
+     "direct_url": null,
+     "name": "pyOpenSSL",
+     "path": "/venv/lib/python3.13/site-packages/pyopenssl-25.3.0.dist-info",
+     "version": "25.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "bcrypt",
+     "path": "/venv/lib/python3.13/site-packages/bcrypt-5.0.0.dist-info",
+     "version": "5.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "bluetooth-adapters",
+     "path": "/venv/lib/python3.13/site-packages/bluetooth_adapters-2.4.0.dist-info",
+     "version": "2.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "home-assistant-bluetooth",
+     "path": "/venv/lib/python3.13/site-packages/home_assistant_bluetooth-1.13.1.dist-info",
+     "version": "1.13.1"
+    },
+    {
+     "direct_url": null,
+     "name": "annotated-types",
+     "path": "/venv/lib/python3.13/site-packages/annotated_types-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "typing-inspection",
+     "path": "/venv/lib/python3.13/site-packages/typing_inspection-0.4.2.dist-info",
+     "version": "0.4.2"
+    },
+    {
+     "direct_url": null,
+     "name": "icmplib",
+     "path": "/venv/lib/python3.13/site-packages/icmplib-3.0.4.dist-info",
+     "version": "3.0.4"
+    },
+    {
+     "direct_url": null,
+     "name": "annotatedyaml",
+     "path": "/venv/lib/python3.13/site-packages/annotatedyaml-1.0.2.dist-info",
+     "version": "1.0.2"
+    },
+    {
+     "direct_url": null,
+     "name": "execnet",
+     "path": "/venv/lib/python3.13/site-packages/execnet-2.1.2.dist-info",
+     "version": "2.1.2"
+    },
+    {
+     "direct_url": null,
+     "name": "cffi",
+     "path": "/venv/lib/python3.13/site-packages/cffi-2.0.0.dist-info",
+     "version": "2.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-aiohttp",
+     "path": "/venv/lib/python3.13/site-packages/pytest_aiohttp-1.1.0.dist-info",
+     "version": "1.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pyserial",
+     "path": "/venv/lib/python3.13/site-packages/pyserial-3.5.dist-info",
+     "version": "3.5"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-timeout",
+     "path": "/venv/lib/python3.13/site-packages/pytest_timeout-2.4.0.dist-info",
+     "version": "2.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "ruff",
+     "path": "/venv/lib/python3.13/site-packages/ruff-0.15.5.dist-info",
+     "version": "0.15.5"
+    },
+    {
+     "direct_url": null,
+     "name": "standard-aifc",
+     "path": "/venv/lib/python3.13/site-packages/standard_aifc-3.13.0.dist-info",
+     "version": "3.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "platformdirs",
+     "path": "/venv/lib/python3.13/site-packages/platformdirs-4.10.0.dist-info",
+     "version": "4.10.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiozoneinfo",
+     "path": "/venv/lib/python3.13/site-packages/aiozoneinfo-0.2.3.dist-info",
+     "version": "0.2.3"
+    },
+    {
+     "direct_url": null,
+     "name": "charset-normalizer",
+     "path": "/venv/lib/python3.13/site-packages/charset_normalizer-3.4.7.dist-info",
+     "version": "3.4.7"
+    },
+    {
+     "direct_url": null,
+     "name": "s3transfer",
+     "path": "/venv/lib/python3.13/site-packages/s3transfer-0.18.0.dist-info",
+     "version": "0.18.0"
+    },
+    {
+     "direct_url": null,
+     "name": "nodeenv",
+     "path": "/venv/lib/python3.13/site-packages/nodeenv-1.10.0.dist-info",
+     "version": "1.10.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pydantic_core",
+     "path": "/venv/lib/python3.13/site-packages/pydantic_core-2.41.4.dist-info",
+     "version": "2.41.4"
+    },
+    {
+     "direct_url": null,
+     "name": "pylint-per-file-ignores",
+     "path": "/venv/lib/python3.13/site-packages/pylint_per_file_ignores-1.4.0.dist-info",
+     "version": "1.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "PyRIC",
+     "path": "/venv/lib/python3.13/site-packages/pyric-0.1.6.3.dist-info",
+     "version": "0.1.6.3"
+    },
+    {
+     "direct_url": null,
+     "name": "lru-dict",
+     "path": "/venv/lib/python3.13/site-packages/lru_dict-1.3.0.dist-info",
+     "version": "1.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohttp-cors",
+     "path": "/venv/lib/python3.13/site-packages/aiohttp_cors-0.8.1.dist-info",
+     "version": "0.8.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-homeassistant-custom-component",
+     "path": "/venv/lib/python3.13/site-packages/pytest_homeassistant_custom_component-0.13.316.dist-info",
+     "version": "0.13.316"
+    },
+    {
+     "direct_url": null,
+     "name": "httpx",
+     "path": "/venv/lib/python3.13/site-packages/httpx-0.28.1.dist-info",
+     "version": "0.28.1"
+    },
+    {
+     "direct_url": null,
+     "name": "zeroconf",
+     "path": "/venv/lib/python3.13/site-packages/zeroconf-0.148.0.dist-info",
+     "version": "0.148.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pycparser",
+     "path": "/venv/lib/python3.13/site-packages/pycparser-3.0.dist-info",
+     "version": "3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-picked",
+     "path": "/venv/lib/python3.13/site-packages/pytest_picked-0.5.1.dist-info",
+     "version": "0.5.1"
+    },
+    {
+     "direct_url": null,
+     "name": "isort",
+     "path": "/venv/lib/python3.13/site-packages/isort-8.0.1.dist-info",
+     "version": "8.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pycognito",
+     "path": "/venv/lib/python3.13/site-packages/pycognito-2024.5.1.dist-info",
+     "version": "2024.5.1"
+    },
+    {
+     "direct_url": null,
+     "name": "paho-mqtt",
+     "path": "/venv/lib/python3.13/site-packages/paho_mqtt-2.1.0.dist-info",
+     "version": "2.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "requests",
+     "path": "/venv/lib/python3.13/site-packages/requests-2.32.5.dist-info",
+     "version": "2.32.5"
+    },
+    {
+     "direct_url": null,
+     "name": "frozenlist",
+     "path": "/venv/lib/python3.13/site-packages/frozenlist-1.8.0.dist-info",
+     "version": "1.8.0"
+    },
+    {
+     "direct_url": null,
+     "name": "yarl",
+     "path": "/venv/lib/python3.13/site-packages/yarl-1.22.0.dist-info",
+     "version": "1.22.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pluggy",
+     "path": "/venv/lib/python3.13/site-packages/pluggy-1.6.0.dist-info",
+     "version": "1.6.0"
+    },
+    {
+     "direct_url": null,
+     "name": "cryptography",
+     "path": "/venv/lib/python3.13/site-packages/cryptography-46.0.5.dist-info",
+     "version": "46.0.5"
+    },
+    {
+     "direct_url": null,
+     "name": "securetar",
+     "path": "/venv/lib/python3.13/site-packages/securetar-2025.2.1.dist-info",
+     "version": "2025.2.1"
+    },
+    {
+     "direct_url": null,
+     "name": "audioop-lts",
+     "path": "/venv/lib/python3.13/site-packages/audioop_lts-0.2.1.dist-info",
+     "version": "0.2.1"
+    },
+    {
+     "direct_url": null,
+     "name": "async_interrupt",
+     "path": "/venv/lib/python3.13/site-packages/async_interrupt-1.2.2.dist-info",
+     "version": "1.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "identify",
+     "path": "/venv/lib/python3.13/site-packages/identify-2.6.19.dist-info",
+     "version": "2.6.19"
+    },
+    {
+     "direct_url": null,
+     "name": "httpcore",
+     "path": "/venv/lib/python3.13/site-packages/httpcore-1.0.9.dist-info",
+     "version": "1.0.9"
+    },
+    {
+     "direct_url": null,
+     "name": "aiooui",
+     "path": "/venv/lib/python3.13/site-packages/aiooui-0.1.9.dist-info",
+     "version": "0.1.9"
+    },
+    {
+     "direct_url": null,
+     "name": "python-discovery",
+     "path": "/venv/lib/python3.13/site-packages/python_discovery-1.4.0.dist-info",
+     "version": "1.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "attrs",
+     "path": "/venv/lib/python3.13/site-packages/attrs-25.4.0.dist-info",
+     "version": "25.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "astral",
+     "path": "/venv/lib/python3.13/site-packages/astral-2.2.dist-info",
+     "version": "2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "typing_extensions",
+     "path": "/venv/lib/python3.13/site-packages/typing_extensions-4.15.0.dist-info",
+     "version": "4.15.0"
+    },
+    {
+     "direct_url": null,
+     "name": "regex",
+     "path": "/venv/lib/python3.13/site-packages/regex-2026.5.9.dist-info",
+     "version": "2026.5.9"
+    },
+    {
+     "direct_url": null,
+     "name": "cronsim",
+     "path": "/venv/lib/python3.13/site-packages/cronsim-2.7.dist-info",
+     "version": "2.7"
+    },
+    {
+     "direct_url": null,
+     "name": "certifi",
+     "path": "/venv/lib/python3.13/site-packages/certifi-2026.5.20.dist-info",
+     "version": "2026.5.20"
+    },
+    {
+     "direct_url": null,
+     "name": "aiosignal",
+     "path": "/venv/lib/python3.13/site-packages/aiosignal-1.4.0.dist-info",
+     "version": "1.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "fnv-hash-fast",
+     "path": "/venv/lib/python3.13/site-packages/fnv_hash_fast-1.6.0.dist-info",
+     "version": "1.6.0"
+    },
+    {
+     "direct_url": null,
+     "name": "bleak",
+     "path": "/venv/lib/python3.13/site-packages/bleak-3.0.2.dist-info",
+     "version": "3.0.2"
+    },
+    {
+     "direct_url": null,
+     "name": "anyio",
+     "path": "/venv/lib/python3.13/site-packages/anyio-4.13.0.dist-info",
+     "version": "4.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "zwave-js-server-python",
+     "path": "/venv/lib/python3.13/site-packages/zwave_js_server_python-0.68.0.dist-info",
+     "version": "0.68.0"
+    },
+    {
+     "direct_url": null,
+     "name": "atomicwrites-homeassistant",
+     "path": "/venv/lib/python3.13/site-packages/atomicwrites_homeassistant-1.4.1.dist-info",
+     "version": "1.4.1"
+    },
+    {
+     "direct_url": null,
+     "name": "respx",
+     "path": "/venv/lib/python3.13/site-packages/respx-0.22.0.dist-info",
+     "version": "0.22.0"
+    },
+    {
+     "direct_url": null,
+     "name": "termcolor",
+     "path": "/venv/lib/python3.13/site-packages/termcolor-3.3.0.dist-info",
+     "version": "3.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohttp-asyncmdnsresolver",
+     "path": "/venv/lib/python3.13/site-packages/aiohttp_asyncmdnsresolver-0.1.1.dist-info",
+     "version": "0.1.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-socket",
+     "path": "/venv/lib/python3.13/site-packages/pytest_socket-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "envs",
+     "path": "/venv/lib/python3.13/site-packages/envs-1.4.dist-info",
+     "version": "1.4"
+    },
+    {
+     "direct_url": null,
+     "name": "aiofiles",
+     "path": "/venv/lib/python3.13/site-packages/aiofiles-25.1.0.dist-info",
+     "version": "25.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "urllib3",
+     "path": "/venv/lib/python3.13/site-packages/urllib3-2.7.0.dist-info",
+     "version": "2.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "sentence_stream",
+     "path": "/venv/lib/python3.13/site-packages/sentence_stream-1.3.0.dist-info",
+     "version": "1.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "tqdm",
+     "path": "/venv/lib/python3.13/site-packages/tqdm-4.67.1.dist-info",
+     "version": "4.67.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pylint",
+     "path": "/venv/lib/python3.13/site-packages/pylint-4.0.5.dist-info",
+     "version": "4.0.5"
+    },
+    {
+     "direct_url": null,
+     "name": "PyYAML",
+     "path": "/venv/lib/python3.13/site-packages/pyyaml-6.0.3.dist-info",
+     "version": "6.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "text-unidecode",
+     "path": "/venv/lib/python3.13/site-packages/text_unidecode-1.3.dist-info",
+     "version": "1.3"
+    },
+    {
+     "direct_url": null,
+     "name": "pyudev",
+     "path": "/venv/lib/python3.13/site-packages/pyudev-0.24.4.dist-info",
+     "version": "0.24.4"
+    },
+    {
+     "direct_url": null,
+     "name": "license-expression",
+     "path": "/venv/lib/python3.13/site-packages/license_expression-30.4.3.dist-info",
+     "version": "30.4.3"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-cov",
+     "path": "/venv/lib/python3.13/site-packages/pytest_cov-7.0.0.dist-info",
+     "version": "7.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "snitun",
+     "path": "/venv/lib/python3.13/site-packages/snitun-0.45.1.dist-info",
+     "version": "0.45.1"
+    },
+    {
+     "direct_url": null,
+     "name": "psutil-home-assistant",
+     "path": "/venv/lib/python3.13/site-packages/psutil_home_assistant-0.0.1.dist-info",
+     "version": "0.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "psutil",
+     "path": "/venv/lib/python3.13/site-packages/psutil-7.2.2.dist-info",
+     "version": "7.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "SQLAlchemy",
+     "path": "/venv/lib/python3.13/site-packages/sqlalchemy-2.0.41.dist-info",
+     "version": "2.0.41"
+    },
+    {
+     "direct_url": null,
+     "name": "bleak-retry-connector",
+     "path": "/venv/lib/python3.13/site-packages/bleak_retry_connector-4.6.1.dist-info",
+     "version": "4.6.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-asyncio",
+     "path": "/venv/lib/python3.13/site-packages/pytest_asyncio-1.3.0.dist-info",
+     "version": "1.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohttp",
+     "path": "/venv/lib/python3.13/site-packages/aiohttp-3.13.3.dist-info",
+     "version": "3.13.3"
+    },
+    {
+     "direct_url": null,
+     "name": "uart-devices",
+     "path": "/venv/lib/python3.13/site-packages/uart_devices-0.1.1.dist-info",
+     "version": "0.1.1"
+    },
+    {
+     "direct_url": null,
+     "name": "Jinja2",
+     "path": "/venv/lib/python3.13/site-packages/jinja2-3.1.6.dist-info",
+     "version": "3.1.6"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest_freezer",
+     "path": "/venv/lib/python3.13/site-packages/pytest_freezer-0.4.9.dist-info",
+     "version": "0.4.9"
+    },
+    {
+     "direct_url": null,
+     "name": "astroid",
+     "path": "/venv/lib/python3.13/site-packages/astroid-4.0.4.dist-info",
+     "version": "4.0.4"
+    },
+    {
+     "direct_url": null,
+     "name": "pip",
+     "path": "/venv/lib/python3.13/site-packages/pip-26.1.2.dist-info",
+     "version": "26.1.2"
+    },
+    {
+     "direct_url": null,
+     "name": "packaging",
+     "path": "/venv/lib/python3.13/site-packages/packaging-26.2.dist-info",
+     "version": "26.2"
+    },
+    {
+     "direct_url": null,
+     "name": "setuptools",
+     "path": "/venv/lib/python3.13/site-packages/setuptools-82.0.1.dist-info",
+     "version": "82.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "wheel",
+     "path": "/venv/lib/python3.13/site-packages/wheel-0.47.0.dist-info",
+     "version": "0.47.0"
+    }
+   ],
+   "prefix": "/venv",
+   "version": "3.13.13"
+  }
+ },
+ "tools": {
+  "gcc": {
+   "path": "/usr/bin/gcc",
+   "version": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+  },
+  "pip3": {
+   "path": "/venv/bin/pip3",
+   "version": "pip 26.1.2 from /venv/lib/python3.13/site-packages/pip (python 3.13)"
+  },
+  "python3": {
+   "path": "/usr/bin/python3",
+   "version": "Python 3.12.3"
+  },
+  "uv": {
+   "path": "/venv/bin/uv",
+   "version": "qemu: uncaught target signal 11 (Segmentation fault) - core dumped"
+  }
+ }
+}

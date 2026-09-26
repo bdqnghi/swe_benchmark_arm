@@ -1,0 +1,3862 @@
+diff --git a/tasks/agent-swarm-task-4a881b/environment/Dockerfile b/tasks/agent-swarm-task-4a881b/environment/Dockerfile
+index 293f4f7..d042d92 100644
+--- a/tasks/agent-swarm-task-4a881b/environment/Dockerfile
++++ b/tasks/agent-swarm-task-4a881b/environment/Dockerfile
+@@ -8,16 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Node.js 20 (provides npm for pnpm install below)
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install bun system-wide so it's available after USER agent switch
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Install pnpm (for new-ui)
+-RUN npm install -g pnpm
++RUN npm install -g pnpm@10.34.1
+ 
+ # Clone the repo at the base commit (cc8c7f5)
+ WORKDIR /workspace
+diff --git a/tasks/agent-swarm-task-4a881b/task.toml b/tasks/agent-swarm-task-4a881b/task.toml
+index e193b83..6f9cc24 100644
+--- a/tasks/agent-swarm-task-4a881b/task.toml
++++ b/tasks/agent-swarm-task-4a881b/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/agent-swarm-task-4a881b:a61b000174ea"
++docker_image = "bdqnghi/swe-together:agent-swarm-task-4a881b"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/agent-swarm-task-ea4bd8/environment/Dockerfile b/tasks/agent-swarm-task-ea4bd8/environment/Dockerfile
+index bd58c9a..289bc19 100644
+--- a/tasks/agent-swarm-task-ea4bd8/environment/Dockerfile
++++ b/tasks/agent-swarm-task-ea4bd8/environment/Dockerfile
+@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
+ # Install Bun system-wide so it survives the USER agent switch
+ ENV BUN_INSTALL="/usr/local"
+ ENV PATH="/usr/local/bin:$PATH"
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ 
+ # Create workspace directories
+ RUN mkdir -p /workspace /logs/verifier
+diff --git a/tasks/agent-swarm-task-ea4bd8/task.toml b/tasks/agent-swarm-task-ea4bd8/task.toml
+index 49e738f..6086295 100644
+--- a/tasks/agent-swarm-task-ea4bd8/task.toml
++++ b/tasks/agent-swarm-task-ea4bd8/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/agent-swarm-task-ea4bd8:89fefa93d453"
++docker_image = "bdqnghi/swe-together:agent-swarm-task-ea4bd8"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/amytis-task-e3714e/environment/Dockerfile b/tasks/amytis-task-e3714e/environment/Dockerfile
+index feeaee9..71e7d71 100644
+--- a/tasks/amytis-task-e3714e/environment/Dockerfile
++++ b/tasks/amytis-task-e3714e/environment/Dockerfile
+@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Bun (system-wide, not under /root)
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:$PATH"
+ 
+ # Clone the repo at the base commit (pre-bugfix state)
+diff --git a/tasks/amytis-task-e3714e/task.toml b/tasks/amytis-task-e3714e/task.toml
+index 6490dc8..0cae2ab 100644
+--- a/tasks/amytis-task-e3714e/task.toml
++++ b/tasks/amytis-task-e3714e/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/amytis-task-e3714e:7bb742c4913c"
++docker_image = "bdqnghi/swe-together:amytis-task-e3714e"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/arr-monitor-add-processes-flag/environment/Dockerfile b/tasks/arr-monitor-add-processes-flag/environment/Dockerfile
+index c567bf9..ca6fc1e 100644
+--- a/tasks/arr-monitor-add-processes-flag/environment/Dockerfile
++++ b/tasks/arr-monitor-add-processes-flag/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.12.8-slim-bookworm
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ ENV DEBIAN_FRONTEND=noninteractive
+ RUN apt-get update && apt-get install -y --no-install-recommends git curl ca-certificates build-essential tmux jq bc sudo && rm -rf /var/lib/apt/lists/*
+diff --git a/tasks/arr-monitor-add-processes-flag/environment/arm64-pip-constraints.txt b/tasks/arr-monitor-add-processes-flag/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..5e5d9b1
+--- /dev/null
++++ b/tasks/arr-monitor-add-processes-flag/environment/arm64-pip-constraints.txt
+@@ -0,0 +1 @@
++psutil==6.1.1
+diff --git a/tasks/arr-monitor-add-processes-flag/task.toml b/tasks/arr-monitor-add-processes-flag/task.toml
+index 5e5a9aa..8763c9e 100644
+--- a/tasks/arr-monitor-add-processes-flag/task.toml
++++ b/tasks/arr-monitor-add-processes-flag/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/arr-monitor-add-processes-flag:b58fd5d9f425"
++docker_image = "bdqnghi/swe-together:arr-monitor-add-processes-flag"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/banodoco-video-perf-optimize/environment/Dockerfile b/tasks/banodoco-video-perf-optimize/environment/Dockerfile
+index 39264d4..3ae89ac 100644
+--- a/tasks/banodoco-video-perf-optimize/environment/Dockerfile
++++ b/tasks/banodoco-video-perf-optimize/environment/Dockerfile
+@@ -14,7 +14,7 @@ RUN apt-get update -o Acquire::AllowInsecureRepositories=true \
+     ca-certificates \
+     && curl -fsSL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh \
+     && bash /tmp/nodesource_setup.sh \
+-    && apt-get install -y --allow-unauthenticated nodejs \
++    && apt-get install -y --allow-unauthenticated nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/* /tmp/nodesource_setup.sh
+ 
+ # Create workspace and log directories
+diff --git a/tasks/banodoco-video-perf-optimize/task.toml b/tasks/banodoco-video-perf-optimize/task.toml
+index d8b1fcc..311be9a 100644
+--- a/tasks/banodoco-video-perf-optimize/task.toml
++++ b/tasks/banodoco-video-perf-optimize/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 600.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/banodoco-video-perf-optimize:f53faec2ec3d"
++docker_image = "bdqnghi/swe-together:banodoco-video-perf-optimize"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/cli-fix-2026-0/environment/Dockerfile b/tasks/cli-fix-2026-0/environment/Dockerfile
+index c926734..505098e 100644
+--- a/tasks/cli-fix-2026-0/environment/Dockerfile
++++ b/tasks/cli-fix-2026-0/environment/Dockerfile
+@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.5 (matching go.mod at base commit)
+-RUN curl -fsSL https://go.dev/dl/go1.25.5.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -fsSL https://go.dev/dl/go1.25.5.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ 
+ # Clone repo at base commit (before any session changes)
+diff --git a/tasks/cli-fix-2026-0/task.toml b/tasks/cli-fix-2026-0/task.toml
+index 7767e06..4708da9 100644
+--- a/tasks/cli-fix-2026-0/task.toml
++++ b/tasks/cli-fix-2026-0/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-fix-2026-0:fd49029246bc"
++docker_image = "bdqnghi/swe-together:cli-fix-2026-0"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-0ec2e9/environment/Dockerfile b/tasks/cli-task-0ec2e9/environment/Dockerfile
+index 787e90c..2d026d9 100644
+--- a/tasks/cli-task-0ec2e9/environment/Dockerfile
++++ b/tasks/cli-task-0ec2e9/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:${PATH}" \
+     GOPATH="/go" \
+     GOBIN="/go/bin"
+diff --git a/tasks/cli-task-0ec2e9/task.toml b/tasks/cli-task-0ec2e9/task.toml
+index 6a444a0..e9eb419 100644
+--- a/tasks/cli-task-0ec2e9/task.toml
++++ b/tasks/cli-task-0ec2e9/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-0ec2e9:6ed0e06f6418"
++docker_image = "bdqnghi/swe-together:cli-task-0ec2e9"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-19def0/environment/Dockerfile b/tasks/cli-task-19def0/environment/Dockerfile
+index 8710d1d..5bca9cf 100644
+--- a/tasks/cli-task-19def0/environment/Dockerfile
++++ b/tasks/cli-task-19def0/environment/Dockerfile
+@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -sL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz | tar -C /usr/local -xzf -
++RUN curl -sL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz | tar -C /usr/local -xzf -
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-19def0/task.toml b/tasks/cli-task-19def0/task.toml
+index 91e8ef7..78217f5 100644
+--- a/tasks/cli-task-19def0/task.toml
++++ b/tasks/cli-task-19def0/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-19def0:fada3895dc9e"
++docker_image = "bdqnghi/swe-together:cli-task-19def0"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-2026-0/environment/Dockerfile b/tasks/cli-task-2026-0/environment/Dockerfile
+index 3026b24..0df474b 100644
+--- a/tasks/cli-task-2026-0/environment/Dockerfile
++++ b/tasks/cli-task-2026-0/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ 
+ # System dependencies
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+@@ -9,9 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.5 (matching .mise.toml)
+-RUN wget -q https://go.dev/dl/go1.25.5.linux-amd64.tar.gz \
+-    && tar -C /usr/local -xzf go1.25.5.linux-amd64.tar.gz \
+-    && rm go1.25.5.linux-amd64.tar.gz
++RUN wget -q https://go.dev/dl/go1.25.5.linux-arm64.tar.gz \
++    && tar -C /usr/local -xzf go1.25.5.linux-arm64.tar.gz \
++    && rm go1.25.5.linux-arm64.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-2026-0/environment/arm64-pip-constraints.txt b/tasks/cli-task-2026-0/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..86d967e
+--- /dev/null
++++ b/tasks/cli-task-2026-0/environment/arm64-pip-constraints.txt
+@@ -0,0 +1 @@
++pyyaml==6.0.3
+diff --git a/tasks/cli-task-2026-0/task.toml b/tasks/cli-task-2026-0/task.toml
+index 3da92a6..60638d8 100644
+--- a/tasks/cli-task-2026-0/task.toml
++++ b/tasks/cli-task-2026-0/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-2026-0:a2b84fdb3743"
++docker_image = "bdqnghi/swe-together:cli-task-2026-0"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-2a55af/environment/Dockerfile b/tasks/cli-task-2a55af/environment/Dockerfile
+index 0d49511..d53b367 100644
+--- a/tasks/cli-task-2a55af/environment/Dockerfile
++++ b/tasks/cli-task-2a55af/environment/Dockerfile
+@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}" \
+diff --git a/tasks/cli-task-2a55af/task.toml b/tasks/cli-task-2a55af/task.toml
+index 5625135..05098e6 100644
+--- a/tasks/cli-task-2a55af/task.toml
++++ b/tasks/cli-task-2a55af/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-2a55af:0ac3161c57d4"
++docker_image = "bdqnghi/swe-together:cli-task-2a55af"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-2c3e30/environment/Dockerfile b/tasks/cli-task-2c3e30/environment/Dockerfile
+index 71b2af4..86c1336 100644
+--- a/tasks/cli-task-2c3e30/environment/Dockerfile
++++ b/tasks/cli-task-2c3e30/environment/Dockerfile
+@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN wget -q https://go.dev/dl/go1.26.0.linux-amd64.tar.gz -O /tmp/go.tar.gz \
++RUN wget -q https://go.dev/dl/go1.26.0.linux-arm64.tar.gz -O /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-2c3e30/task.toml b/tasks/cli-task-2c3e30/task.toml
+index 64c8c9d..f940e84 100644
+--- a/tasks/cli-task-2c3e30/task.toml
++++ b/tasks/cli-task-2c3e30/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-2c3e30:e406049b02e4"
++docker_image = "bdqnghi/swe-together:cli-task-2c3e30"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-2f5833/environment/Dockerfile b/tasks/cli-task-2f5833/environment/Dockerfile
+index 5278e87..7242ff8 100644
+--- a/tasks/cli-task-2f5833/environment/Dockerfile
++++ b/tasks/cli-task-2f5833/environment/Dockerfile
+@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-2f5833/task.toml b/tasks/cli-task-2f5833/task.toml
+index 3144173..1196aeb 100644
+--- a/tasks/cli-task-2f5833/task.toml
++++ b/tasks/cli-task-2f5833/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-2f5833:0789fc66ad45"
++docker_image = "bdqnghi/swe-together:cli-task-2f5833"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-30159a/environment/Dockerfile b/tasks/cli-task-30159a/environment/Dockerfile
+index 3c71a4b..39a9c69 100644
+--- a/tasks/cli-task-30159a/environment/Dockerfile
++++ b/tasks/cli-task-30159a/environment/Dockerfile
+@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN curl -fsSL -o /tmp/go.tar.gz https://go.dev/dl/go1.26.0.linux-amd64.tar.gz \
++RUN curl -fsSL -o /tmp/go.tar.gz https://go.dev/dl/go1.26.0.linux-arm64.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-30159a/task.toml b/tasks/cli-task-30159a/task.toml
+index 5447437..0fb8191 100644
+--- a/tasks/cli-task-30159a/task.toml
++++ b/tasks/cli-task-30159a/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-30159a:bebe38000b0e"
++docker_image = "bdqnghi/swe-together:cli-task-30159a"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-32ba47/environment/Dockerfile b/tasks/cli-task-32ba47/environment/Dockerfile
+index fbeefdf..4992ad3 100644
+--- a/tasks/cli-task-32ba47/environment/Dockerfile
++++ b/tasks/cli-task-32ba47/environment/Dockerfile
+@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -sL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -sL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-32ba47/task.toml b/tasks/cli-task-32ba47/task.toml
+index dd38b93..b817840 100644
+--- a/tasks/cli-task-32ba47/task.toml
++++ b/tasks/cli-task-32ba47/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-32ba47:3dacce59b4b1"
++docker_image = "bdqnghi/swe-together:cli-task-32ba47"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-33e050/environment/Dockerfile b/tasks/cli-task-33e050/environment/Dockerfile
+index 3d77df8..0ca1f4a 100644
+--- a/tasks/cli-task-33e050/environment/Dockerfile
++++ b/tasks/cli-task-33e050/environment/Dockerfile
+@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Go 1.26
+ ARG GO_VERSION=1.26.0
+-RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz \
++RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz" -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-33e050/task.toml b/tasks/cli-task-33e050/task.toml
+index f0e8989..391b6ec 100644
+--- a/tasks/cli-task-33e050/task.toml
++++ b/tasks/cli-task-33e050/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-33e050:1f1ce1c7e95c"
++docker_image = "bdqnghi/swe-together:cli-task-33e050"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-408b8c/environment/Dockerfile b/tasks/cli-task-408b8c/environment/Dockerfile
+index 7b989e8..db4632d 100644
+--- a/tasks/cli-task-408b8c/environment/Dockerfile
++++ b/tasks/cli-task-408b8c/environment/Dockerfile
+@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -sL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz | tar -C /usr/local -xzf -
++RUN curl -sL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz | tar -C /usr/local -xzf -
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-408b8c/task.toml b/tasks/cli-task-408b8c/task.toml
+index d4952ad..f6b111f 100644
+--- a/tasks/cli-task-408b8c/task.toml
++++ b/tasks/cli-task-408b8c/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-408b8c:c029f07bcf28"
++docker_image = "bdqnghi/swe-together:cli-task-408b8c"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-4a9dde/environment/Dockerfile b/tasks/cli-task-4a9dde/environment/Dockerfile
+index af7dd95..5e046a7 100644
+--- a/tasks/cli-task-4a9dde/environment/Dockerfile
++++ b/tasks/cli-task-4a9dde/environment/Dockerfile
+@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz && \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz && \
+     tar -C /usr/local -xzf /tmp/go.tar.gz && \
+     rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-4a9dde/task.toml b/tasks/cli-task-4a9dde/task.toml
+index 2c64bd7..1d342f2 100644
+--- a/tasks/cli-task-4a9dde/task.toml
++++ b/tasks/cli-task-4a9dde/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-4a9dde:5ea41ab5fbe4"
++docker_image = "bdqnghi/swe-together:cli-task-4a9dde"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-577e8c/environment/Dockerfile b/tasks/cli-task-577e8c/environment/Dockerfile
+index 1b49a99..447bcdd 100644
+--- a/tasks/cli-task-577e8c/environment/Dockerfile
++++ b/tasks/cli-task-577e8c/environment/Dockerfile
+@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-577e8c/task.toml b/tasks/cli-task-577e8c/task.toml
+index 2f1bd69..a9b87e5 100644
+--- a/tasks/cli-task-577e8c/task.toml
++++ b/tasks/cli-task-577e8c/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 1800.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-577e8c:051d957e244e"
++docker_image = "bdqnghi/swe-together:cli-task-577e8c"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-5a69ca/environment/Dockerfile b/tasks/cli-task-5a69ca/environment/Dockerfile
+index 0dc3457..1a31522 100644
+--- a/tasks/cli-task-5a69ca/environment/Dockerfile
++++ b/tasks/cli-task-5a69ca/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz && \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz && \
+     tar -C /usr/local -xzf /tmp/go.tar.gz && \
+     rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-5a69ca/task.toml b/tasks/cli-task-5a69ca/task.toml
+index 1426c7e..9e9bdd9 100644
+--- a/tasks/cli-task-5a69ca/task.toml
++++ b/tasks/cli-task-5a69ca/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-5a69ca:fdfd6bb3e5d6"
++docker_image = "bdqnghi/swe-together:cli-task-5a69ca"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-70c88c/environment/Dockerfile b/tasks/cli-task-70c88c/environment/Dockerfile
+index bf33131..b55dc47 100644
+--- a/tasks/cli-task-70c88c/environment/Dockerfile
++++ b/tasks/cli-task-70c88c/environment/Dockerfile
+@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.9 (go.mod requires >= 1.25.6)
+-RUN curl -fsSL https://go.dev/dl/go1.25.9.linux-amd64.tar.gz -o /tmp/go.tar.gz \
+-    && echo "00859d7bd6defe8bf84d9db9e57b9a4467b2887c18cd93ae7460e713db774bc1  /tmp/go.tar.gz" | sha256sum -c \
++RUN curl -fsSL https://go.dev/dl/go1.25.9.linux-arm64.tar.gz -o /tmp/go.tar.gz \
++    && echo "ec342e7389b7f489564ed5463c63b16cf8040023dabc7861256677165a8c0e2b  /tmp/go.tar.gz" | sha256sum -c \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-70c88c/task.toml b/tasks/cli-task-70c88c/task.toml
+index 377b4b9..191249e 100644
+--- a/tasks/cli-task-70c88c/task.toml
++++ b/tasks/cli-task-70c88c/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-70c88c:5fd32261159e"
++docker_image = "bdqnghi/swe-together:cli-task-70c88c"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-726de6/environment/Dockerfile b/tasks/cli-task-726de6/environment/Dockerfile
+index 4285e84..9ba8455 100644
+--- a/tasks/cli-task-726de6/environment/Dockerfile
++++ b/tasks/cli-task-726de6/environment/Dockerfile
+@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0 (required by go.mod)
+-RUN curl -sL https://dl.google.com/go/go1.26.0.linux-amd64.tar.gz | tar -C /usr/local -xzf -
++RUN curl -sL https://dl.google.com/go/go1.26.0.linux-arm64.tar.gz | tar -C /usr/local -xzf -
+ ENV PATH="/usr/local/go/bin:$PATH"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-726de6/task.toml b/tasks/cli-task-726de6/task.toml
+index 3455a1f..bdc4c02 100644
+--- a/tasks/cli-task-726de6/task.toml
++++ b/tasks/cli-task-726de6/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-726de6:405d2853941d"
++docker_image = "bdqnghi/swe-together:cli-task-726de6"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-aa4038/environment/Dockerfile b/tasks/cli-task-aa4038/environment/Dockerfile
+index 1011e10..f591954 100644
+--- a/tasks/cli-task-aa4038/environment/Dockerfile
++++ b/tasks/cli-task-aa4038/environment/Dockerfile
+@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
+     build-essential tmux asciinema \
+     && rm -rf /var/lib/apt/lists/*
+ 
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-aa4038/task.toml b/tasks/cli-task-aa4038/task.toml
+index b6f2623..3b6f784 100644
+--- a/tasks/cli-task-aa4038/task.toml
++++ b/tasks/cli-task-aa4038/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-aa4038:260e5ccc383f"
++docker_image = "bdqnghi/swe-together:cli-task-aa4038"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-b12319/environment/Dockerfile b/tasks/cli-task-b12319/environment/Dockerfile
+index 2a1e0c4..4d50e3a 100644
+--- a/tasks/cli-task-b12319/environment/Dockerfile
++++ b/tasks/cli-task-b12319/environment/Dockerfile
+@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-b12319/task.toml b/tasks/cli-task-b12319/task.toml
+index f7a3bc1..bb9e79d 100644
+--- a/tasks/cli-task-b12319/task.toml
++++ b/tasks/cli-task-b12319/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-b12319:4c87e5af172d"
++docker_image = "bdqnghi/swe-together:cli-task-b12319"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-b3d2dd/environment/Dockerfile b/tasks/cli-task-b3d2dd/environment/Dockerfile
+index 4216cd7..5db2624 100644
+--- a/tasks/cli-task-b3d2dd/environment/Dockerfile
++++ b/tasks/cli-task-b3d2dd/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.2 (matches go.mod)
+-RUN curl -sSL https://go.dev/dl/go1.26.2.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -sSL https://go.dev/dl/go1.26.2.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:$PATH"
+ ENV GOPATH="/go"
+ ENV PATH="${GOPATH}/bin:${PATH}"
+diff --git a/tasks/cli-task-b3d2dd/task.toml b/tasks/cli-task-b3d2dd/task.toml
+index 8f24211..e4bbcc1 100644
+--- a/tasks/cli-task-b3d2dd/task.toml
++++ b/tasks/cli-task-b3d2dd/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-b3d2dd:bce1928b044e"
++docker_image = "bdqnghi/swe-together:cli-task-b3d2dd"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-c01017/environment/Dockerfile b/tasks/cli-task-c01017/environment/Dockerfile
+index 4da8d40..81b1586 100644
+--- a/tasks/cli-task-c01017/environment/Dockerfile
++++ b/tasks/cli-task-c01017/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-c01017/task.toml b/tasks/cli-task-c01017/task.toml
+index a27cd6b..7f9ca60 100644
+--- a/tasks/cli-task-c01017/task.toml
++++ b/tasks/cli-task-c01017/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-c01017:a0ccc813c731"
++docker_image = "bdqnghi/swe-together:cli-task-c01017"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-c425e4/task.toml b/tasks/cli-task-c425e4/task.toml
+index be15d77..2043978 100644
+--- a/tasks/cli-task-c425e4/task.toml
++++ b/tasks/cli-task-c425e4/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-c425e4:3e8123ad47db"
++docker_image = "bdqnghi/swe-together:cli-task-c425e4"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-c4c7e9/environment/Dockerfile b/tasks/cli-task-c4c7e9/environment/Dockerfile
+index c56cc47..1121609 100644
+--- a/tasks/cli-task-c4c7e9/environment/Dockerfile
++++ b/tasks/cli-task-c4c7e9/environment/Dockerfile
+@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Go
+ ARG GO_VERSION=1.26.2
+-RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-c4c7e9/task.toml b/tasks/cli-task-c4c7e9/task.toml
+index 5bccb57..d9170bc 100644
+--- a/tasks/cli-task-c4c7e9/task.toml
++++ b/tasks/cli-task-c4c7e9/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-c4c7e9:9e15b6fc751f"
++docker_image = "bdqnghi/swe-together:cli-task-c4c7e9"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-cd4662/environment/Dockerfile b/tasks/cli-task-cd4662/environment/Dockerfile
+index 981e9ed..2007b3d 100644
+--- a/tasks/cli-task-cd4662/environment/Dockerfile
++++ b/tasks/cli-task-cd4662/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6 (matches go.mod)
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-cd4662/task.toml b/tasks/cli-task-cd4662/task.toml
+index 35ffeba..6ccbe0c 100644
+--- a/tasks/cli-task-cd4662/task.toml
++++ b/tasks/cli-task-cd4662/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-cd4662:4a4fba8cb0d3"
++docker_image = "bdqnghi/swe-together:cli-task-cd4662"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-cf32cb/environment/Dockerfile b/tasks/cli-task-cf32cb/environment/Dockerfile
+index d8995a1..c9ffc29 100644
+--- a/tasks/cli-task-cf32cb/environment/Dockerfile
++++ b/tasks/cli-task-cf32cb/environment/Dockerfile
+@@ -6,9 +6,9 @@ RUN apt-get update && apt-get install -y \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0 (required by go.mod)
+-RUN wget -q https://go.dev/dl/go1.26.0.linux-amd64.tar.gz && \
+-    tar -C /usr/local -xzf go1.26.0.linux-amd64.tar.gz && \
+-    rm go1.26.0.linux-amd64.tar.gz
++RUN wget -q https://go.dev/dl/go1.26.0.linux-arm64.tar.gz && \
++    tar -C /usr/local -xzf go1.26.0.linux-arm64.tar.gz && \
++    rm go1.26.0.linux-arm64.tar.gz
+ 
+ ENV PATH="/usr/local/go/bin:${PATH}"
+ ENV GOPATH="/go"
+diff --git a/tasks/cli-task-cf32cb/task.toml b/tasks/cli-task-cf32cb/task.toml
+index 85cb3fb..eb06a9d 100644
+--- a/tasks/cli-task-cf32cb/task.toml
++++ b/tasks/cli-task-cf32cb/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-cf32cb:ee3b130d3543"
++docker_image = "bdqnghi/swe-together:cli-task-cf32cb"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-dbd2bf/environment/Dockerfile b/tasks/cli-task-dbd2bf/environment/Dockerfile
+index ac2726d..47db209 100644
+--- a/tasks/cli-task-dbd2bf/environment/Dockerfile
++++ b/tasks/cli-task-dbd2bf/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0 (matching go.mod)
+-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ 
+diff --git a/tasks/cli-task-dbd2bf/task.toml b/tasks/cli-task-dbd2bf/task.toml
+index 91ea5e5..8029cc7 100644
+--- a/tasks/cli-task-dbd2bf/task.toml
++++ b/tasks/cli-task-dbd2bf/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-dbd2bf:93bc76805483"
++docker_image = "bdqnghi/swe-together:cli-task-dbd2bf"
+ build_timeout_sec = 1800.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-e5813e/environment/Dockerfile b/tasks/cli-task-e5813e/environment/Dockerfile
+index 73c9d75..7b63143 100644
+--- a/tasks/cli-task-e5813e/environment/Dockerfile
++++ b/tasks/cli-task-e5813e/environment/Dockerfile
+@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.25.6 (matched to go.mod and mise.toml)
+-RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-amd64.tar.gz -o /tmp/go.tar.gz \
++RUN curl -fsSL https://go.dev/dl/go1.25.6.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+     && tar -C /usr/local -xzf /tmp/go.tar.gz \
+     && rm /tmp/go.tar.gz
+ ENV PATH="/usr/local/go/bin:${PATH}"
+diff --git a/tasks/cli-task-e5813e/task.toml b/tasks/cli-task-e5813e/task.toml
+index 47cbda2..d27e9c1 100644
+--- a/tasks/cli-task-e5813e/task.toml
++++ b/tasks/cli-task-e5813e/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 180.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-e5813e:fa7ccfab64f4"
++docker_image = "bdqnghi/swe-together:cli-task-e5813e"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/cli-task-ea3f8f/environment/Dockerfile b/tasks/cli-task-ea3f8f/environment/Dockerfile
+index 4f5a1bc..250c920 100644
+--- a/tasks/cli-task-ea3f8f/environment/Dockerfile
++++ b/tasks/cli-task-ea3f8f/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Go 1.26.0
+-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-amd64.tar.gz | tar -C /usr/local -xz
++RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz | tar -C /usr/local -xz
+ ENV PATH="/usr/local/go/bin:$PATH" \
+     GOPATH="/go" \
+     GOMODCACHE="/go/pkg/mod"
+diff --git a/tasks/cli-task-ea3f8f/task.toml b/tasks/cli-task-ea3f8f/task.toml
+index 3d2b123..889d6fc 100644
+--- a/tasks/cli-task-ea3f8f/task.toml
++++ b/tasks/cli-task-ea3f8f/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/cli-task-ea3f8f:9c2dc39e418f"
++docker_image = "bdqnghi/swe-together:cli-task-ea3f8f"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/comfyui-gemma3-sliding-window/environment/Dockerfile b/tasks/comfyui-gemma3-sliding-window/environment/Dockerfile
+index 9cd82f7..9d196ba 100644
+--- a/tasks/comfyui-gemma3-sliding-window/environment/Dockerfile
++++ b/tasks/comfyui-gemma3-sliding-window/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=1ca89b810e921efce95fb4d254a8c6c93180450b
+diff --git a/tasks/comfyui-gemma3-sliding-window/task.toml b/tasks/comfyui-gemma3-sliding-window/task.toml
+index b65c529..bd49630 100644
+--- a/tasks/comfyui-gemma3-sliding-window/task.toml
++++ b/tasks/comfyui-gemma3-sliding-window/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-gemma3-sliding-window:e1932271906b"
++docker_image = "bdqnghi/swe-together:comfyui-gemma3-sliding-window"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/comfyui-jina-clip-v2-full/environment/Dockerfile b/tasks/comfyui-jina-clip-v2-full/environment/Dockerfile
+index bd5f443..e3675fe 100644
+--- a/tasks/comfyui-jina-clip-v2-full/environment/Dockerfile
++++ b/tasks/comfyui-jina-clip-v2-full/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v043-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=31e961736a476851e2579d5d9202ed4177a71720
+@@ -19,7 +21,7 @@ RUN cd /workspace/ComfyUI && \
+ # the minimal viable fix without restructuring the base venv layout.
+ RUN /usr/bin/python3 -m pip install --break-system-packages --no-cache-dir \
+         --extra-index-url https://download.pytorch.org/whl/cpu \
+-        torch==2.6.0+cpu torchvision==0.21.0+cpu transformers==4.47.1 \
++        torch==2.6.0+cpu torchvision==0.21.0 transformers==4.47.1 \
+         safetensors==0.5.2 aiohttp==3.11.11 einops==0.8.0 pyyaml==6.0.2 \
+         Pillow==11.1.0 scipy==1.15.1 tqdm==4.67.1 psutil==6.1.1 \
+         tokenizers==0.21.0 sentencepiece==0.2.0 spandrel==0.4.1 \
+diff --git a/tasks/comfyui-jina-clip-v2-full/environment/arm64-pip-constraints.txt b/tasks/comfyui-jina-clip-v2-full/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..25b6f78
+--- /dev/null
++++ b/tasks/comfyui-jina-clip-v2-full/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,50 @@
++aiohappyeyeballs==2.6.2
++aiohttp==3.11.11
++aiosignal==1.4.0
++astroid==3.3.11
++attrs==26.1.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++dill==0.4.1
++einops==0.8.0
++filelock==3.29.1
++frozenlist==1.8.0
++fsspec==2026.4.0
++hf-xet==1.5.0
++huggingface-hub==0.36.2
++idna==3.18
++iniconfig==2.3.0
++isort==5.13.2
++jinja2==3.1.6
++markupsafe==3.0.3
++mccabe==0.7.0
++mpmath==1.3.0
++multidict==6.7.1
++networkx==3.6.1
++opencv-python-headless==4.10.0.84
++pillow==11.1.0
++platformdirs==4.10.0
++pluggy==1.6.0
++propcache==0.5.2
++psutil==6.1.1
++pylint==3.3.3
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.2
++regex==2026.5.9
++requests==2.34.2
++ruff==0.9.5
++safetensors==0.5.2
++scipy==1.15.1
++sentencepiece==0.2.0
++spandrel==0.4.1
++sympy==1.13.1
++tokenizers==0.21.0
++tomlkit==0.15.0
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.67.1
++transformers==4.47.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++yarl==1.24.2
+diff --git a/tasks/comfyui-jina-clip-v2-full/task.toml b/tasks/comfyui-jina-clip-v2-full/task.toml
+index 312de9a..7f771d4 100644
+--- a/tasks/comfyui-jina-clip-v2-full/task.toml
++++ b/tasks/comfyui-jina-clip-v2-full/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 180.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-jina-clip-v2-full:7a7243f22b21"
++docker_image = "bdqnghi/swe-together:comfyui-jina-clip-v2-full"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/comfyui-lumina-axes-lens/environment/Dockerfile b/tasks/comfyui-lumina-axes-lens/environment/Dockerfile
+index 8d38e6c..b8f7811 100644
+--- a/tasks/comfyui-lumina-axes-lens/environment/Dockerfile
++++ b/tasks/comfyui-lumina-axes-lens/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v043-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=da2bfb5b0af26c7a1c44ec951dbd0fffe413c793
+@@ -17,7 +19,7 @@ RUN cd /workspace/ComfyUI && \
+ # Cost: ~500MB extra image size; minimal viable fix without restructuring base venv.
+ RUN /usr/bin/python3 -m pip install --break-system-packages --no-cache-dir \
+         --extra-index-url https://download.pytorch.org/whl/cpu \
+-        torch==2.6.0+cpu torchvision==0.21.0+cpu transformers==4.47.1 \
++        torch==2.6.0+cpu torchvision==0.21.0 transformers==4.47.1 \
+         safetensors==0.5.2 aiohttp==3.11.11 einops==0.8.0 pyyaml==6.0.2 \
+         Pillow==11.1.0 scipy==1.15.1 tqdm==4.67.1 psutil==6.1.1 \
+         tokenizers==0.21.0 sentencepiece==0.2.0 spandrel==0.4.1 \
+diff --git a/tasks/comfyui-lumina-axes-lens/environment/arm64-pip-constraints.txt b/tasks/comfyui-lumina-axes-lens/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..25b6f78
+--- /dev/null
++++ b/tasks/comfyui-lumina-axes-lens/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,50 @@
++aiohappyeyeballs==2.6.2
++aiohttp==3.11.11
++aiosignal==1.4.0
++astroid==3.3.11
++attrs==26.1.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++dill==0.4.1
++einops==0.8.0
++filelock==3.29.1
++frozenlist==1.8.0
++fsspec==2026.4.0
++hf-xet==1.5.0
++huggingface-hub==0.36.2
++idna==3.18
++iniconfig==2.3.0
++isort==5.13.2
++jinja2==3.1.6
++markupsafe==3.0.3
++mccabe==0.7.0
++mpmath==1.3.0
++multidict==6.7.1
++networkx==3.6.1
++opencv-python-headless==4.10.0.84
++pillow==11.1.0
++platformdirs==4.10.0
++pluggy==1.6.0
++propcache==0.5.2
++psutil==6.1.1
++pylint==3.3.3
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.2
++regex==2026.5.9
++requests==2.34.2
++ruff==0.9.5
++safetensors==0.5.2
++scipy==1.15.1
++sentencepiece==0.2.0
++spandrel==0.4.1
++sympy==1.13.1
++tokenizers==0.21.0
++tomlkit==0.15.0
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.67.1
++transformers==4.47.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++yarl==1.24.2
+diff --git a/tasks/comfyui-lumina-axes-lens/task.toml b/tasks/comfyui-lumina-axes-lens/task.toml
+index ff21dd4..ed200db 100644
+--- a/tasks/comfyui-lumina-axes-lens/task.toml
++++ b/tasks/comfyui-lumina-axes-lens/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-lumina-axes-lens:fb400717fa73"
++docker_image = "bdqnghi/swe-together:comfyui-lumina-axes-lens"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/comfyui-lumina2-lora-prefix/environment/Dockerfile b/tasks/comfyui-lumina2-lora-prefix/environment/Dockerfile
+index b8ca5f7..9f08746 100644
+--- a/tasks/comfyui-lumina2-lora-prefix/environment/Dockerfile
++++ b/tasks/comfyui-lumina2-lora-prefix/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=8e889c535d1fc407bf27dbf8359eef9580f2ed60
+diff --git a/tasks/comfyui-lumina2-lora-prefix/task.toml b/tasks/comfyui-lumina2-lora-prefix/task.toml
+index dcd8aa1..493ae22 100644
+--- a/tasks/comfyui-lumina2-lora-prefix/task.toml
++++ b/tasks/comfyui-lumina2-lora-prefix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-lumina2-lora-prefix:d66fbfdb00fe"
++docker_image = "bdqnghi/swe-together:comfyui-lumina2-lora-prefix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/comfyui-newbie-lumina-refactor/environment/Dockerfile b/tasks/comfyui-newbie-lumina-refactor/environment/Dockerfile
+index 8e087c1..1f84f6f 100644
+--- a/tasks/comfyui-newbie-lumina-refactor/environment/Dockerfile
++++ b/tasks/comfyui-newbie-lumina-refactor/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v043-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=5ac3b26a7dedb9b13c681abe8733c54f13353273
+@@ -17,7 +19,7 @@ RUN cd /workspace/ComfyUI && \
+ # Cost: ~500MB extra image size; minimal viable fix without restructuring base venv.
+ RUN /usr/bin/python3 -m pip install --break-system-packages --no-cache-dir \
+         --extra-index-url https://download.pytorch.org/whl/cpu \
+-        torch==2.6.0+cpu torchvision==0.21.0+cpu transformers==4.47.1 \
++        torch==2.6.0+cpu torchvision==0.21.0 transformers==4.47.1 \
+         safetensors==0.5.2 aiohttp==3.11.11 einops==0.8.0 pyyaml==6.0.2 \
+         Pillow==11.1.0 scipy==1.15.1 tqdm==4.67.1 psutil==6.1.1 \
+         tokenizers==0.21.0 sentencepiece==0.2.0 spandrel==0.4.1 \
+diff --git a/tasks/comfyui-newbie-lumina-refactor/environment/arm64-pip-constraints.txt b/tasks/comfyui-newbie-lumina-refactor/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..25b6f78
+--- /dev/null
++++ b/tasks/comfyui-newbie-lumina-refactor/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,50 @@
++aiohappyeyeballs==2.6.2
++aiohttp==3.11.11
++aiosignal==1.4.0
++astroid==3.3.11
++attrs==26.1.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++dill==0.4.1
++einops==0.8.0
++filelock==3.29.1
++frozenlist==1.8.0
++fsspec==2026.4.0
++hf-xet==1.5.0
++huggingface-hub==0.36.2
++idna==3.18
++iniconfig==2.3.0
++isort==5.13.2
++jinja2==3.1.6
++markupsafe==3.0.3
++mccabe==0.7.0
++mpmath==1.3.0
++multidict==6.7.1
++networkx==3.6.1
++opencv-python-headless==4.10.0.84
++pillow==11.1.0
++platformdirs==4.10.0
++pluggy==1.6.0
++propcache==0.5.2
++psutil==6.1.1
++pylint==3.3.3
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.2
++regex==2026.5.9
++requests==2.34.2
++ruff==0.9.5
++safetensors==0.5.2
++scipy==1.15.1
++sentencepiece==0.2.0
++spandrel==0.4.1
++sympy==1.13.1
++tokenizers==0.21.0
++tomlkit==0.15.0
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.67.1
++transformers==4.47.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++yarl==1.24.2
+diff --git a/tasks/comfyui-newbie-lumina-refactor/task.toml b/tasks/comfyui-newbie-lumina-refactor/task.toml
+index 75dd805..0b06a4f 100644
+--- a/tasks/comfyui-newbie-lumina-refactor/task.toml
++++ b/tasks/comfyui-newbie-lumina-refactor/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-newbie-lumina-refactor:10ef82337c10"
++docker_image = "bdqnghi/swe-together:comfyui-newbie-lumina-refactor"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/comfyui-triton-windows-amd-fix/environment/Dockerfile b/tasks/comfyui-triton-windows-amd-fix/environment/Dockerfile
+index ee3da0d..8e91855 100644
+--- a/tasks/comfyui-triton-windows-amd-fix/environment/Dockerfile
++++ b/tasks/comfyui-triton-windows-amd-fix/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses comfyui-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/comfyui-dev:latest
++FROM bdqnghi/swe-together-base:comfyui-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=b06c7d2d6d9bda2cdb6f61e1476f4db37d309f17
+diff --git a/tasks/comfyui-triton-windows-amd-fix/task.toml b/tasks/comfyui-triton-windows-amd-fix/task.toml
+index 7557d7c..cd34e1c 100644
+--- a/tasks/comfyui-triton-windows-amd-fix/task.toml
++++ b/tasks/comfyui-triton-windows-amd-fix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/comfyui-triton-windows-amd-fix:ccb61262648c"
++docker_image = "bdqnghi/swe-together:comfyui-triton-windows-amd-fix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/dataclaw-anonymizer-tests/environment/Dockerfile b/tasks/dataclaw-anonymizer-tests/environment/Dockerfile
+index f9812df..1d586c6 100644
+--- a/tasks/dataclaw-anonymizer-tests/environment/Dockerfile
++++ b/tasks/dataclaw-anonymizer-tests/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.12.8-slim
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/dataclaw-anonymizer-tests/environment/arm64-pip-constraints.txt b/tasks/dataclaw-anonymizer-tests/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..d88a804
+--- /dev/null
++++ b/tasks/dataclaw-anonymizer-tests/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,25 @@
++annotated-doc==0.0.4
++anyio==4.13.0
++certifi==2026.5.20
++click==8.4.1
++dataclaw==0.3.2
++filelock==3.29.1
++fsspec==2026.4.0
++h11==0.16.0
++hf-xet==1.5.0
++httpcore==1.0.9
++httpx==0.28.1
++huggingface-hub==1.18.0
++idna==3.18
++iniconfig==2.3.0
++markdown-it-py==4.2.0
++mdurl==0.1.2
++pluggy==1.6.0
++pygments==2.20.0
++pytest==8.3.4
++pyyaml==6.0.3
++rich==15.0.0
++shellingham==1.5.4
++tqdm==4.68.1
++typer==0.25.1
++typing-extensions==4.15.0
+diff --git a/tasks/dataclaw-anonymizer-tests/task.toml b/tasks/dataclaw-anonymizer-tests/task.toml
+index de1244a..ea3f254 100644
+--- a/tasks/dataclaw-anonymizer-tests/task.toml
++++ b/tasks/dataclaw-anonymizer-tests/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/dataclaw-anonymizer-tests:8f629b1548d9"
++docker_image = "bdqnghi/swe-together:dataclaw-anonymizer-tests"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/dataclaw-test-coverage-fix/environment/Dockerfile b/tasks/dataclaw-test-coverage-fix/environment/Dockerfile
+index 5b098e0..445e05b 100644
+--- a/tasks/dataclaw-test-coverage-fix/environment/Dockerfile
++++ b/tasks/dataclaw-test-coverage-fix/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ # Prevent interactive prompts during package installation
+diff --git a/tasks/dataclaw-test-coverage-fix/environment/arm64-pip-constraints.txt b/tasks/dataclaw-test-coverage-fix/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..7de62e1
+--- /dev/null
++++ b/tasks/dataclaw-test-coverage-fix/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,31 @@
++annotated-doc==0.0.4
++anyio==4.13.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++click==8.4.1
++coverage==7.14.1
++dataclaw==0.2.0
++filelock==3.29.1
++fsspec==2026.4.0
++h11==0.16.0
++hf-xet==1.5.0
++httpcore==1.0.9
++httpx==0.28.1
++huggingface-hub==0.27.1
++idna==3.18
++iniconfig==2.3.0
++markdown-it-py==4.2.0
++mdurl==0.1.2
++pluggy==1.6.0
++pygments==2.20.0
++pytest==8.3.4
++pytest-cov==6.0.0
++pytest-timeout==2.3.1
++pyyaml==6.0.3
++requests==2.34.2
++rich==15.0.0
++shellingham==1.5.4
++tqdm==4.68.1
++typer==0.25.1
++typing-extensions==4.15.0
++urllib3==2.7.0
+diff --git a/tasks/dataclaw-test-coverage-fix/task.toml b/tasks/dataclaw-test-coverage-fix/task.toml
+index 5b5c7f3..74df788 100644
+--- a/tasks/dataclaw-test-coverage-fix/task.toml
++++ b/tasks/dataclaw-test-coverage-fix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 180.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/dataclaw-test-coverage-fix:f51d94835007"
++docker_image = "bdqnghi/swe-together:dataclaw-test-coverage-fix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/dataclaw-windows-path-fix/environment/Dockerfile b/tasks/dataclaw-windows-path-fix/environment/Dockerfile
+index b4a442e..18cf62f 100644
+--- a/tasks/dataclaw-windows-path-fix/environment/Dockerfile
++++ b/tasks/dataclaw-windows-path-fix/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.12-slim@sha256:804ddf3251a60bbf9c92e73b7566c40428d54d0e79d3428194edf40da6521286
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/dataclaw-windows-path-fix/environment/arm64-pip-constraints.txt b/tasks/dataclaw-windows-path-fix/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..ac523c8
+--- /dev/null
++++ b/tasks/dataclaw-windows-path-fix/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,22 @@
++annotated-doc==0.0.4
++anyio==4.13.0
++certifi==2026.2.25
++click==8.3.2
++dataclaw==0.2.1
++filelock==3.29.0
++fsspec==2026.3.0
++h11==0.16.0
++hf-xet==1.4.3
++httpcore==1.0.9
++httpx==0.28.1
++huggingface-hub==1.11.0
++idna==3.12
++markdown-it-py==4.0.0
++mdurl==0.1.2
++pygments==2.20.0
++pyyaml==6.0.3
++rich==15.0.0
++shellingham==1.5.4
++tqdm==4.67.3
++typer==0.24.1
++typing-extensions==4.15.0
+diff --git a/tasks/dataclaw-windows-path-fix/task.toml b/tasks/dataclaw-windows-path-fix/task.toml
+index 0cfb92b..b2bccdd 100644
+--- a/tasks/dataclaw-windows-path-fix/task.toml
++++ b/tasks/dataclaw-windows-path-fix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/dataclaw-windows-path-fix:13923376d0ee"
++docker_image = "bdqnghi/swe-together:dataclaw-windows-path-fix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/desloppify-treesitter-plugins/environment/Dockerfile b/tasks/desloppify-treesitter-plugins/environment/Dockerfile
+index 7c82075..7e8c5fc 100644
+--- a/tasks/desloppify-treesitter-plugins/environment/Dockerfile
++++ b/tasks/desloppify-treesitter-plugins/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ # Prevent interactive prompts during package installation
+diff --git a/tasks/desloppify-treesitter-plugins/environment/arm64-pip-constraints.txt b/tasks/desloppify-treesitter-plugins/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..4530ab4
+--- /dev/null
++++ b/tasks/desloppify-treesitter-plugins/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,17 @@
++bandit==1.8.3
++defusedxml==0.7.1
++desloppify==0.6.0
++iniconfig==2.3.0
++markdown-it-py==4.2.0
++mdurl==0.1.2
++mypy==1.14.1
++mypy-extensions==1.1.0
++pillow==10.4.0
++pluggy==1.6.0
++pygments==2.20.0
++pytest==8.3.4
++pyyaml==6.0.2
++rich==15.0.0
++ruff==0.9.7
++stevedore==5.8.0
++typing-extensions==4.15.0
+diff --git a/tasks/desloppify-treesitter-plugins/task.toml b/tasks/desloppify-treesitter-plugins/task.toml
+index 8e4ae71..6d3f096 100644
+--- a/tasks/desloppify-treesitter-plugins/task.toml
++++ b/tasks/desloppify-treesitter-plugins/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/desloppify-treesitter-plugins:dc6c18d03693"
++docker_image = "bdqnghi/swe-together:desloppify-treesitter-plugins"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/desloppify-zone-classification/environment/Dockerfile b/tasks/desloppify-zone-classification/environment/Dockerfile
+index 74a0755..bb57639 100644
+--- a/tasks/desloppify-zone-classification/environment/Dockerfile
++++ b/tasks/desloppify-zone-classification/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ # Prevent interactive prompts during package installation
+diff --git a/tasks/desloppify-zone-classification/environment/arm64-pip-constraints.txt b/tasks/desloppify-zone-classification/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..4a39cd3
+--- /dev/null
++++ b/tasks/desloppify-zone-classification/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,6 @@
++desloppify==0.2.0
++iniconfig==2.3.0
++pillow==10.4.0
++pluggy==1.6.0
++pytest==8.3.4
++pyyaml==6.0.2
+diff --git a/tasks/desloppify-zone-classification/task.toml b/tasks/desloppify-zone-classification/task.toml
+index 76dd336..d626149 100644
+--- a/tasks/desloppify-zone-classification/task.toml
++++ b/tasks/desloppify-zone-classification/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/desloppify-zone-classification:d9e3ae10a8f3"
++docker_image = "bdqnghi/swe-together:desloppify-zone-classification"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/gemini-voyager-task-16a5c7/environment/Dockerfile b/tasks/gemini-voyager-task-16a5c7/environment/Dockerfile
+index 0e20e0c..717571b 100644
+--- a/tasks/gemini-voyager-task-16a5c7/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-16a5c7/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install bun system-wide so the agent user can execute it
+ ENV BUN_INSTALL="/usr/local"
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Clone repo at pre-rename commit (parent of the session's commit)
+diff --git a/tasks/gemini-voyager-task-16a5c7/task.toml b/tasks/gemini-voyager-task-16a5c7/task.toml
+index db01038..288ec4a 100644
+--- a/tasks/gemini-voyager-task-16a5c7/task.toml
++++ b/tasks/gemini-voyager-task-16a5c7/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-16a5c7:d32423970f67"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-16a5c7"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-4a5730/environment/Dockerfile b/tasks/gemini-voyager-task-4a5730/environment/Dockerfile
+index 6a9ce04..dbd9482 100644
+--- a/tasks/gemini-voyager-task-4a5730/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-4a5730/environment/Dockerfile
+@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
+ 
+ # Install Node.js 20
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install bun system-wide so it's accessible to the agent user
+-RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash
++RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Clone repo at the buggy state (pre-fix commit 69d734b)
+diff --git a/tasks/gemini-voyager-task-4a5730/task.toml b/tasks/gemini-voyager-task-4a5730/task.toml
+index d287872..2693ac7 100644
+--- a/tasks/gemini-voyager-task-4a5730/task.toml
++++ b/tasks/gemini-voyager-task-4a5730/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-4a5730:5f43e6b11a86"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-4a5730"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-4bddaf/environment/Dockerfile b/tasks/gemini-voyager-task-4bddaf/environment/Dockerfile
+index 8bf6186..29f3afa 100644
+--- a/tasks/gemini-voyager-task-4bddaf/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-4bddaf/environment/Dockerfile
+@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install bun system-wide so the agent user can execute it
+ ENV BUN_INSTALL="/usr/local"
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:$PATH"
+ 
+ # Set PYTHONPATH
+diff --git a/tasks/gemini-voyager-task-4bddaf/task.toml b/tasks/gemini-voyager-task-4bddaf/task.toml
+index 428f1d0..462cade 100644
+--- a/tasks/gemini-voyager-task-4bddaf/task.toml
++++ b/tasks/gemini-voyager-task-4bddaf/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-4bddaf:b39e9c437976"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-4bddaf"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-64c72f/environment/Dockerfile b/tasks/gemini-voyager-task-64c72f/environment/Dockerfile
+index af2ba91..c7c34ab 100644
+--- a/tasks/gemini-voyager-task-64c72f/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-64c72f/environment/Dockerfile
+@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Bun system-wide (required by this TypeScript project)
+ ENV BUN_INSTALL="/usr/local"
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Clone the repo at the buggy commit (parent of the dot-reuse fix 23a513c)
+diff --git a/tasks/gemini-voyager-task-64c72f/task.toml b/tasks/gemini-voyager-task-64c72f/task.toml
+index 0357d08..eb1ba33 100644
+--- a/tasks/gemini-voyager-task-64c72f/task.toml
++++ b/tasks/gemini-voyager-task-64c72f/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-64c72f:ba9b58d0322f"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-64c72f"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-72a86c/environment/Dockerfile b/tasks/gemini-voyager-task-72a86c/environment/Dockerfile
+index 3eed16c..8288b6f 100644
+--- a/tasks/gemini-voyager-task-72a86c/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-72a86c/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ 
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+     git curl ca-certificates python3 python3-pip python3-venv \
+@@ -7,11 +9,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Node.js 20
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install bun (system-wide so the agent user can execute it)
+-RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash
++RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:$PATH"
+ 
+ # Install Python YAML parser for test scripts
+diff --git a/tasks/gemini-voyager-task-72a86c/environment/arm64-pip-constraints.txt b/tasks/gemini-voyager-task-72a86c/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..86d967e
+--- /dev/null
++++ b/tasks/gemini-voyager-task-72a86c/environment/arm64-pip-constraints.txt
+@@ -0,0 +1 @@
++pyyaml==6.0.3
+diff --git a/tasks/gemini-voyager-task-72a86c/task.toml b/tasks/gemini-voyager-task-72a86c/task.toml
+index 55bae42..e31764b 100644
+--- a/tasks/gemini-voyager-task-72a86c/task.toml
++++ b/tasks/gemini-voyager-task-72a86c/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-72a86c:a8e299a15e3e"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-72a86c"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-aa88f5/environment/Dockerfile b/tasks/gemini-voyager-task-aa88f5/environment/Dockerfile
+index 70ec12e..382ef46 100644
+--- a/tasks/gemini-voyager-task-aa88f5/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-aa88f5/environment/Dockerfile
+@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Bun system-wide
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Create workspace directories
+diff --git a/tasks/gemini-voyager-task-aa88f5/task.toml b/tasks/gemini-voyager-task-aa88f5/task.toml
+index e95837c..dbac7ee 100644
+--- a/tasks/gemini-voyager-task-aa88f5/task.toml
++++ b/tasks/gemini-voyager-task-aa88f5/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-aa88f5:e9181822ed24"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-aa88f5"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-c5c01d/environment/Dockerfile b/tasks/gemini-voyager-task-c5c01d/environment/Dockerfile
+index f53bb7d..6d3d509 100644
+--- a/tasks/gemini-voyager-task-c5c01d/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-c5c01d/environment/Dockerfile
+@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install bun (required by the project)
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/root/.bun/bin:${PATH}"
+ 
+ # Clone the repo at the base commit
+diff --git a/tasks/gemini-voyager-task-c5c01d/task.toml b/tasks/gemini-voyager-task-c5c01d/task.toml
+index ac42eb0..28cf4d4 100644
+--- a/tasks/gemini-voyager-task-c5c01d/task.toml
++++ b/tasks/gemini-voyager-task-c5c01d/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-c5c01d:7158c25074b5"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-c5c01d"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/gemini-voyager-task-f519c2/environment/Dockerfile b/tasks/gemini-voyager-task-f519c2/environment/Dockerfile
+index bdfbdd4..6f8ddde 100644
+--- a/tasks/gemini-voyager-task-f519c2/environment/Dockerfile
++++ b/tasks/gemini-voyager-task-f519c2/environment/Dockerfile
+@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install bun to /usr/local so it's accessible to the agent user
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:${PATH}"
+ 
+ # Clone repo at base commit (pre-fix state)
+diff --git a/tasks/gemini-voyager-task-f519c2/task.toml b/tasks/gemini-voyager-task-f519c2/task.toml
+index 3a5b84e..4d58414 100644
+--- a/tasks/gemini-voyager-task-f519c2/task.toml
++++ b/tasks/gemini-voyager-task-f519c2/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/gemini-voyager-task-f519c2:b4d21738414c"
++docker_image = "bdqnghi/swe-together:gemini-voyager-task-f519c2"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/hyperswitch-8008/environment/Dockerfile b/tasks/hyperswitch-8008/environment/Dockerfile
+index a2926f6..110578d 100644
+--- a/tasks/hyperswitch-8008/environment/Dockerfile
++++ b/tasks/hyperswitch-8008/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=9d78c583f6c299ab9f63e551b887d1cb080106b4
+diff --git a/tasks/hyperswitch-8008/task.toml b/tasks/hyperswitch-8008/task.toml
+index acc77c2..fb3fa2d 100644
+--- a/tasks/hyperswitch-8008/task.toml
++++ b/tasks/hyperswitch-8008/task.toml
+@@ -18,7 +18,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-8008:9fe5ac8a55b9"
++docker_image = "bdqnghi/swe-together:hyperswitch-8008"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/hyperswitch-8084/environment/Dockerfile b/tasks/hyperswitch-8084/environment/Dockerfile
+index 715733a..bd949cf 100644
+--- a/tasks/hyperswitch-8084/environment/Dockerfile
++++ b/tasks/hyperswitch-8084/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=344dcd6e43022c3e5479629b57bff255b903d5b5
+diff --git a/tasks/hyperswitch-8084/task.toml b/tasks/hyperswitch-8084/task.toml
+index bea9c22..b9dd7e5 100644
+--- a/tasks/hyperswitch-8084/task.toml
++++ b/tasks/hyperswitch-8084/task.toml
+@@ -18,7 +18,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-8084:4d27613167a4"
++docker_image = "bdqnghi/swe-together:hyperswitch-8084"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/hyperswitch-8338/environment/Dockerfile b/tasks/hyperswitch-8338/environment/Dockerfile
+index a88aa17..3cf7748 100644
+--- a/tasks/hyperswitch-8338/environment/Dockerfile
++++ b/tasks/hyperswitch-8338/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=d305fad2e6c403fde11b9eea785fddefbf3477df
+diff --git a/tasks/hyperswitch-8338/task.toml b/tasks/hyperswitch-8338/task.toml
+index bd56dae..10465ef 100644
+--- a/tasks/hyperswitch-8338/task.toml
++++ b/tasks/hyperswitch-8338/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 600.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-8338:8ff821b95f1a"
++docker_image = "bdqnghi/swe-together:hyperswitch-8338"
+ build_timeout_sec = 6000.0
+ cpus = 4
+ memory = "8G"
+diff --git a/tasks/hyperswitch-8377/environment/Dockerfile b/tasks/hyperswitch-8377/environment/Dockerfile
+index 45efffa..9dbc980 100644
+--- a/tasks/hyperswitch-8377/environment/Dockerfile
++++ b/tasks/hyperswitch-8377/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=305ca9bda9d3c5bf3cc97458b7ed07b79e894154
+diff --git a/tasks/hyperswitch-8377/task.toml b/tasks/hyperswitch-8377/task.toml
+index 523273e..dab3c3d 100644
+--- a/tasks/hyperswitch-8377/task.toml
++++ b/tasks/hyperswitch-8377/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 1800.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-8377:b71a4463b2a7"
++docker_image = "bdqnghi/swe-together:hyperswitch-8377"
+ build_timeout_sec = 3600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/hyperswitch-8389/environment/Dockerfile b/tasks/hyperswitch-8389/environment/Dockerfile
+index 0ea547c..8af447c 100644
+--- a/tasks/hyperswitch-8389/environment/Dockerfile
++++ b/tasks/hyperswitch-8389/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=c5c0e677f2a2d43170a66330c98e0ebc4d771717
+diff --git a/tasks/hyperswitch-8389/task.toml b/tasks/hyperswitch-8389/task.toml
+index cced5b7..ee32cba 100644
+--- a/tasks/hyperswitch-8389/task.toml
++++ b/tasks/hyperswitch-8389/task.toml
+@@ -18,7 +18,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-8389:3ce2a32f825c"
++docker_image = "bdqnghi/swe-together:hyperswitch-8389"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/hyperswitch-9063/environment/Dockerfile b/tasks/hyperswitch-9063/environment/Dockerfile
+index f381f9f..db65c80 100644
+--- a/tasks/hyperswitch-9063/environment/Dockerfile
++++ b/tasks/hyperswitch-9063/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=8446ffbf5992a97d79d129cade997effc60fcd85
+diff --git a/tasks/hyperswitch-9063/task.toml b/tasks/hyperswitch-9063/task.toml
+index 1b33d17..2b6dc86 100644
+--- a/tasks/hyperswitch-9063/task.toml
++++ b/tasks/hyperswitch-9063/task.toml
+@@ -18,7 +18,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-9063:27bb883c9006"
++docker_image = "bdqnghi/swe-together:hyperswitch-9063"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/hyperswitch-9430/environment/Dockerfile b/tasks/hyperswitch-9430/environment/Dockerfile
+index ee41fa8..da3fb89 100644
+--- a/tasks/hyperswitch-9430/environment/Dockerfile
++++ b/tasks/hyperswitch-9430/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=e410af26ffffc63273f9a83ae28c982f37f47484
+diff --git a/tasks/hyperswitch-9430/task.toml b/tasks/hyperswitch-9430/task.toml
+index cac58ef..3c604aa 100644
+--- a/tasks/hyperswitch-9430/task.toml
++++ b/tasks/hyperswitch-9430/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 600.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-9430:4588ace3c9a9"
++docker_image = "bdqnghi/swe-together:hyperswitch-9430"
+ build_timeout_sec = 1800.0
+ cpus = 4
+ memory = "8G"
+diff --git a/tasks/hyperswitch-9437/environment/Dockerfile b/tasks/hyperswitch-9437/environment/Dockerfile
+index 58bf582..50979bb 100644
+--- a/tasks/hyperswitch-9437/environment/Dockerfile
++++ b/tasks/hyperswitch-9437/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=8930e1ed289bb4c128da664849af1095bafd45a7
+diff --git a/tasks/hyperswitch-9437/task.toml b/tasks/hyperswitch-9437/task.toml
+index 2eb3f2d..c5d3a4d 100644
+--- a/tasks/hyperswitch-9437/task.toml
++++ b/tasks/hyperswitch-9437/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 600.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-9437:3dc6ccc1069b"
++docker_image = "bdqnghi/swe-together:hyperswitch-9437"
+ build_timeout_sec = 1800.0
+ cpus = 4
+ memory = "8G"
+diff --git a/tasks/hyperswitch-9465/environment/Dockerfile b/tasks/hyperswitch-9465/environment/Dockerfile
+index 8fcf249..f07ac80 100644
+--- a/tasks/hyperswitch-9465/environment/Dockerfile
++++ b/tasks/hyperswitch-9465/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses hyperswitch-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/hyperswitch-dev:latest
++FROM bdqnghi/swe-together-base:hyperswitch-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=2553780051e3a2fe54fcb99384e4bd8021d52048
+diff --git a/tasks/hyperswitch-9465/task.toml b/tasks/hyperswitch-9465/task.toml
+index 735815a..b20c460 100644
+--- a/tasks/hyperswitch-9465/task.toml
++++ b/tasks/hyperswitch-9465/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 600.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/hyperswitch-9465:2937634b1e2b"
++docker_image = "bdqnghi/swe-together:hyperswitch-9465"
+ build_timeout_sec = 1800.0
+ cpus = 4
+ memory = "8G"
+diff --git a/tasks/light-protocol-implement-7adad1/environment/Dockerfile b/tasks/light-protocol-implement-7adad1/environment/Dockerfile
+index ca981a5..54118ed 100644
+--- a/tasks/light-protocol-implement-7adad1/environment/Dockerfile
++++ b/tasks/light-protocol-implement-7adad1/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ 
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+     git curl ca-certificates python3 python3-pip python3-venv \
+diff --git a/tasks/light-protocol-implement-7adad1/environment/arm64-pip-constraints.txt b/tasks/light-protocol-implement-7adad1/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..9edccb9
+--- /dev/null
++++ b/tasks/light-protocol-implement-7adad1/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,2 @@
++tree-sitter==0.23.2
++tree-sitter-rust==0.23.2
+diff --git a/tasks/light-protocol-implement-7adad1/task.toml b/tasks/light-protocol-implement-7adad1/task.toml
+index 5492bd7..0c49423 100644
+--- a/tasks/light-protocol-implement-7adad1/task.toml
++++ b/tasks/light-protocol-implement-7adad1/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 1800.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/light-protocol-implement-7adad1:b066eeb2e535"
++docker_image = "bdqnghi/swe-together:light-protocol-implement-7adad1"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/lock-code-manager-fix-7c955a/environment/Dockerfile b/tasks/lock-code-manager-fix-7c955a/environment/Dockerfile
+index 9bc4cb4..3c9ee3d 100644
+--- a/tasks/lock-code-manager-fix-7c955a/environment/Dockerfile
++++ b/tasks/lock-code-manager-fix-7c955a/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ 
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+     git \
+diff --git a/tasks/lock-code-manager-fix-7c955a/environment/arm64-pip-constraints.txt b/tasks/lock-code-manager-fix-7c955a/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..c0675d0
+--- /dev/null
++++ b/tasks/lock-code-manager-fix-7c955a/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,155 @@
++acme==5.2.2
++aiodns==4.0.0
++aiofiles==25.1.0
++aiohappyeyeballs==2.6.2
++aiohasupervisor==0.3.3
++aiohttp==3.13.3
++aiohttp-asyncmdnsresolver==0.1.1
++aiohttp-cors==0.8.1
++aiohttp-fast-zlib==0.3.0
++aiooui==0.1.9
++aiosignal==1.4.0
++aiozoneinfo==0.2.3
++annotated-types==0.7.0
++annotatedyaml==1.0.2
++anyio==4.13.0
++astral==2.2
++astroid==4.0.4
++async-interrupt==1.2.2
++async-timeout==5.0.1
++atomicwrites-homeassistant==1.4.1
++attrs==25.4.0
++audioop-lts==0.2.1
++awesomeversion==25.8.0
++bcrypt==5.0.0
++bleak==3.0.2
++bleak-retry-connector==4.6.1
++bluetooth-adapters==2.4.0
++bluetooth-auto-recovery==1.6.4
++bluetooth-data-tools==1.28.4
++boolean-py==5.0
++boto3==1.43.24
++botocore==1.43.24
++btsocket==0.3.0
++certifi==2026.5.20
++cffi==2.0.0
++cfgv==3.5.0
++charset-normalizer==3.4.7
++ciso8601==2.3.3
++colorlog==6.10.1
++coverage==7.10.6
++cronsim==2.7
++cryptography==46.0.5
++dbus-fast==5.0.22
++debugpy==1.8.20
++dill==0.4.1
++envs==1.4
++execnet==2.1.2
++filelock==3.29.1
++fnv-hash-fast==1.6.0
++fnvhash==0.2.1
++freezegun==1.5.2
++frozenlist==1.8.0
++greenlet==3.5.1
++grpcio==1.81.0
++h11==0.16.0
++habluetooth==6.1.0
++hass-nabucasa==1.12.0
++home-assistant-bluetooth==1.13.1
++homeassistant==2026.2.3
++httpcore==1.0.9
++httpx==0.28.1
++icmplib==3.0.4
++identify==2.6.19
++idna==3.18
++ifaddr==0.2.0
++iniconfig==2.3.0
++isort==8.0.1
++jinja2==3.1.6
++jmespath==1.1.0
++josepy==2.2.0
++license-expression==30.4.3
++lru-dict==1.3.0
++markupsafe==3.0.3
++mashumaro==3.22
++mccabe==0.7.0
++mock-open==1.4.0
++multidict==6.7.1
++nodeenv==1.10.0
++numpy==2.3.2
++orjson==3.11.5
++paho-mqtt==2.1.0
++pillow==12.0.0
++pipdeptree==2.26.1
++platformdirs==4.10.0
++pluggy==1.6.0
++pre-commit==4.5.1
++propcache==0.4.1
++psutil==7.2.2
++psutil-home-assistant==0.0.1
++pycares==5.0.1
++pycognito==2024.5.1
++pycparser==3.0
++pydantic==2.12.2
++pydantic-core==2.41.4
++pygments==2.20.0
++pyjwt==2.10.1
++pylint==4.0.5
++pylint-per-file-ignores==1.4.0
++pylint-strict-informational==0.1
++pyopenssl==25.3.0
++pyrfc3339==2.1.0
++pyric==0.1.6.3
++pyserial==3.5
++pytest==9.0.0
++pytest-aiohttp==1.1.0
++pytest-asyncio==1.3.0
++pytest-cov==7.0.0
++pytest-freezer==0.4.9
++pytest-github-actions-annotate-failures==0.3.0
++pytest-homeassistant-custom-component==0.13.316
++pytest-picked==0.5.1
++pytest-socket==0.7.0
++pytest-sugar==1.0.0
++pytest-timeout==2.4.0
++pytest-unordered==0.7.0
++pytest-xdist==3.8.0
++python-dateutil==2.9.0.post0
++python-discovery==1.4.0
++python-slugify==8.0.4
++pytz==2026.2
++pyudev==0.24.4
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.32.5
++requests-mock==1.12.1
++respx==0.22.0
++ruff==0.15.5
++s3transfer==0.18.0
++securetar==2025.2.1
++sentence-stream==1.3.0
++six==1.17.0
++snitun==0.45.1
++sqlalchemy==2.0.41
++standard-aifc==3.13.0
++standard-chunk==3.13.0
++standard-telnetlib==3.13.0
++syrupy==5.0.0
++termcolor==3.3.0
++text-unidecode==1.3
++tomlkit==0.15.0
++tqdm==4.67.1
++typing-extensions==4.15.0
++typing-inspection==0.4.2
++tzdata==2026.2
++uart-devices==0.1.1
++ulid-transform==1.5.2
++urllib3==2.7.0
++usb-devices==0.5.1
++voluptuous==0.15.2
++voluptuous-openapi==0.2.0
++voluptuous-serialize==2.7.0
++webrtc-models==0.3.0
++yarl==1.22.0
++zeroconf==0.148.0
++zwave-js-server-python==0.68.0
+diff --git a/tasks/lock-code-manager-fix-7c955a/task.toml b/tasks/lock-code-manager-fix-7c955a/task.toml
+index c0d434d..fa8dbb8 100644
+--- a/tasks/lock-code-manager-fix-7c955a/task.toml
++++ b/tasks/lock-code-manager-fix-7c955a/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/lock-code-manager-fix-7c955a:12a0f58f0525"
++docker_image = "bdqnghi/swe-together:lock-code-manager-fix-7c955a"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/mlx-lm-mambacache/environment/Dockerfile b/tasks/mlx-lm-mambacache/environment/Dockerfile
+index 7d89bd9..5728d62 100644
+--- a/tasks/mlx-lm-mambacache/environment/Dockerfile
++++ b/tasks/mlx-lm-mambacache/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.12.8-slim
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/mlx-lm-mambacache/environment/arm64-pip-constraints.txt b/tasks/mlx-lm-mambacache/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..31643ac
+--- /dev/null
++++ b/tasks/mlx-lm-mambacache/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,35 @@
++annotated-doc==0.0.4
++anyio==4.13.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++click==8.4.1
++filelock==3.29.1
++fsspec==2026.4.0
++h11==0.16.0
++hf-xet==1.5.0
++httpcore==1.0.9
++httpx==0.28.1
++huggingface-hub==1.18.0
++idna==3.18
++jinja2==3.1.6
++markdown-it-py==4.2.0
++markupsafe==3.0.3
++mdurl==0.1.2
++mlx-lm==0.30.2
++numpy==2.4.6
++protobuf==7.35.0
++pygments==2.20.0
++pyyaml==6.0.3
++regex==2024.11.6
++requests==2.34.2
++rich==15.0.0
++safetensors==0.7.0
++sentencepiece==0.2.1
++shellingham==1.5.4
++tokenizers==0.22.2
++tqdm==4.68.1
++transformers==5.0.0rc1
++typer==0.25.1
++typer-slim==0.24.0
++typing-extensions==4.15.0
++urllib3==2.7.0
+diff --git a/tasks/mlx-lm-mambacache/task.toml b/tasks/mlx-lm-mambacache/task.toml
+index 725be12..b19120a 100644
+--- a/tasks/mlx-lm-mambacache/task.toml
++++ b/tasks/mlx-lm-mambacache/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/mlx-lm-mambacache:3b821508ab77"
++docker_image = "bdqnghi/swe-together:mlx-lm-mambacache"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/no-magic-task-ce67d5/task.toml b/tasks/no-magic-task-ce67d5/task.toml
+index ceda2ff..4ed836b 100644
+--- a/tasks/no-magic-task-ce67d5/task.toml
++++ b/tasks/no-magic-task-ce67d5/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/no-magic-task-ce67d5:4aeba6c69416"
++docker_image = "bdqnghi/swe-together:no-magic-task-ce67d5"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/nunchaku-quantize-bugfix/environment/Dockerfile b/tasks/nunchaku-quantize-bugfix/environment/Dockerfile
+index e8b59a4..ac564ad 100644
+--- a/tasks/nunchaku-quantize-bugfix/environment/Dockerfile
++++ b/tasks/nunchaku-quantize-bugfix/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/nunchaku-quantize-bugfix/environment/arm64-pip-constraints.txt b/tasks/nunchaku-quantize-bugfix/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..44ba1ea
+--- /dev/null
++++ b/tasks/nunchaku-quantize-bugfix/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,11 @@
++filelock==3.29.0
++fsspec==2026.4.0
++jinja2==3.1.6
++markupsafe==3.0.3
++mpmath==1.3.0
++networkx==3.6.1
++safetensors==0.5.3
++sympy==1.13.1
++torch==2.6.0
++tqdm==4.67.1
++typing-extensions==4.15.0
+diff --git a/tasks/nunchaku-quantize-bugfix/task.toml b/tasks/nunchaku-quantize-bugfix/task.toml
+index 3cd56ed..20337f9 100644
+--- a/tasks/nunchaku-quantize-bugfix/task.toml
++++ b/tasks/nunchaku-quantize-bugfix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/nunchaku-quantize-bugfix:2155d05c5dc7"
++docker_image = "bdqnghi/swe-together:nunchaku-quantize-bugfix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/nunchaku-svdq-reconstruction/environment/Dockerfile b/tasks/nunchaku-svdq-reconstruction/environment/Dockerfile
+index db6d173..0eecae3 100644
+--- a/tasks/nunchaku-svdq-reconstruction/environment/Dockerfile
++++ b/tasks/nunchaku-svdq-reconstruction/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/nunchaku-svdq-reconstruction/environment/arm64-pip-constraints.txt b/tasks/nunchaku-svdq-reconstruction/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..c9d558b
+--- /dev/null
++++ b/tasks/nunchaku-svdq-reconstruction/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,11 @@
++filelock==3.29.0
++fsspec==2026.4.0
++jinja2==3.1.6
++markupsafe==3.0.3
++mpmath==1.3.0
++networkx==3.6.1
++pyyaml==6.0.2
++safetensors==0.7.0
++sympy==1.13.1
++torch==2.6.0
++typing-extensions==4.15.0
+diff --git a/tasks/nunchaku-svdq-reconstruction/task.toml b/tasks/nunchaku-svdq-reconstruction/task.toml
+index 26bace9..71fc359 100644
+--- a/tasks/nunchaku-svdq-reconstruction/task.toml
++++ b/tasks/nunchaku-svdq-reconstruction/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/nunchaku-svdq-reconstruction:87ea30aaf3d2"
++docker_image = "bdqnghi/swe-together:nunchaku-svdq-reconstruction"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/openclaw-security-review-flow/environment/Dockerfile b/tasks/openclaw-security-review-flow/environment/Dockerfile
+index a61479b..2650449 100644
+--- a/tasks/openclaw-security-review-flow/environment/Dockerfile
++++ b/tasks/openclaw-security-review-flow/environment/Dockerfile
+@@ -19,12 +19,12 @@ RUN mkdir -p /workspace /logs/verifier
+ 
+ # Install Node.js 22 (has built-in TypeScript strip-types support)
+ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+-    apt-get install -y nodejs && \
++    apt-get install -y nodejs=22.22.3-1nodesource1 && \
+     rm -rf /var/lib/apt/lists/*
+ 
+ # Install tsx globally for TypeScript execution in verifier
+ # tsx uses esbuild to strip types and run TS files without compilation
+-RUN npm install -g tsx@4 typescript@5
++RUN npm install -g tsx@4.22.4 typescript@5.9.3
+ 
+ # Clone OpenClaw at the base commit (2026-02-01 18:20 UTC).
+ # This is BEFORE the prompt-injection security module was added (session started 2026-02-01T18:55).
+diff --git a/tasks/openclaw-security-review-flow/task.toml b/tasks/openclaw-security-review-flow/task.toml
+index 4e91b0f..690e3c7 100644
+--- a/tasks/openclaw-security-review-flow/task.toml
++++ b/tasks/openclaw-security-review-flow/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/openclaw-security-review-flow:2fb9b64200da"
++docker_image = "bdqnghi/swe-together:openclaw-security-review-flow"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-0467b78e/environment/Dockerfile b/tasks/pi-mono-auto-0467b78e/environment/Dockerfile
+index 77bc594..80df58c 100644
+--- a/tasks/pi-mono-auto-0467b78e/environment/Dockerfile
++++ b/tasks/pi-mono-auto-0467b78e/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-0467b78e/task.toml b/tasks/pi-mono-auto-0467b78e/task.toml
+index db23779..8f22e5c 100644
+--- a/tasks/pi-mono-auto-0467b78e/task.toml
++++ b/tasks/pi-mono-auto-0467b78e/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-0467b78e:68247cfbd78f"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-0467b78e"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-0750e8eb/environment/Dockerfile b/tasks/pi-mono-auto-0750e8eb/environment/Dockerfile
+index 9c5b1da..1f841e2 100644
+--- a/tasks/pi-mono-auto-0750e8eb/environment/Dockerfile
++++ b/tasks/pi-mono-auto-0750e8eb/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-0750e8eb/task.toml b/tasks/pi-mono-auto-0750e8eb/task.toml
+index 639ac05..5d35672 100644
+--- a/tasks/pi-mono-auto-0750e8eb/task.toml
++++ b/tasks/pi-mono-auto-0750e8eb/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-0750e8eb:98f2cb46fa0a"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-0750e8eb"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-0fa6d7bd/environment/Dockerfile b/tasks/pi-mono-auto-0fa6d7bd/environment/Dockerfile
+index 71e304d..b0a88c1 100644
+--- a/tasks/pi-mono-auto-0fa6d7bd/environment/Dockerfile
++++ b/tasks/pi-mono-auto-0fa6d7bd/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-0fa6d7bd/task.toml b/tasks/pi-mono-auto-0fa6d7bd/task.toml
+index d276f32..478ff1f 100644
+--- a/tasks/pi-mono-auto-0fa6d7bd/task.toml
++++ b/tasks/pi-mono-auto-0fa6d7bd/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-0fa6d7bd:ff40aad0fd99"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-0fa6d7bd"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-1b58dd4f/environment/Dockerfile b/tasks/pi-mono-auto-1b58dd4f/environment/Dockerfile
+index 18e2ec4..f49f944 100644
+--- a/tasks/pi-mono-auto-1b58dd4f/environment/Dockerfile
++++ b/tasks/pi-mono-auto-1b58dd4f/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-1b58dd4f/task.toml b/tasks/pi-mono-auto-1b58dd4f/task.toml
+index 04f5ea8..7905339 100644
+--- a/tasks/pi-mono-auto-1b58dd4f/task.toml
++++ b/tasks/pi-mono-auto-1b58dd4f/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-1b58dd4f:80cd550859bd"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-1b58dd4f"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-41636ae5/environment/Dockerfile b/tasks/pi-mono-auto-41636ae5/environment/Dockerfile
+index 55c5844..a73f715 100644
+--- a/tasks/pi-mono-auto-41636ae5/environment/Dockerfile
++++ b/tasks/pi-mono-auto-41636ae5/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-41636ae5/task.toml b/tasks/pi-mono-auto-41636ae5/task.toml
+index f892ac6..678a8ac 100644
+--- a/tasks/pi-mono-auto-41636ae5/task.toml
++++ b/tasks/pi-mono-auto-41636ae5/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-41636ae5:07887dc26b26"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-41636ae5"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-4439324b/environment/Dockerfile b/tasks/pi-mono-auto-4439324b/environment/Dockerfile
+index 2fdf8d7..3f1378b 100644
+--- a/tasks/pi-mono-auto-4439324b/environment/Dockerfile
++++ b/tasks/pi-mono-auto-4439324b/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-4439324b/task.toml b/tasks/pi-mono-auto-4439324b/task.toml
+index f2b6e9e..f4fba0f 100644
+--- a/tasks/pi-mono-auto-4439324b/task.toml
++++ b/tasks/pi-mono-auto-4439324b/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-4439324b:8fed93e434a7"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-4439324b"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-6f8288bb/environment/Dockerfile b/tasks/pi-mono-auto-6f8288bb/environment/Dockerfile
+index f9df24b..aa9c940 100644
+--- a/tasks/pi-mono-auto-6f8288bb/environment/Dockerfile
++++ b/tasks/pi-mono-auto-6f8288bb/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-6f8288bb/task.toml b/tasks/pi-mono-auto-6f8288bb/task.toml
+index deb7ac0..f79f876 100644
+--- a/tasks/pi-mono-auto-6f8288bb/task.toml
++++ b/tasks/pi-mono-auto-6f8288bb/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-6f8288bb:ec87a685b3fd"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-6f8288bb"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-90748a5d/environment/Dockerfile b/tasks/pi-mono-auto-90748a5d/environment/Dockerfile
+index 015a2b2..832d641 100644
+--- a/tasks/pi-mono-auto-90748a5d/environment/Dockerfile
++++ b/tasks/pi-mono-auto-90748a5d/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-90748a5d/task.toml b/tasks/pi-mono-auto-90748a5d/task.toml
+index c3a4cd1..5fbb698 100644
+--- a/tasks/pi-mono-auto-90748a5d/task.toml
++++ b/tasks/pi-mono-auto-90748a5d/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-90748a5d:8f0e90291656"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-90748a5d"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-93c17d3b/environment/Dockerfile b/tasks/pi-mono-auto-93c17d3b/environment/Dockerfile
+index 1751673..5372ce7 100644
+--- a/tasks/pi-mono-auto-93c17d3b/environment/Dockerfile
++++ b/tasks/pi-mono-auto-93c17d3b/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-93c17d3b/task.toml b/tasks/pi-mono-auto-93c17d3b/task.toml
+index 190895b..673cb43 100644
+--- a/tasks/pi-mono-auto-93c17d3b/task.toml
++++ b/tasks/pi-mono-auto-93c17d3b/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-93c17d3b:2f7d1992e60d"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-93c17d3b"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-95de1efe/environment/Dockerfile b/tasks/pi-mono-auto-95de1efe/environment/Dockerfile
+index e28c71f..f05eaa1 100644
+--- a/tasks/pi-mono-auto-95de1efe/environment/Dockerfile
++++ b/tasks/pi-mono-auto-95de1efe/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-95de1efe/task.toml b/tasks/pi-mono-auto-95de1efe/task.toml
+index ce6d7f0..7cb400b 100644
+--- a/tasks/pi-mono-auto-95de1efe/task.toml
++++ b/tasks/pi-mono-auto-95de1efe/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-95de1efe:6c45cafb4ac4"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-95de1efe"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-a4fca584/environment/Dockerfile b/tasks/pi-mono-auto-a4fca584/environment/Dockerfile
+index be32e66..6a1f1dc 100644
+--- a/tasks/pi-mono-auto-a4fca584/environment/Dockerfile
++++ b/tasks/pi-mono-auto-a4fca584/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-a4fca584/task.toml b/tasks/pi-mono-auto-a4fca584/task.toml
+index 3de0234..d2f3cdb 100644
+--- a/tasks/pi-mono-auto-a4fca584/task.toml
++++ b/tasks/pi-mono-auto-a4fca584/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-a4fca584:d1a6ee81ebeb"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-a4fca584"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-cad40af4/environment/Dockerfile b/tasks/pi-mono-auto-cad40af4/environment/Dockerfile
+index 2daa1b3..41a179c 100644
+--- a/tasks/pi-mono-auto-cad40af4/environment/Dockerfile
++++ b/tasks/pi-mono-auto-cad40af4/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-cad40af4/task.toml b/tasks/pi-mono-auto-cad40af4/task.toml
+index 5174c1e..f002a23 100644
+--- a/tasks/pi-mono-auto-cad40af4/task.toml
++++ b/tasks/pi-mono-auto-cad40af4/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-cad40af4:4d8a2b60979e"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-cad40af4"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-cbb62cbe/environment/Dockerfile b/tasks/pi-mono-auto-cbb62cbe/environment/Dockerfile
+index 89af8a5..4ccc06c 100644
+--- a/tasks/pi-mono-auto-cbb62cbe/environment/Dockerfile
++++ b/tasks/pi-mono-auto-cbb62cbe/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-cbb62cbe/task.toml b/tasks/pi-mono-auto-cbb62cbe/task.toml
+index 9640072..8936b20 100644
+--- a/tasks/pi-mono-auto-cbb62cbe/task.toml
++++ b/tasks/pi-mono-auto-cbb62cbe/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-cbb62cbe:1123fd95daf1"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-cbb62cbe"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-d3b2130d/environment/Dockerfile b/tasks/pi-mono-auto-d3b2130d/environment/Dockerfile
+index b74e722..652c506 100644
+--- a/tasks/pi-mono-auto-d3b2130d/environment/Dockerfile
++++ b/tasks/pi-mono-auto-d3b2130d/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-d3b2130d/task.toml b/tasks/pi-mono-auto-d3b2130d/task.toml
+index 510aff2..5f5a751 100644
+--- a/tasks/pi-mono-auto-d3b2130d/task.toml
++++ b/tasks/pi-mono-auto-d3b2130d/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-d3b2130d:c156882a1c0a"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-d3b2130d"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-d8c68afc/environment/Dockerfile b/tasks/pi-mono-auto-d8c68afc/environment/Dockerfile
+index c6ea873..d22aa5f 100644
+--- a/tasks/pi-mono-auto-d8c68afc/environment/Dockerfile
++++ b/tasks/pi-mono-auto-d8c68afc/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-d8c68afc/task.toml b/tasks/pi-mono-auto-d8c68afc/task.toml
+index e114192..76a46b8 100644
+--- a/tasks/pi-mono-auto-d8c68afc/task.toml
++++ b/tasks/pi-mono-auto-d8c68afc/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-d8c68afc:4b446119fc45"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-d8c68afc"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-e86a388c/environment/Dockerfile b/tasks/pi-mono-auto-e86a388c/environment/Dockerfile
+index 9441a36..8a54feb 100644
+--- a/tasks/pi-mono-auto-e86a388c/environment/Dockerfile
++++ b/tasks/pi-mono-auto-e86a388c/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-e86a388c/task.toml b/tasks/pi-mono-auto-e86a388c/task.toml
+index 88d3d61..f252c64 100644
+--- a/tasks/pi-mono-auto-e86a388c/task.toml
++++ b/tasks/pi-mono-auto-e86a388c/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-e86a388c:d53eec149eab"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-e86a388c"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-ec7037ba/environment/Dockerfile b/tasks/pi-mono-auto-ec7037ba/environment/Dockerfile
+index 01589b6..a89cc5e 100644
+--- a/tasks/pi-mono-auto-ec7037ba/environment/Dockerfile
++++ b/tasks/pi-mono-auto-ec7037ba/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-ec7037ba/task.toml b/tasks/pi-mono-auto-ec7037ba/task.toml
+index 80fa3ac..f45dba9 100644
+--- a/tasks/pi-mono-auto-ec7037ba/task.toml
++++ b/tasks/pi-mono-auto-ec7037ba/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-ec7037ba:0d1c2a669853"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-ec7037ba"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-auto-fcb17499/environment/Dockerfile b/tasks/pi-mono-auto-fcb17499/environment/Dockerfile
+index 943a825..3794683 100644
+--- a/tasks/pi-mono-auto-fcb17499/environment/Dockerfile
++++ b/tasks/pi-mono-auto-fcb17499/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-auto-fcb17499/task.toml b/tasks/pi-mono-auto-fcb17499/task.toml
+index 0666833..645a4e9 100644
+--- a/tasks/pi-mono-auto-fcb17499/task.toml
++++ b/tasks/pi-mono-auto-fcb17499/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-auto-fcb17499:58309da15d8b"
++docker_image = "bdqnghi/swe-together:pi-mono-auto-fcb17499"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-extensions-event-refactor/environment/Dockerfile b/tasks/pi-mono-extensions-event-refactor/environment/Dockerfile
+index 96004e3..e45f1ad 100644
+--- a/tasks/pi-mono-extensions-event-refactor/environment/Dockerfile
++++ b/tasks/pi-mono-extensions-event-refactor/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-extensions-event-refactor/task.toml b/tasks/pi-mono-extensions-event-refactor/task.toml
+index f81617f..75dc580 100644
+--- a/tasks/pi-mono-extensions-event-refactor/task.toml
++++ b/tasks/pi-mono-extensions-event-refactor/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-extensions-event-refactor:a0bfa0e501e9"
++docker_image = "bdqnghi/swe-together:pi-mono-extensions-event-refactor"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-foreign-toolcall-fix/environment/Dockerfile b/tasks/pi-mono-foreign-toolcall-fix/environment/Dockerfile
+index 2fdf8d7..3f1378b 100644
+--- a/tasks/pi-mono-foreign-toolcall-fix/environment/Dockerfile
++++ b/tasks/pi-mono-foreign-toolcall-fix/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-foreign-toolcall-fix/task.toml b/tasks/pi-mono-foreign-toolcall-fix/task.toml
+index e9a7554..41454a4 100644
+--- a/tasks/pi-mono-foreign-toolcall-fix/task.toml
++++ b/tasks/pi-mono-foreign-toolcall-fix/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-foreign-toolcall-fix:8fed93e434a7"
++docker_image = "bdqnghi/swe-together:pi-mono-foreign-toolcall-fix"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-keybinding-scope/environment/Dockerfile b/tasks/pi-mono-keybinding-scope/environment/Dockerfile
+index 0f4f829..4a7c7ec 100644
+--- a/tasks/pi-mono-keybinding-scope/environment/Dockerfile
++++ b/tasks/pi-mono-keybinding-scope/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-keybinding-scope/task.toml b/tasks/pi-mono-keybinding-scope/task.toml
+index c9083d4..d2d2987 100644
+--- a/tasks/pi-mono-keybinding-scope/task.toml
++++ b/tasks/pi-mono-keybinding-scope/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-keybinding-scope:cfaff329f963"
++docker_image = "bdqnghi/swe-together:pi-mono-keybinding-scope"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-parallel-tool-stall/environment/Dockerfile b/tasks/pi-mono-parallel-tool-stall/environment/Dockerfile
+index 01674ef..9b66a6d 100644
+--- a/tasks/pi-mono-parallel-tool-stall/environment/Dockerfile
++++ b/tasks/pi-mono-parallel-tool-stall/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-parallel-tool-stall/task.toml b/tasks/pi-mono-parallel-tool-stall/task.toml
+index 1c464f1..d818112 100644
+--- a/tasks/pi-mono-parallel-tool-stall/task.toml
++++ b/tasks/pi-mono-parallel-tool-stall/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-parallel-tool-stall:7b3d676128f0"
++docker_image = "bdqnghi/swe-together:pi-mono-parallel-tool-stall"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/pi-mono-tool-execution-write-error/environment/Dockerfile b/tasks/pi-mono-tool-execution-write-error/environment/Dockerfile
+index 5c7a92f..2cfb399 100644
+--- a/tasks/pi-mono-tool-execution-write-error/environment/Dockerfile
++++ b/tasks/pi-mono-tool-execution-write-error/environment/Dockerfile
+@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Node.js 20 + Bun 1.3.13 + tsx 4 (matches base_images/pi-mono/Dockerfile).
+ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+-    && apt-get install -y nodejs \
++    && apt-get install -y nodejs=20.20.2-1nodesource1 \
+     && rm -rf /var/lib/apt/lists/*
+-RUN npm install -g bun@1.3.13 tsx@4
++RUN npm install -g bun@1.3.13 tsx@4.22.4
+ 
+ # Non-root agent user (required by claude-code's --dangerously-skip-permissions).
+ RUN useradd -m -s /bin/bash agent && \
+diff --git a/tasks/pi-mono-tool-execution-write-error/task.toml b/tasks/pi-mono-tool-execution-write-error/task.toml
+index 7dc0d1e..2983123 100644
+--- a/tasks/pi-mono-tool-execution-write-error/task.toml
++++ b/tasks/pi-mono-tool-execution-write-error/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/pi-mono-tool-execution-write-error:a24ed80196fc"
++docker_image = "bdqnghi/swe-together:pi-mono-tool-execution-write-error"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/qwen3-moe-gguf-dequant/environment/Dockerfile b/tasks/qwen3-moe-gguf-dequant/environment/Dockerfile
+index 33ca4ad..fe84f18 100644
+--- a/tasks/qwen3-moe-gguf-dequant/environment/Dockerfile
++++ b/tasks/qwen3-moe-gguf-dequant/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.11.12-slim@sha256:dbf1de478a55d6763afaa39c2f3d7b54b25230614980276de5cacdde79529d0c
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/qwen3-moe-gguf-dequant/environment/arm64-pip-constraints.txt b/tasks/qwen3-moe-gguf-dequant/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..916a6c4
+--- /dev/null
++++ b/tasks/qwen3-moe-gguf-dequant/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,14 @@
++filelock==3.29.0
++fsspec==2026.4.0
++gguf==0.16.3
++jinja2==3.1.6
++markupsafe==3.0.3
++mpmath==1.3.0
++networkx==3.6.1
++numpy==1.26.4
++pyyaml==6.0.3
++sentencepiece==0.2.0
++sympy==1.13.1
++torch==2.6.0
++tqdm==4.68.1
++typing-extensions==4.15.0
+diff --git a/tasks/qwen3-moe-gguf-dequant/task.toml b/tasks/qwen3-moe-gguf-dequant/task.toml
+index 20173f0..7bbe288 100644
+--- a/tasks/qwen3-moe-gguf-dequant/task.toml
++++ b/tasks/qwen3-moe-gguf-dequant/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 180.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/qwen3-moe-gguf-dequant:0729ed0c61c3"
++docker_image = "bdqnghi/swe-together:qwen3-moe-gguf-dequant"
+ build_timeout_sec = 900.0
+ cpus = 4
+ memory = "8G"
+diff --git a/tasks/reigh-medialightbox-refactor/environment/Dockerfile b/tasks/reigh-medialightbox-refactor/environment/Dockerfile
+index 63d1fec..fb28d98 100644
+--- a/tasks/reigh-medialightbox-refactor/environment/Dockerfile
++++ b/tasks/reigh-medialightbox-refactor/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=bcee1dc6afbf45be2d622683e69a32dedc19e5da
+diff --git a/tasks/reigh-medialightbox-refactor/task.toml b/tasks/reigh-medialightbox-refactor/task.toml
+index c12052f..070da83 100644
+--- a/tasks/reigh-medialightbox-refactor/task.toml
++++ b/tasks/reigh-medialightbox-refactor/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-medialightbox-refactor:c0fdb255071e"
++docker_image = "bdqnghi/swe-together:reigh-medialightbox-refactor"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-preset-data-flow/environment/Dockerfile b/tasks/reigh-preset-data-flow/environment/Dockerfile
+index 7d83c25..5cb3656 100644
+--- a/tasks/reigh-preset-data-flow/environment/Dockerfile
++++ b/tasks/reigh-preset-data-flow/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=55d46bb095dc59b709cffbe3f43f5aea4be04d91
+diff --git a/tasks/reigh-preset-data-flow/task.toml b/tasks/reigh-preset-data-flow/task.toml
+index d107d8b..b8b2c37 100644
+--- a/tasks/reigh-preset-data-flow/task.toml
++++ b/tasks/reigh-preset-data-flow/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-preset-data-flow:7c7d9842c79d"
++docker_image = "bdqnghi/swe-together:reigh-preset-data-flow"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-radix-props-cleanup/environment/Dockerfile b/tasks/reigh-radix-props-cleanup/environment/Dockerfile
+index 175f34a..96ad385 100644
+--- a/tasks/reigh-radix-props-cleanup/environment/Dockerfile
++++ b/tasks/reigh-radix-props-cleanup/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=37e42a1f3f5fdb82a5c19423b78ad65e80fe85e0
+diff --git a/tasks/reigh-radix-props-cleanup/task.toml b/tasks/reigh-radix-props-cleanup/task.toml
+index 17a964e..773af21 100644
+--- a/tasks/reigh-radix-props-cleanup/task.toml
++++ b/tasks/reigh-radix-props-cleanup/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-radix-props-cleanup:f09120df36ad"
++docker_image = "bdqnghi/swe-together:reigh-radix-props-cleanup"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-stroke-overlay-refactor/environment/Dockerfile b/tasks/reigh-stroke-overlay-refactor/environment/Dockerfile
+index 266cd80..c988c46 100644
+--- a/tasks/reigh-stroke-overlay-refactor/environment/Dockerfile
++++ b/tasks/reigh-stroke-overlay-refactor/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=c8f2e4a968ada45dc8c00845daa265b3b56cbb14
+diff --git a/tasks/reigh-stroke-overlay-refactor/task.toml b/tasks/reigh-stroke-overlay-refactor/task.toml
+index e5beb37..88d0935 100644
+--- a/tasks/reigh-stroke-overlay-refactor/task.toml
++++ b/tasks/reigh-stroke-overlay-refactor/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-stroke-overlay-refactor:383e9c739d6e"
++docker_image = "bdqnghi/swe-together:reigh-stroke-overlay-refactor"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-taskspane-lightbox-bug/environment/Dockerfile b/tasks/reigh-taskspane-lightbox-bug/environment/Dockerfile
+index 22d65bc..b758099 100644
+--- a/tasks/reigh-taskspane-lightbox-bug/environment/Dockerfile
++++ b/tasks/reigh-taskspane-lightbox-bug/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=d9e6dc572ceec79220b8848d553bd4ff44e9060e
+diff --git a/tasks/reigh-taskspane-lightbox-bug/task.toml b/tasks/reigh-taskspane-lightbox-bug/task.toml
+index 593b60e..b5ba5b8 100644
+--- a/tasks/reigh-taskspane-lightbox-bug/task.toml
++++ b/tasks/reigh-taskspane-lightbox-bug/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-taskspane-lightbox-bug:9e5d769cd1d0"
++docker_image = "bdqnghi/swe-together:reigh-taskspane-lightbox-bug"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-timeline-mode-cleanup/environment/Dockerfile b/tasks/reigh-timeline-mode-cleanup/environment/Dockerfile
+index 4769ace..d54f2d2 100644
+--- a/tasks/reigh-timeline-mode-cleanup/environment/Dockerfile
++++ b/tasks/reigh-timeline-mode-cleanup/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=65e12652c1b36264a9db20a5745e5861df669de1
+diff --git a/tasks/reigh-timeline-mode-cleanup/task.toml b/tasks/reigh-timeline-mode-cleanup/task.toml
+index 5e065e8..b1b75d7 100644
+--- a/tasks/reigh-timeline-mode-cleanup/task.toml
++++ b/tasks/reigh-timeline-mode-cleanup/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-timeline-mode-cleanup:f5770f4bb70e"
++docker_image = "bdqnghi/swe-together:reigh-timeline-mode-cleanup"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/reigh-timeline-multiselect/environment/Dockerfile b/tasks/reigh-timeline-multiselect/environment/Dockerfile
+index ab81eda..2f5307d 100644
+--- a/tasks/reigh-timeline-multiselect/environment/Dockerfile
++++ b/tasks/reigh-timeline-multiselect/environment/Dockerfile
+@@ -1,6 +1,6 @@
+ # Thin child Dockerfile — uses reigh-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/reigh-dev:latest
++FROM bdqnghi/swe-together-base:reigh-dev
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=3ad26d62e8decf4037618d2b5746f3ca5e42a69e
+diff --git a/tasks/reigh-timeline-multiselect/task.toml b/tasks/reigh-timeline-multiselect/task.toml
+index 1097e0b..1716569 100644
+--- a/tasks/reigh-timeline-multiselect/task.toml
++++ b/tasks/reigh-timeline-multiselect/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/reigh-timeline-multiselect:dd1c6dc7158b"
++docker_image = "bdqnghi/swe-together:reigh-timeline-multiselect"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/rudel-task-468289/environment/Dockerfile b/tasks/rudel-task-468289/environment/Dockerfile
+index 91d66ae..d45c714 100644
+--- a/tasks/rudel-task-468289/environment/Dockerfile
++++ b/tasks/rudel-task-468289/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ 
+ RUN apt-get update && apt-get install -y \
+     git curl ca-certificates unzip xz-utils \
+@@ -11,7 +13,7 @@ RUN pip3 install --break-system-packages pyyaml
+ 
+ # Install Bun (system-wide, not in /root/)
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:$PATH"
+ 
+ RUN mkdir -p /workspace /logs/verifier
+diff --git a/tasks/rudel-task-468289/environment/arm64-pip-constraints.txt b/tasks/rudel-task-468289/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..86d967e
+--- /dev/null
++++ b/tasks/rudel-task-468289/environment/arm64-pip-constraints.txt
+@@ -0,0 +1 @@
++pyyaml==6.0.3
+diff --git a/tasks/rudel-task-468289/task.toml b/tasks/rudel-task-468289/task.toml
+index fdd5673..9d1a725 100644
+--- a/tasks/rudel-task-468289/task.toml
++++ b/tasks/rudel-task-468289/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/rudel-task-468289:e9da8d0e98fb"
++docker_image = "bdqnghi/swe-together:rudel-task-468289"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/rudel-task-491983/environment/Dockerfile b/tasks/rudel-task-491983/environment/Dockerfile
+index ab3f9cd..413625e 100644
+--- a/tasks/rudel-task-491983/environment/Dockerfile
++++ b/tasks/rudel-task-491983/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
+ 
+ # Install bun system-wide (so agent user can access it)
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14"
+ ENV PATH="/usr/local/bin:$PATH"
+ 
+ # Clone the repo at the base commit (tip of main before the fix)
+diff --git a/tasks/rudel-task-491983/task.toml b/tasks/rudel-task-491983/task.toml
+index 86bcb36..9ebe282 100644
+--- a/tasks/rudel-task-491983/task.toml
++++ b/tasks/rudel-task-491983/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/rudel-task-491983:6ccd2430a828"
++docker_image = "bdqnghi/swe-together:rudel-task-491983"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/rudel-task-8e0bd6/environment/Dockerfile b/tasks/rudel-task-8e0bd6/environment/Dockerfile
+index 1d1735d..1bfba9d 100644
+--- a/tasks/rudel-task-8e0bd6/environment/Dockerfile
++++ b/tasks/rudel-task-8e0bd6/environment/Dockerfile
+@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+ 
+ # Install Bun
+ ENV BUN_INSTALL=/usr/local
+-RUN curl -fsSL https://bun.sh/install | bash && \
++RUN curl -fsSL https://bun.sh/install | bash -s "bun-v1.3.14" && \
+     bun --version
+ 
+ # Clone the repo at the base commit (pre-feature state)
+diff --git a/tasks/rudel-task-8e0bd6/task.toml b/tasks/rudel-task-8e0bd6/task.toml
+index a758969..53edea1 100644
+--- a/tasks/rudel-task-8e0bd6/task.toml
++++ b/tasks/rudel-task-8e0bd6/task.toml
+@@ -12,7 +12,7 @@ timeout_sec = 120.0
+ [agent]
+ timeout_sec = 3600.0
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/rudel-task-8e0bd6:8480c44e7c51"
++docker_image = "bdqnghi/swe-together:rudel-task-8e0bd6"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/rudel-task-d1ddb8/environment/Dockerfile b/tasks/rudel-task-d1ddb8/environment/Dockerfile
+index df17f19..f96841f 100644
+--- a/tasks/rudel-task-d1ddb8/environment/Dockerfile
++++ b/tasks/rudel-task-d1ddb8/environment/Dockerfile
+@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
+     && rm -rf /var/lib/apt/lists/*
+ 
+ # Install Bun (globally available for all users)
+-RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash
++RUN curl -fsSL https://bun.sh/install | BUN_INSTALL=/usr/local bash -s "bun-v1.3.14"
+ ENV PATH=/usr/local/bin:$PATH
+ 
+ # Clone repo at the exact base commit
+diff --git a/tasks/rudel-task-d1ddb8/task.toml b/tasks/rudel-task-d1ddb8/task.toml
+index 10bbbf7..3f47023 100644
+--- a/tasks/rudel-task-d1ddb8/task.toml
++++ b/tasks/rudel-task-d1ddb8/task.toml
+@@ -16,7 +16,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/rudel-task-d1ddb8:3e5a0468565f"
++docker_image = "bdqnghi/swe-together:rudel-task-d1ddb8"
+ build_timeout_sec = 600.0
+ allow_internet = true
+ cpus = 4
+diff --git a/tasks/sd-scripts-fp8-lumina/environment/Dockerfile b/tasks/sd-scripts-fp8-lumina/environment/Dockerfile
+index 7ebf7c7..cc6ce76 100644
+--- a/tasks/sd-scripts-fp8-lumina/environment/Dockerfile
++++ b/tasks/sd-scripts-fp8-lumina/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses sd-scripts-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest
++FROM bdqnghi/swe-together-base:sd-scripts-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=a5a162044ca953faabdb07742b4b8925f26096ce
+diff --git a/tasks/sd-scripts-fp8-lumina/environment/arm64-pip-constraints.txt b/tasks/sd-scripts-fp8-lumina/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..6a01dc0
+--- /dev/null
++++ b/tasks/sd-scripts-fp8-lumina/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,55 @@
++absl-py==2.4.0
++accelerate==1.6.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++diffusers==0.32.1
++einops==0.7.0
++filelock==3.29.1
++fsspec==2026.4.0
++ftfy==6.3.1
++grpcio==1.81.0
++hf-xet==1.5.0
++huggingface-hub==0.34.3
++idna==3.18
++imagesize==1.4.1
++importlib-metadata==9.0.0
++iniconfig==2.3.0
++jinja2==3.1.6
++library==0.0.0
++markdown==3.10.2
++markdown-it-py==4.2.0
++markupsafe==3.0.3
++mdurl==0.1.2
++mpmath==1.3.0
++networkx==3.6.1
++numpy==1.26.4
++opencv-python==4.10.0.84
++pillow==12.2.0
++pluggy==1.6.0
++protobuf==7.35.0
++psutil==7.2.2
++pygments==2.20.0
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.34.2
++rich==14.1.0
++safetensors==0.4.5
++sentencepiece==0.2.1
++six==1.17.0
++sympy==1.13.1
++tensorboard==2.19.0
++tensorboard-data-server==0.7.2
++tokenizers==0.21.4
++toml==0.10.2
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.68.1
++transformers==4.54.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++voluptuous==0.15.2
++wcwidth==0.8.0
++werkzeug==3.1.8
++zipp==4.1.0
+diff --git a/tasks/sd-scripts-fp8-lumina/task.toml b/tasks/sd-scripts-fp8-lumina/task.toml
+index eee5bb1..f644b7e 100644
+--- a/tasks/sd-scripts-fp8-lumina/task.toml
++++ b/tasks/sd-scripts-fp8-lumina/task.toml
+@@ -18,7 +18,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/sd-scripts-fp8-lumina:a6e2437846b5"
++docker_image = "bdqnghi/swe-together:sd-scripts-fp8-lumina"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/sd-scripts-multiresolution-compat/environment/Dockerfile b/tasks/sd-scripts-multiresolution-compat/environment/Dockerfile
+index 903a4f9..a715831 100644
+--- a/tasks/sd-scripts-multiresolution-compat/environment/Dockerfile
++++ b/tasks/sd-scripts-multiresolution-compat/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses sd-scripts-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest
++FROM bdqnghi/swe-together-base:sd-scripts-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=e21a7736f8fdd2477836edf254105518beb9790e
+diff --git a/tasks/sd-scripts-multiresolution-compat/environment/arm64-pip-constraints.txt b/tasks/sd-scripts-multiresolution-compat/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..6a01dc0
+--- /dev/null
++++ b/tasks/sd-scripts-multiresolution-compat/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,55 @@
++absl-py==2.4.0
++accelerate==1.6.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++diffusers==0.32.1
++einops==0.7.0
++filelock==3.29.1
++fsspec==2026.4.0
++ftfy==6.3.1
++grpcio==1.81.0
++hf-xet==1.5.0
++huggingface-hub==0.34.3
++idna==3.18
++imagesize==1.4.1
++importlib-metadata==9.0.0
++iniconfig==2.3.0
++jinja2==3.1.6
++library==0.0.0
++markdown==3.10.2
++markdown-it-py==4.2.0
++markupsafe==3.0.3
++mdurl==0.1.2
++mpmath==1.3.0
++networkx==3.6.1
++numpy==1.26.4
++opencv-python==4.10.0.84
++pillow==12.2.0
++pluggy==1.6.0
++protobuf==7.35.0
++psutil==7.2.2
++pygments==2.20.0
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.34.2
++rich==14.1.0
++safetensors==0.4.5
++sentencepiece==0.2.1
++six==1.17.0
++sympy==1.13.1
++tensorboard==2.19.0
++tensorboard-data-server==0.7.2
++tokenizers==0.21.4
++toml==0.10.2
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.68.1
++transformers==4.54.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++voluptuous==0.15.2
++wcwidth==0.8.0
++werkzeug==3.1.8
++zipp==4.1.0
+diff --git a/tasks/sd-scripts-multiresolution-compat/task.toml b/tasks/sd-scripts-multiresolution-compat/task.toml
+index 45e7591..bdc5d72 100644
+--- a/tasks/sd-scripts-multiresolution-compat/task.toml
++++ b/tasks/sd-scripts-multiresolution-compat/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/sd-scripts-multiresolution-compat:557d151751f1"
++docker_image = "bdqnghi/swe-together:sd-scripts-multiresolution-compat"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/sd-scripts-reg-image-dedup/environment/Dockerfile b/tasks/sd-scripts-reg-image-dedup/environment/Dockerfile
+index f64030e..5c11a74 100644
+--- a/tasks/sd-scripts-reg-image-dedup/environment/Dockerfile
++++ b/tasks/sd-scripts-reg-image-dedup/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses sd-scripts-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest
++FROM bdqnghi/swe-together-base:sd-scripts-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=af3a55b21d8efa03307153c66d07842bca211391
+diff --git a/tasks/sd-scripts-reg-image-dedup/environment/arm64-pip-constraints.txt b/tasks/sd-scripts-reg-image-dedup/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..6a01dc0
+--- /dev/null
++++ b/tasks/sd-scripts-reg-image-dedup/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,55 @@
++absl-py==2.4.0
++accelerate==1.6.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++diffusers==0.32.1
++einops==0.7.0
++filelock==3.29.1
++fsspec==2026.4.0
++ftfy==6.3.1
++grpcio==1.81.0
++hf-xet==1.5.0
++huggingface-hub==0.34.3
++idna==3.18
++imagesize==1.4.1
++importlib-metadata==9.0.0
++iniconfig==2.3.0
++jinja2==3.1.6
++library==0.0.0
++markdown==3.10.2
++markdown-it-py==4.2.0
++markupsafe==3.0.3
++mdurl==0.1.2
++mpmath==1.3.0
++networkx==3.6.1
++numpy==1.26.4
++opencv-python==4.10.0.84
++pillow==12.2.0
++pluggy==1.6.0
++protobuf==7.35.0
++psutil==7.2.2
++pygments==2.20.0
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.34.2
++rich==14.1.0
++safetensors==0.4.5
++sentencepiece==0.2.1
++six==1.17.0
++sympy==1.13.1
++tensorboard==2.19.0
++tensorboard-data-server==0.7.2
++tokenizers==0.21.4
++toml==0.10.2
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.68.1
++transformers==4.54.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++voluptuous==0.15.2
++wcwidth==0.8.0
++werkzeug==3.1.8
++zipp==4.1.0
+diff --git a/tasks/sd-scripts-reg-image-dedup/task.toml b/tasks/sd-scripts-reg-image-dedup/task.toml
+index 8836fee..d4fbb07 100644
+--- a/tasks/sd-scripts-reg-image-dedup/task.toml
++++ b/tasks/sd-scripts-reg-image-dedup/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 300.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/sd-scripts-reg-image-dedup:e34557c087de"
++docker_image = "bdqnghi/swe-together:sd-scripts-reg-image-dedup"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/sd-scripts-sdxl-multires-dedup/environment/Dockerfile b/tasks/sd-scripts-sdxl-multires-dedup/environment/Dockerfile
+index 2027779..e5ba7e6 100644
+--- a/tasks/sd-scripts-sdxl-multires-dedup/environment/Dockerfile
++++ b/tasks/sd-scripts-sdxl-multires-dedup/environment/Dockerfile
+@@ -1,6 +1,8 @@
+ # Thin child Dockerfile — uses sd-scripts-dev base image
+ # Generated by scripts/rewrite_task_dockerfiles.py
+-FROM ghcr.io/togetherbench/togetherbench/sd-scripts-dev:latest
++FROM bdqnghi/swe-together-base:sd-scripts-dev
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ARG BASE_COMMIT=609d1292f6e262b27a8c5b2849e7bf0df2ecd7a8
+diff --git a/tasks/sd-scripts-sdxl-multires-dedup/environment/arm64-pip-constraints.txt b/tasks/sd-scripts-sdxl-multires-dedup/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..6a01dc0
+--- /dev/null
++++ b/tasks/sd-scripts-sdxl-multires-dedup/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,55 @@
++absl-py==2.4.0
++accelerate==1.6.0
++certifi==2026.5.20
++charset-normalizer==3.4.7
++diffusers==0.32.1
++einops==0.7.0
++filelock==3.29.1
++fsspec==2026.4.0
++ftfy==6.3.1
++grpcio==1.81.0
++hf-xet==1.5.0
++huggingface-hub==0.34.3
++idna==3.18
++imagesize==1.4.1
++importlib-metadata==9.0.0
++iniconfig==2.3.0
++jinja2==3.1.6
++library==0.0.0
++markdown==3.10.2
++markdown-it-py==4.2.0
++markupsafe==3.0.3
++mdurl==0.1.2
++mpmath==1.3.0
++networkx==3.6.1
++numpy==1.26.4
++opencv-python==4.10.0.84
++pillow==12.2.0
++pluggy==1.6.0
++protobuf==7.35.0
++psutil==7.2.2
++pygments==2.20.0
++pytest==8.3.4
++pytest-timeout==2.3.1
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.34.2
++rich==14.1.0
++safetensors==0.4.5
++sentencepiece==0.2.1
++six==1.17.0
++sympy==1.13.1
++tensorboard==2.19.0
++tensorboard-data-server==0.7.2
++tokenizers==0.21.4
++toml==0.10.2
++torch==2.6.0
++torchvision==0.21.0
++tqdm==4.68.1
++transformers==4.54.1
++typing-extensions==4.15.0
++urllib3==2.7.0
++voluptuous==0.15.2
++wcwidth==0.8.0
++werkzeug==3.1.8
++zipp==4.1.0
+diff --git a/tasks/sd-scripts-sdxl-multires-dedup/task.toml b/tasks/sd-scripts-sdxl-multires-dedup/task.toml
+index 424e3ea..61b96bc 100644
+--- a/tasks/sd-scripts-sdxl-multires-dedup/task.toml
++++ b/tasks/sd-scripts-sdxl-multires-dedup/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/sd-scripts-sdxl-multires-dedup:ef690300f4f7"
++docker_image = "bdqnghi/swe-together:sd-scripts-sdxl-multires-dedup"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/triton-msvc-c4267-warnings/task.toml b/tasks/triton-msvc-c4267-warnings/task.toml
+index 3e4ef53..44e92f7 100644
+--- a/tasks/triton-msvc-c4267-warnings/task.toml
++++ b/tasks/triton-msvc-c4267-warnings/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/triton-msvc-c4267-warnings:b2585ac677d0"
++docker_image = "bdqnghi/swe-together:triton-msvc-c4267-warnings"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/unsloth-idefics3-finetune/environment/Dockerfile b/tasks/unsloth-idefics3-finetune/environment/Dockerfile
+index bb13722..6b5e279 100644
+--- a/tasks/unsloth-idefics3-finetune/environment/Dockerfile
++++ b/tasks/unsloth-idefics3-finetune/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM python:3.12.13-slim
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ # Prevent interactive prompts during package installation
+@@ -24,7 +26,7 @@ RUN git init /workspace/unsloth && \
+ 
+ # Install CPU-only PyTorch (no CUDA needed for structural verification)
+ RUN pip install --no-cache-dir --retries 5 --timeout 300 \
+-    torch==2.5.1+cpu --index-url https://download.pytorch.org/whl/cpu
++    torch==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+ 
+ # Install core dependencies needed for unsloth to be importable.
+ # We pin unsloth_zoo to 2026.1.4 -- the version from the session era --
+@@ -82,7 +84,7 @@ RUN SITE=$(python3 -c "import site; print(site.getsitepackages()[0])") && \
+ 
+ # Install optional deps that may not be available on all architectures
+ RUN pip install --no-cache-dir "bitsandbytes==0.49.2" 2>&1 || true
+-RUN pip install --no-cache-dir --retries 5 --timeout 300 "torchvision==0.20.1+cpu" --index-url https://download.pytorch.org/whl/cpu 2>&1 || true
++RUN pip install --no-cache-dir --retries 5 --timeout 300 "torchvision==0.20.1" --index-url https://download.pytorch.org/whl/cpu 2>&1 || true
+ 
+ # Install unsloth itself in editable mode so agent changes take effect
+ RUN cd /workspace/unsloth && \
+diff --git a/tasks/unsloth-idefics3-finetune/environment/arm64-pip-constraints.txt b/tasks/unsloth-idefics3-finetune/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..9ea4cd7
+--- /dev/null
++++ b/tasks/unsloth-idefics3-finetune/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,63 @@
++accelerate==1.13.0
++aiohappyeyeballs==2.6.2
++aiohttp==3.14.1
++aiosignal==1.4.0
++anyio==4.13.0
++asciinema==2.4.0
++attrs==26.1.0
++bitsandbytes==0.49.2
++certifi==2026.5.20
++charset-normalizer==3.4.7
++cut-cross-entropy==25.1.1
++datasets==4.3.0
++dill==0.4.0
++docstring-parser==0.18.0
++filelock==3.29.0
++frozenlist==1.8.0
++fsspec==2025.9.0
++h11==0.16.0
++hf-transfer==0.1.9
++hf-xet==1.5.0
++httpcore==1.0.9
++httpx==0.28.1
++huggingface-hub==0.36.2
++idna==3.18
++jinja2==3.1.6
++markupsafe==3.0.3
++mpmath==1.3.0
++msgspec==0.21.1
++multidict==6.7.1
++multiprocess==0.70.16
++networkx==3.6.1
++numpy==2.4.4
++pandas==3.0.3
++peft==0.19.1
++pillow==12.2.0
++propcache==0.5.2
++protobuf==7.34.1
++psutil==7.2.2
++pyarrow==24.0.0
++python-dateutil==2.9.0.post0
++pyyaml==6.0.3
++regex==2026.5.9
++requests==2.34.2
++safetensors==0.7.0
++sentencepiece==0.2.1
++six==1.17.0
++sympy==1.13.1
++tokenizers==0.22.2
++torch==2.5.1
++torchao==0.17.0
++torchvision==0.20.1
++tqdm==4.67.3
++transformers==4.57.6
++triton==3.7.0
++trl==0.24.0
++typeguard==4.5.2
++typing-extensions==4.15.0
++tyro==1.0.13
++unsloth==2026.1.4
++unsloth-zoo==2026.1.4
++urllib3==2.7.0
++xxhash==3.7.0
++yarl==1.24.2
+diff --git a/tasks/unsloth-idefics3-finetune/task.toml b/tasks/unsloth-idefics3-finetune/task.toml
+index f4300f3..4594231 100644
+--- a/tasks/unsloth-idefics3-finetune/task.toml
++++ b/tasks/unsloth-idefics3-finetune/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 180.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/unsloth-idefics3-finetune:aa4ad7f34e30"
++docker_image = "bdqnghi/swe-together:unsloth-idefics3-finetune"
+ build_timeout_sec = 900.0
+ cpus = 4
+ memory = "4G"
+diff --git a/tasks/vibecomfy-mcp-pr-integration/environment/Dockerfile b/tasks/vibecomfy-mcp-pr-integration/environment/Dockerfile
+index ee4f3a2..3a631a4 100644
+--- a/tasks/vibecomfy-mcp-pr-integration/environment/Dockerfile
++++ b/tasks/vibecomfy-mcp-pr-integration/environment/Dockerfile
+@@ -1,4 +1,6 @@
+ FROM ubuntu:24.04@sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b
++COPY arm64-pip-constraints.txt /opt/swe-together-arm64/pip-constraints.txt
++ARG PIP_CONSTRAINT=/opt/swe-together-arm64/pip-constraints.txt
+ ARG REBUILD_TOKEN=v042-20260430  # cache-bust to force rebuild on top of new base layers
+ 
+ ENV DEBIAN_FRONTEND=noninteractive
+diff --git a/tasks/vibecomfy-mcp-pr-integration/environment/arm64-pip-constraints.txt b/tasks/vibecomfy-mcp-pr-integration/environment/arm64-pip-constraints.txt
+new file mode 100644
+index 0000000..5c75096
+--- /dev/null
++++ b/tasks/vibecomfy-mcp-pr-integration/environment/arm64-pip-constraints.txt
+@@ -0,0 +1,25 @@
++annotated-types==0.7.0
++anyio==4.13.0
++asciinema==2.4.0
++certifi==2026.5.20
++click==8.4.1
++h11==0.16.0
++httpcore==1.0.9
++httpx==0.28.1
++httpx-sse==0.4.3
++idna==3.18
++iniconfig==2.3.0
++mcp==1.3.0
++numpy==2.2.3
++pluggy==1.6.0
++pydantic==2.13.4
++pydantic-core==2.46.4
++pydantic-settings==2.14.1
++pytest==8.3.5
++pytest-timeout==2.3.1
++python-dotenv==1.2.2
++sse-starlette==3.4.4
++starlette==1.2.1
++typing-extensions==4.15.0
++typing-inspection==0.4.2
++uvicorn==0.49.0
+diff --git a/tasks/vibecomfy-mcp-pr-integration/task.toml b/tasks/vibecomfy-mcp-pr-integration/task.toml
+index 11bfa41..8e5108e 100644
+--- a/tasks/vibecomfy-mcp-pr-integration/task.toml
++++ b/tasks/vibecomfy-mcp-pr-integration/task.toml
+@@ -19,7 +19,7 @@ timeout_sec = 120.0
+ timeout_sec = 3600.0
+ 
+ [environment]
+-docker_image = "ghcr.io/togetherbench/multi-user-turn-codebench/vibecomfy-mcp-pr-integration:c4ec581117c9"
++docker_image = "bdqnghi/swe-together:vibecomfy-mcp-pr-integration"
+ build_timeout_sec = 600.0
+ cpus = 4
+ memory = "4G"

@@ -1,0 +1,567 @@
+{
+ "dpkg": {
+  "adduser": "3.152",
+  "apt": "3.0.3",
+  "base-files": "13.8+deb13u5",
+  "base-passwd": "3.6.7",
+  "bash": "5.2.37-2+b9",
+  "bsdutils": "1:2.41-5",
+  "ca-certificates": "20250419",
+  "coreutils": "9.7-3",
+  "curl": "8.14.1-2+deb13u3",
+  "dash": "0.5.12-12",
+  "debconf": "1.5.91",
+  "debian-archive-keyring": "2025.1",
+  "debianutils": "5.23.2",
+  "diffutils": "1:3.10-4",
+  "dpkg": "1.22.22",
+  "findutils": "4.10.0-3",
+  "gcc-14-base": "14.2.0-19",
+  "git": "1:2.47.3-0+deb13u1",
+  "git-man": "1:2.47.3-0+deb13u1",
+  "grep": "3.11-4",
+  "gzip": "1.13-1",
+  "hostname": "3.25",
+  "init-system-helpers": "1.69~deb13u1",
+  "libacl1": "2.3.2-2+b1",
+  "libapt-pkg7.0": "3.0.3",
+  "libattr1": "1:2.5.2-3",
+  "libaudit-common": "1:4.0.2-2",
+  "libaudit1": "1:4.0.2-2+b2",
+  "libblkid1": "2.41-5",
+  "libbrotli1": "1.1.0-2+b7",
+  "libbsd0": "0.12.2-2",
+  "libbz2-1.0": "1.0.8-6",
+  "libc-bin": "2.41-12+deb13u3",
+  "libc6": "2.41-12+deb13u3",
+  "libcap-ng0": "0.8.5-4+b1",
+  "libcap2": "1:2.75-10+deb13u1+b1",
+  "libcom-err2": "1.47.2-3+b11",
+  "libcrypt1": "1:4.4.38-1",
+  "libcurl3t64-gnutls": "8.14.1-2+deb13u3",
+  "libcurl4t64": "8.14.1-2+deb13u3",
+  "libdb5.3t64": "5.3.28+dfsg2-9",
+  "libdebconfclient0": "0.280",
+  "liberror-perl": "0.17030-1",
+  "libevent-core-2.1-7t64": "2.1.12-stable-10+b1",
+  "libexpat1": "2.7.1-2",
+  "libffi8": "3.4.8-2",
+  "libgcc-s1": "14.2.0-19",
+  "libgdbm-compat4t64": "1.24-2",
+  "libgdbm6t64": "1.24-2",
+  "libgmp10": "2:6.3.0+dfsg-3",
+  "libgnutls30t64": "3.8.9-3+deb13u4",
+  "libgssapi-krb5-2": "1.21.3-5+deb13u1",
+  "libhogweed6t64": "3.10.1-1",
+  "libidn2-0": "2.3.8-2",
+  "libjemalloc2": "5.3.0-3",
+  "libk5crypto3": "1.21.3-5+deb13u1",
+  "libkeyutils1": "1.6.3-6",
+  "libkrb5-3": "1.21.3-5+deb13u1",
+  "libkrb5support0": "1.21.3-5+deb13u1",
+  "liblastlog2-2": "2.41-5",
+  "libldap2": "2.6.10+dfsg-1",
+  "liblz4-1": "1.10.0-4",
+  "liblzma5": "5.8.1-1",
+  "libmd0": "1.1.0-2+b1",
+  "libmount1": "2.41-5",
+  "libncursesw6": "6.5+20250216-2",
+  "libnettle8t64": "3.10.1-1",
+  "libnghttp2-14": "1.64.0-1.1+deb13u1",
+  "libnghttp3-9": "1.8.0-1",
+  "libngtcp2-16": "1.11.0-1+deb13u1",
+  "libngtcp2-crypto-gnutls8": "1.11.0-1+deb13u1",
+  "libp11-kit0": "0.25.5-3",
+  "libpam-modules": "1.7.0-5",
+  "libpam-modules-bin": "1.7.0-5",
+  "libpam-runtime": "1.7.0-5",
+  "libpam0g": "1.7.0-5",
+  "libpcre2-8-0": "10.46-1~deb13u1",
+  "libperl5.40": "5.40.1-6",
+  "libpsl5t64": "0.21.2-1.1+b1",
+  "libreadline8t64": "8.2-6",
+  "librtmp1": "2.4+20151223.gitfa8646d.1-2+b5",
+  "libsasl2-2": "2.1.28+dfsg1-9",
+  "libsasl2-modules-db": "2.1.28+dfsg1-9",
+  "libseccomp2": "2.6.0-2",
+  "libselinux1": "3.8.1-1",
+  "libsemanage-common": "3.8.1-1",
+  "libsemanage2": "3.8.1-1",
+  "libsepol2": "3.8.1-1",
+  "libsmartcols1": "2.41-5",
+  "libsqlite3-0": "3.46.1-7+deb13u1",
+  "libssh2-1t64": "1.11.1-1",
+  "libssl3t64": "3.5.6-1~deb13u1",
+  "libstdc++6": "14.2.0-19",
+  "libsystemd0": "257.13-1~deb13u1",
+  "libtasn1-6": "4.20.0-2",
+  "libtinfo6": "6.5+20250216-2",
+  "libudev1": "257.13-1~deb13u1",
+  "libunistring5": "1.3-2",
+  "libuuid1": "2.41-5",
+  "libxxhash0": "0.8.3-2",
+  "libzstd1": "1.5.7+dfsg-1",
+  "login": "1:4.16.0-2+really2.41-5",
+  "login.defs": "1:4.17.4-2",
+  "mawk": "1.3.4.20250131-1",
+  "mount": "2.41-5",
+  "ncurses-base": "6.5+20250216-2",
+  "ncurses-bin": "6.5+20250216-2",
+  "netbase": "6.5",
+  "openssl": "3.5.6-1~deb13u1",
+  "openssl-provider-legacy": "3.5.6-1~deb13u1",
+  "passwd": "1:4.17.4-2",
+  "perl": "5.40.1-6",
+  "perl-base": "5.40.1-6",
+  "perl-modules-5.40": "5.40.1-6",
+  "readline-common": "8.2-6",
+  "sed": "4.9-2+deb13u1",
+  "sqv": "1.3.0-3+b2",
+  "sysvinit-utils": "3.14-4",
+  "tar": "1.35+dfsg-3.1",
+  "tmux": "3.5a-3",
+  "tzdata": "2026b-0+deb13u1",
+  "util-linux": "2.41-5",
+  "zlib1g": "1:1.3.dfsg+really1.3.1-1+b1"
+ },
+ "image": "ghcr.io/togetherbench/multi-user-turn-codebench/unsloth-idefics3-finetune:aa4ad7f34e30",
+ "npm_global": {},
+ "platform": "linux/amd64",
+ "pythons": {
+  "/usr/local/bin/python": {
+   "dists": [
+    {
+     "direct_url": null,
+     "name": "unsloth",
+     "path": "unsloth.egg-info",
+     "version": "2026.1.4"
+    },
+    {
+     "direct_url": null,
+     "name": "unsloth",
+     "path": "/workspace/unsloth/unsloth.egg-info",
+     "version": "2026.1.4"
+    },
+    {
+     "direct_url": null,
+     "name": "pip",
+     "path": "/usr/local/lib/python3.12/site-packages/pip-25.0.1.dist-info",
+     "version": "25.0.1"
+    },
+    {
+     "direct_url": {
+      "dir_info": {
+       "editable": true
+      },
+      "url": "file:///workspace/unsloth"
+     },
+     "name": "unsloth",
+     "path": "/usr/local/lib/python3.12/site-packages/unsloth-2026.1.4.dist-info",
+     "version": "2026.1.4"
+    },
+    {
+     "direct_url": null,
+     "name": "torchvision",
+     "path": "/usr/local/lib/python3.12/site-packages/torchvision-0.20.1+cpu.dist-info",
+     "version": "0.20.1+cpu"
+    },
+    {
+     "direct_url": null,
+     "name": "bitsandbytes",
+     "path": "/usr/local/lib/python3.12/site-packages/bitsandbytes-0.49.2.dist-info",
+     "version": "0.49.2"
+    },
+    {
+     "direct_url": null,
+     "name": "docstring_parser",
+     "path": "/usr/local/lib/python3.12/site-packages/docstring_parser-0.18.0.dist-info",
+     "version": "0.18.0"
+    },
+    {
+     "direct_url": null,
+     "name": "cut-cross-entropy",
+     "path": "/usr/local/lib/python3.12/site-packages/cut_cross_entropy-25.1.1.dist-info",
+     "version": "25.1.1"
+    },
+    {
+     "direct_url": null,
+     "name": "tyro",
+     "path": "/usr/local/lib/python3.12/site-packages/tyro-1.0.13.dist-info",
+     "version": "1.0.13"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohappyeyeballs",
+     "path": "/usr/local/lib/python3.12/site-packages/aiohappyeyeballs-2.6.2.dist-info",
+     "version": "2.6.2"
+    },
+    {
+     "direct_url": null,
+     "name": "pillow",
+     "path": "/usr/local/lib/python3.12/site-packages/pillow-12.2.0.dist-info",
+     "version": "12.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "fsspec",
+     "path": "/usr/local/lib/python3.12/site-packages/fsspec-2025.9.0.dist-info",
+     "version": "2025.9.0"
+    },
+    {
+     "direct_url": null,
+     "name": "tokenizers",
+     "path": "/usr/local/lib/python3.12/site-packages/tokenizers-0.22.2.dist-info",
+     "version": "0.22.2"
+    },
+    {
+     "direct_url": null,
+     "name": "h11",
+     "path": "/usr/local/lib/python3.12/site-packages/h11-0.16.0.dist-info",
+     "version": "0.16.0"
+    },
+    {
+     "direct_url": null,
+     "name": "numpy",
+     "path": "/usr/local/lib/python3.12/site-packages/numpy-2.4.4.dist-info",
+     "version": "2.4.4"
+    },
+    {
+     "direct_url": null,
+     "name": "six",
+     "path": "/usr/local/lib/python3.12/site-packages/six-1.17.0.dist-info",
+     "version": "1.17.0"
+    },
+    {
+     "direct_url": null,
+     "name": "huggingface_hub",
+     "path": "/usr/local/lib/python3.12/site-packages/huggingface_hub-0.36.2.dist-info",
+     "version": "0.36.2"
+    },
+    {
+     "direct_url": null,
+     "name": "multiprocess",
+     "path": "/usr/local/lib/python3.12/site-packages/multiprocess-0.70.16.dist-info",
+     "version": "0.70.16"
+    },
+    {
+     "direct_url": null,
+     "name": "multidict",
+     "path": "/usr/local/lib/python3.12/site-packages/multidict-6.7.1.dist-info",
+     "version": "6.7.1"
+    },
+    {
+     "direct_url": null,
+     "name": "triton",
+     "path": "/usr/local/lib/python3.12/site-packages/triton-3.7.0.dist-info",
+     "version": "3.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "safetensors",
+     "path": "/usr/local/lib/python3.12/site-packages/safetensors-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "aiohttp",
+     "path": "/usr/local/lib/python3.12/site-packages/aiohttp-3.14.1.dist-info",
+     "version": "3.14.1"
+    },
+    {
+     "direct_url": null,
+     "name": "msgspec",
+     "path": "/usr/local/lib/python3.12/site-packages/msgspec-0.21.1.dist-info",
+     "version": "0.21.1"
+    },
+    {
+     "direct_url": null,
+     "name": "python-dateutil",
+     "path": "/usr/local/lib/python3.12/site-packages/python_dateutil-2.9.0.post0.dist-info",
+     "version": "2.9.0.post0"
+    },
+    {
+     "direct_url": null,
+     "name": "dill",
+     "path": "/usr/local/lib/python3.12/site-packages/dill-0.4.0.dist-info",
+     "version": "0.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "idna",
+     "path": "/usr/local/lib/python3.12/site-packages/idna-3.18.dist-info",
+     "version": "3.18"
+    },
+    {
+     "direct_url": null,
+     "name": "requests",
+     "path": "/usr/local/lib/python3.12/site-packages/requests-2.34.2.dist-info",
+     "version": "2.34.2"
+    },
+    {
+     "direct_url": null,
+     "name": "unsloth_zoo",
+     "path": "/usr/local/lib/python3.12/site-packages/unsloth_zoo-2026.1.4.dist-info",
+     "version": "2026.1.4"
+    },
+    {
+     "direct_url": null,
+     "name": "tqdm",
+     "path": "/usr/local/lib/python3.12/site-packages/tqdm-4.67.3.dist-info",
+     "version": "4.67.3"
+    },
+    {
+     "direct_url": null,
+     "name": "protobuf",
+     "path": "/usr/local/lib/python3.12/site-packages/protobuf-7.34.1.dist-info",
+     "version": "7.34.1"
+    },
+    {
+     "direct_url": null,
+     "name": "hf_transfer",
+     "path": "/usr/local/lib/python3.12/site-packages/hf_transfer-0.1.9.dist-info",
+     "version": "0.1.9"
+    },
+    {
+     "direct_url": null,
+     "name": "attrs",
+     "path": "/usr/local/lib/python3.12/site-packages/attrs-26.1.0.dist-info",
+     "version": "26.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "transformers",
+     "path": "/usr/local/lib/python3.12/site-packages/transformers-4.57.6.dist-info",
+     "version": "4.57.6"
+    },
+    {
+     "direct_url": null,
+     "name": "charset-normalizer",
+     "path": "/usr/local/lib/python3.12/site-packages/charset_normalizer-3.4.7.dist-info",
+     "version": "3.4.7"
+    },
+    {
+     "direct_url": null,
+     "name": "sentencepiece",
+     "path": "/usr/local/lib/python3.12/site-packages/sentencepiece-0.2.1.dist-info",
+     "version": "0.2.1"
+    },
+    {
+     "direct_url": null,
+     "name": "typeguard",
+     "path": "/usr/local/lib/python3.12/site-packages/typeguard-4.5.2.dist-info",
+     "version": "4.5.2"
+    },
+    {
+     "direct_url": null,
+     "name": "pandas",
+     "path": "/usr/local/lib/python3.12/site-packages/pandas-3.0.3.dist-info",
+     "version": "3.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "httpx",
+     "path": "/usr/local/lib/python3.12/site-packages/httpx-0.28.1.dist-info",
+     "version": "0.28.1"
+    },
+    {
+     "direct_url": null,
+     "name": "pyarrow",
+     "path": "/usr/local/lib/python3.12/site-packages/pyarrow-24.0.0.dist-info",
+     "version": "24.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "packaging",
+     "path": "/usr/local/lib/python3.12/site-packages/packaging-26.1.dist-info",
+     "version": "26.1"
+    },
+    {
+     "direct_url": null,
+     "name": "torchao",
+     "path": "/usr/local/lib/python3.12/site-packages/torchao-0.17.0.dist-info",
+     "version": "0.17.0"
+    },
+    {
+     "direct_url": null,
+     "name": "hf-xet",
+     "path": "/usr/local/lib/python3.12/site-packages/hf_xet-1.5.0.dist-info",
+     "version": "1.5.0"
+    },
+    {
+     "direct_url": null,
+     "name": "datasets",
+     "path": "/usr/local/lib/python3.12/site-packages/datasets-4.3.0.dist-info",
+     "version": "4.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "frozenlist",
+     "path": "/usr/local/lib/python3.12/site-packages/frozenlist-1.8.0.dist-info",
+     "version": "1.8.0"
+    },
+    {
+     "direct_url": null,
+     "name": "yarl",
+     "path": "/usr/local/lib/python3.12/site-packages/yarl-1.24.2.dist-info",
+     "version": "1.24.2"
+    },
+    {
+     "direct_url": null,
+     "name": "httpcore",
+     "path": "/usr/local/lib/python3.12/site-packages/httpcore-1.0.9.dist-info",
+     "version": "1.0.9"
+    },
+    {
+     "direct_url": null,
+     "name": "regex",
+     "path": "/usr/local/lib/python3.12/site-packages/regex-2026.5.9.dist-info",
+     "version": "2026.5.9"
+    },
+    {
+     "direct_url": null,
+     "name": "certifi",
+     "path": "/usr/local/lib/python3.12/site-packages/certifi-2026.5.20.dist-info",
+     "version": "2026.5.20"
+    },
+    {
+     "direct_url": null,
+     "name": "aiosignal",
+     "path": "/usr/local/lib/python3.12/site-packages/aiosignal-1.4.0.dist-info",
+     "version": "1.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "anyio",
+     "path": "/usr/local/lib/python3.12/site-packages/anyio-4.13.0.dist-info",
+     "version": "4.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "urllib3",
+     "path": "/usr/local/lib/python3.12/site-packages/urllib3-2.7.0.dist-info",
+     "version": "2.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "PyYAML",
+     "path": "/usr/local/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info",
+     "version": "6.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "trl",
+     "path": "/usr/local/lib/python3.12/site-packages/trl-0.24.0.dist-info",
+     "version": "0.24.0"
+    },
+    {
+     "direct_url": null,
+     "name": "psutil",
+     "path": "/usr/local/lib/python3.12/site-packages/psutil-7.2.2.dist-info",
+     "version": "7.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "accelerate",
+     "path": "/usr/local/lib/python3.12/site-packages/accelerate-1.13.0.dist-info",
+     "version": "1.13.0"
+    },
+    {
+     "direct_url": null,
+     "name": "wheel",
+     "path": "/usr/local/lib/python3.12/site-packages/wheel-0.47.0.dist-info",
+     "version": "0.47.0"
+    },
+    {
+     "direct_url": null,
+     "name": "peft",
+     "path": "/usr/local/lib/python3.12/site-packages/peft-0.19.1.dist-info",
+     "version": "0.19.1"
+    },
+    {
+     "direct_url": null,
+     "name": "xxhash",
+     "path": "/usr/local/lib/python3.12/site-packages/xxhash-3.7.0.dist-info",
+     "version": "3.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "propcache",
+     "path": "/usr/local/lib/python3.12/site-packages/propcache-0.5.2.dist-info",
+     "version": "0.5.2"
+    },
+    {
+     "direct_url": null,
+     "name": "MarkupSafe",
+     "path": "/usr/local/lib/python3.12/site-packages/markupsafe-3.0.3.dist-info",
+     "version": "3.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "filelock",
+     "path": "/usr/local/lib/python3.12/site-packages/filelock-3.29.0.dist-info",
+     "version": "3.29.0"
+    },
+    {
+     "direct_url": null,
+     "name": "torch",
+     "path": "/usr/local/lib/python3.12/site-packages/torch-2.5.1+cpu.dist-info",
+     "version": "2.5.1+cpu"
+    },
+    {
+     "direct_url": null,
+     "name": "mpmath",
+     "path": "/usr/local/lib/python3.12/site-packages/mpmath-1.3.0.dist-info",
+     "version": "1.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "networkx",
+     "path": "/usr/local/lib/python3.12/site-packages/networkx-3.6.1.dist-info",
+     "version": "3.6.1"
+    },
+    {
+     "direct_url": null,
+     "name": "typing_extensions",
+     "path": "/usr/local/lib/python3.12/site-packages/typing_extensions-4.15.0.dist-info",
+     "version": "4.15.0"
+    },
+    {
+     "direct_url": null,
+     "name": "sympy",
+     "path": "/usr/local/lib/python3.12/site-packages/sympy-1.13.1.dist-info",
+     "version": "1.13.1"
+    },
+    {
+     "direct_url": null,
+     "name": "Jinja2",
+     "path": "/usr/local/lib/python3.12/site-packages/jinja2-3.1.6.dist-info",
+     "version": "3.1.6"
+    },
+    {
+     "direct_url": null,
+     "name": "setuptools",
+     "path": "/usr/local/lib/python3.12/site-packages/setuptools-70.2.0.dist-info",
+     "version": "70.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "asciinema",
+     "path": "/usr/local/lib/python3.12/site-packages/asciinema-2.4.0.dist-info",
+     "version": "2.4.0"
+    }
+   ],
+   "prefix": "/usr/local",
+   "version": "3.12.13"
+  }
+ },
+ "tools": {
+  "pip3": {
+   "path": "/usr/local/bin/pip3",
+   "version": "pip 25.0.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)"
+  },
+  "python3": {
+   "path": "/usr/local/bin/python3",
+   "version": "Python 3.12.13"
+  }
+ }
+}

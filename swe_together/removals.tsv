@@ -1,0 +1,13 @@
+2026-09-26T14:27:35Z	bdqnghi/terminal-bench-v4:takens-embedding-lean-verifier	10.40 GB	hub digest sha256:1b3591c905e6ca81034d1ec4916ae0bb51d60a672a561244435882bbeeec64d8 matches local
+2026-09-26T14:27:39Z	bdqnghi/terminal-bench-v4:formal-crypto-verifier	6.64 GB	hub digest sha256:ca0d81473a57d4e0e1500ded18150d7af1ac6765b7ab25d6dc6fcc2b2a932df2 matches local
+2026-09-26T14:27:43Z	bdqnghi/terminal-bench-v4:formal-crypto	6.38 GB	hub digest sha256:8506ced396fa9d05dc5f5cfcdbd61a03a13c21f1fbe63988c4268c01c3545b79 matches local
+2026-09-26T14:27:44Z	bdqnghi/terminal-bench-v4:layout-config-recreation-verifier	4.88 GB	hub digest sha256:96159b1b12f1c81be8530fcbdb6aa5835cdab5b13453c691c9b9d0d607d69ebd matches local
+2026-09-26T14:27:45Z	bdqnghi/terminal-bench-v4:layout-config-recreation	4.81 GB	hub digest sha256:4b6623bb81fe75196e41036cd54461f291c52a9ffd57f6d217b306957ffa2c54 matches local
+2026-09-26T14:27:47Z	bdqnghi/terminal-bench-v4:cumulative-layout-shift-verifier	3.73 GB	hub digest sha256:0d8275a9d5ef30abe67447483d497eb9d3a96f3aceda21aa32860836f9f93ffa matches local
+2026-09-26T14:27:48Z	bdqnghi/terminal-bench-v4:freecad-spring-clip-verifier	3.45 GB	hub digest sha256:2c09ce355175ef5a0b3de9c31cf9b95ce9d5a8b12864bd90039ea46b206284ab matches local
+2026-09-26T14:27:51Z	bdqnghi/terminal-bench-v4:freecad-platform-drawing-verifier	3.45 GB	hub digest sha256:af179b0d27cc661ba857743bc4a28fadda565397c9e1bed3d9c271e07cb0f979 matches local
+2026-09-26T14:27:54Z	bdqnghi/terminal-bench-v4:freecad-impeller-verifier	3.45 GB	hub digest sha256:99ce71622e1cdb62e6b44da92d69be74ed4130cafb1ab4cd8cf185e5cab9981f matches local
+2026-09-26T14:27:55Z	bdqnghi/terminal-bench-v4:freecad-spring-clip	3.41 GB	hub digest sha256:954a3aa1495996314a2925d4c478fa56318e86e452418221a7a66d9b53ba51e4 matches local
+2026-09-26T14:27:58Z	bdqnghi/terminal-bench-v4:freecad-platform-drawing	3.41 GB	hub digest sha256:d6b63c2cf172ad8448191d00b5639ee415c9dde732246fc4bcae12a646df4fae matches local
+2026-09-26T14:28:02Z	bdqnghi/terminal-bench-v4:freecad-impeller	3.41 GB	hub digest sha256:954a3aa1495996314a2925d4c478fa56318e86e452418221a7a66d9b53ba51e4 matches local
+2026-09-26T14:28:03Z	bdqnghi/terminal-bench-v4:nextjs-performance-verifier	3.21 GB	hub digest sha256:5cdc0a0a322f935461102c20c2659859ea791ef588b8fffbfa89a292920cc1fe matches local

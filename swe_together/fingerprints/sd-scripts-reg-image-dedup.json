@@ -1,0 +1,628 @@
+{
+ "dpkg": {
+  "adduser": "3.134",
+  "apt": "2.6.1",
+  "base-files": "12.4+deb12u9",
+  "base-passwd": "3.6.1",
+  "bash": "5.2.15-2+b7",
+  "binutils": "2.40-2",
+  "binutils-common": "2.40-2",
+  "binutils-x86-64-linux-gnu": "2.40-2",
+  "bsdutils": "1:2.38.1-5+deb12u3",
+  "build-essential": "12.9",
+  "bzip2": "1.0.8-5+b1",
+  "ca-certificates": "20230311+deb12u1",
+  "coreutils": "9.1-1",
+  "cpp": "4:12.2.0-3",
+  "cpp-12": "12.2.0-14+deb12u1",
+  "curl": "7.88.1-10+deb12u14",
+  "dash": "0.5.12-2",
+  "debconf": "1.5.82",
+  "debian-archive-keyring": "2023.3+deb12u1",
+  "debianutils": "5.7-0.5~deb12u1",
+  "diffutils": "1:3.8-4",
+  "dpkg": "1.21.23",
+  "dpkg-dev": "1.21.23",
+  "e2fsprogs": "1.47.0-2",
+  "findutils": "4.9.0-4",
+  "g++": "4:12.2.0-3",
+  "g++-12": "12.2.0-14+deb12u1",
+  "gcc": "4:12.2.0-3",
+  "gcc-12": "12.2.0-14+deb12u1",
+  "gcc-12-base": "12.2.0-14+deb12u1",
+  "git": "1:2.39.5-0+deb12u3",
+  "git-man": "1:2.39.5-0+deb12u3",
+  "gpgv": "2.2.40-1.1",
+  "grep": "3.8-5",
+  "gzip": "1.12-1",
+  "hostname": "3.23+nmu1",
+  "init-system-helpers": "1.65.2",
+  "libacl1": "2.3.1-3",
+  "libapt-pkg6.0": "2.6.1",
+  "libasan8": "12.2.0-14+deb12u1",
+  "libatomic1": "12.2.0-14+deb12u1",
+  "libattr1": "1:2.5.1-4",
+  "libaudit-common": "1:3.0.9-1",
+  "libaudit1": "1:3.0.9-1",
+  "libbinutils": "2.40-2",
+  "libblkid1": "2.38.1-5+deb12u3",
+  "libbrotli1": "1.0.9-2+b6",
+  "libbsd0": "0.11.7-2",
+  "libbz2-1.0": "1.0.8-5+b1",
+  "libc-bin": "2.36-9+deb12u14",
+  "libc-dev-bin": "2.36-9+deb12u14",
+  "libc6": "2.36-9+deb12u14",
+  "libc6-dev": "2.36-9+deb12u14",
+  "libcap-ng0": "0.8.3-1+b3",
+  "libcap2": "1:2.66-4",
+  "libcc1-0": "12.2.0-14+deb12u1",
+  "libcom-err2": "1.47.0-2",
+  "libcrypt-dev": "1:4.4.33-2",
+  "libcrypt1": "1:4.4.33-2",
+  "libctf-nobfd0": "2.40-2",
+  "libctf0": "2.40-2",
+  "libcurl3-gnutls": "7.88.1-10+deb12u14",
+  "libcurl4": "7.88.1-10+deb12u14",
+  "libdb5.3": "5.3.28+dfsg2-1",
+  "libdebconfclient0": "0.270",
+  "libdpkg-perl": "1.21.23",
+  "libdrm-amdgpu1": "2.4.114-1+b1",
+  "libdrm-common": "2.4.114-1",
+  "libdrm-intel1": "2.4.114-1+b1",
+  "libdrm-nouveau2": "2.4.114-1+b1",
+  "libdrm-radeon1": "2.4.114-1+b1",
+  "libdrm2": "2.4.114-1+b1",
+  "libedit2": "3.1-20221030-2",
+  "libelf1": "0.188-2.1",
+  "liberror-perl": "0.17029-2",
+  "libevent-core-2.1-7": "2.1.12-stable-8",
+  "libexpat1": "2.5.0-1+deb12u2",
+  "libext2fs2": "1.47.0-2",
+  "libffi8": "3.4.4-1",
+  "libgcc-12-dev": "12.2.0-14+deb12u1",
+  "libgcc-s1": "12.2.0-14+deb12u1",
+  "libgcrypt20": "1.10.1-3",
+  "libgdbm-compat4": "1.23-3",
+  "libgdbm6": "1.23-3",
+  "libgl1": "1.6.0-1",
+  "libgl1-mesa-dri": "22.3.6-1+deb12u1",
+  "libglapi-mesa": "22.3.6-1+deb12u1",
+  "libglib2.0-0": "2.74.6-2+deb12u9",
+  "libglvnd0": "1.6.0-1",
+  "libglx-mesa0": "22.3.6-1+deb12u1",
+  "libglx0": "1.6.0-1",
+  "libgmp10": "2:6.2.1+dfsg1-1.1",
+  "libgnutls30": "3.7.9-2+deb12u3",
+  "libgomp1": "12.2.0-14+deb12u1",
+  "libgpg-error0": "1.46-1",
+  "libgprofng0": "2.40-2",
+  "libgssapi-krb5-2": "1.20.1-2+deb12u2",
+  "libhogweed6": "3.8.1-2",
+  "libicu72": "72.1-3+deb12u1",
+  "libidn2-0": "2.3.3-1+b1",
+  "libisl23": "0.25-1.1",
+  "libitm1": "12.2.0-14+deb12u1",
+  "libjansson4": "2.14-2",
+  "libk5crypto3": "1.20.1-2+deb12u2",
+  "libkeyutils1": "1.6.3-2",
+  "libkrb5-3": "1.20.1-2+deb12u2",
+  "libkrb5support0": "1.20.1-2+deb12u2",
+  "libldap-2.5-0": "2.5.13+dfsg-5",
+  "libllvm15": "1:15.0.6-4+b1",
+  "liblsan0": "12.2.0-14+deb12u1",
+  "liblz4-1": "1.9.4-1",
+  "liblzma5": "5.4.1-1",
+  "libmd0": "1.0.4-2",
+  "libmount1": "2.38.1-5+deb12u3",
+  "libmpc3": "1.3.1-1",
+  "libmpfr6": "4.2.0-1",
+  "libncursesw6": "6.4-4",
+  "libnettle8": "3.8.1-2",
+  "libnghttp2-14": "1.52.0-1+deb12u3",
+  "libnsl-dev": "1.3.0-2",
+  "libnsl2": "1.3.0-2",
+  "libp11-kit0": "0.24.1-2",
+  "libpam-modules": "1.5.2-6+deb12u1",
+  "libpam-modules-bin": "1.5.2-6+deb12u1",
+  "libpam-runtime": "1.5.2-6+deb12u1",
+  "libpam0g": "1.5.2-6+deb12u1",
+  "libpciaccess0": "0.17-2",
+  "libpcre2-8-0": "10.42-1",
+  "libperl5.36": "5.36.0-7+deb12u3",
+  "libpsl5": "0.21.2-1",
+  "libquadmath0": "12.2.0-14+deb12u1",
+  "libreadline8": "8.2-1.3",
+  "librtmp1": "2.4+20151223.gitfa8646d.1-2+b2",
+  "libsasl2-2": "2.1.28+dfsg-10",
+  "libsasl2-modules-db": "2.1.28+dfsg-10",
+  "libseccomp2": "2.5.4-1+deb12u1",
+  "libselinux1": "3.4-1+b6",
+  "libsemanage-common": "3.4-1",
+  "libsemanage2": "3.4-1+b5",
+  "libsensors-config": "1:3.6.0-7.1",
+  "libsensors5": "1:3.6.0-7.1",
+  "libsepol2": "3.4-2.1",
+  "libsmartcols1": "2.38.1-5+deb12u3",
+  "libsqlite3-0": "3.40.1-2+deb12u1",
+  "libss2": "1.47.0-2",
+  "libssh2-1": "1.10.0-3+b1",
+  "libssl3": "3.0.15-1~deb12u1",
+  "libstdc++-12-dev": "12.2.0-14+deb12u1",
+  "libstdc++6": "12.2.0-14+deb12u1",
+  "libsystemd0": "252.33-1~deb12u1",
+  "libtasn1-6": "4.19.0-2",
+  "libtinfo6": "6.4-4",
+  "libtirpc-common": "1.3.3+ds-1",
+  "libtirpc-dev": "1.3.3+ds-1",
+  "libtirpc3": "1.3.3+ds-1",
+  "libtsan2": "12.2.0-14+deb12u1",
+  "libubsan1": "12.2.0-14+deb12u1",
+  "libudev1": "252.33-1~deb12u1",
+  "libunistring2": "1.0-2",
+  "libutempter0": "1.2.1-3",
+  "libuuid1": "2.38.1-5+deb12u3",
+  "libx11-6": "2:1.8.4-2+deb12u2",
+  "libx11-data": "2:1.8.4-2+deb12u2",
+  "libx11-xcb1": "2:1.8.4-2+deb12u2",
+  "libxau6": "1:1.0.9-1",
+  "libxcb-dri2-0": "1.15-1",
+  "libxcb-dri3-0": "1.15-1",
+  "libxcb-glx0": "1.15-1",
+  "libxcb-present0": "1.15-1",
+  "libxcb-randr0": "1.15-1",
+  "libxcb-shm0": "1.15-1",
+  "libxcb-sync1": "1.15-1",
+  "libxcb-xfixes0": "1.15-1",
+  "libxcb1": "1.15-1",
+  "libxdmcp6": "1:1.1.2-3",
+  "libxext6": "2:1.3.4-1+b1",
+  "libxfixes3": "1:6.0.0-2",
+  "libxml2": "2.9.14+dfsg-1.3~deb12u5",
+  "libxshmfence1": "1.3-1",
+  "libxxf86vm1": "1:1.1.4-1+b2",
+  "libxxhash0": "0.8.1-1",
+  "libz3-4": "4.8.12-3.1",
+  "libzstd1": "1.5.4+dfsg2-5",
+  "linux-libc-dev": "6.1.174-1",
+  "login": "1:4.13+dfsg1-1+b1",
+  "logsave": "1.47.0-2",
+  "make": "4.3-4.1",
+  "mawk": "1.3.4.20200120-3.1",
+  "mount": "2.38.1-5+deb12u3",
+  "ncurses-base": "6.4-4",
+  "ncurses-bin": "6.4-4",
+  "netbase": "6.4",
+  "openssl": "3.0.15-1~deb12u1",
+  "passwd": "1:4.13+dfsg1-1+b1",
+  "patch": "2.7.6-7",
+  "perl": "5.36.0-7+deb12u3",
+  "perl-base": "5.36.0-7+deb12u3",
+  "perl-modules-5.36": "5.36.0-7+deb12u3",
+  "readline-common": "8.2-1.3",
+  "rpcsvc-proto": "1.4.3-1",
+  "sed": "4.9-1",
+  "sysvinit-utils": "3.06-4",
+  "tar": "1.34+dfsg-1.2+deb12u1",
+  "tmux": "3.3a-3",
+  "tzdata": "2024b-0+deb12u1",
+  "usr-is-merged": "37~deb12u1",
+  "util-linux": "2.38.1-5+deb12u3",
+  "util-linux-extra": "2.38.1-5+deb12u3",
+  "xz-utils": "5.4.1-1",
+  "zlib1g": "1:1.2.13.dfsg-1"
+ },
+ "image": "ghcr.io/togetherbench/multi-user-turn-codebench/sd-scripts-reg-image-dedup:e34557c087de",
+ "npm_global": {},
+ "platform": "linux/amd64",
+ "pythons": {
+  "/usr/local/bin/python": {
+   "dists": [
+    {
+     "direct_url": null,
+     "name": "library",
+     "path": "library.egg-info",
+     "version": "0.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "library",
+     "path": "/workspace/sd-scripts/library.egg-info",
+     "version": "0.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pip",
+     "path": "/usr/local/lib/python3.12/site-packages/pip-24.3.1.dist-info",
+     "version": "24.3.1"
+    }
+   ],
+   "prefix": "/usr/local",
+   "version": "3.12.8"
+  },
+  "/workspace/venv/bin/python": {
+   "dists": [
+    {
+     "direct_url": null,
+     "name": "library",
+     "path": "library.egg-info",
+     "version": "0.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "library",
+     "path": "/workspace/sd-scripts/library.egg-info",
+     "version": "0.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pip",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pip-24.3.1.dist-info",
+     "version": "24.3.1"
+    },
+    {
+     "direct_url": {
+      "dir_info": {
+       "editable": true
+      },
+      "url": "file:///workspace/sd-scripts"
+     },
+     "name": "library",
+     "path": "/workspace/venv/lib/python3.12/site-packages/library-0.0.0.dist-info",
+     "version": "0.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "ftfy",
+     "path": "/workspace/venv/lib/python3.12/site-packages/ftfy-6.3.1.dist-info",
+     "version": "6.3.1"
+    },
+    {
+     "direct_url": null,
+     "name": "fsspec",
+     "path": "/workspace/venv/lib/python3.12/site-packages/fsspec-2026.4.0.dist-info",
+     "version": "2026.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "numpy",
+     "path": "/workspace/venv/lib/python3.12/site-packages/numpy-1.26.4.dist-info",
+     "version": "1.26.4"
+    },
+    {
+     "direct_url": null,
+     "name": "pillow",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pillow-12.2.0.dist-info",
+     "version": "12.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "opencv-python",
+     "path": "/workspace/venv/lib/python3.12/site-packages/opencv_python-4.10.0.84.dist-info",
+     "version": "4.10.0.84"
+    },
+    {
+     "direct_url": null,
+     "name": "huggingface-hub",
+     "path": "/workspace/venv/lib/python3.12/site-packages/huggingface_hub-0.34.3.dist-info",
+     "version": "0.34.3"
+    },
+    {
+     "direct_url": null,
+     "name": "mdurl",
+     "path": "/workspace/venv/lib/python3.12/site-packages/mdurl-0.1.2.dist-info",
+     "version": "0.1.2"
+    },
+    {
+     "direct_url": null,
+     "name": "einops",
+     "path": "/workspace/venv/lib/python3.12/site-packages/einops-0.7.0.dist-info",
+     "version": "0.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "six",
+     "path": "/workspace/venv/lib/python3.12/site-packages/six-1.17.0.dist-info",
+     "version": "1.17.0"
+    },
+    {
+     "direct_url": null,
+     "name": "packaging",
+     "path": "/workspace/venv/lib/python3.12/site-packages/packaging-26.2.dist-info",
+     "version": "26.2"
+    },
+    {
+     "direct_url": null,
+     "name": "Pygments",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pygments-2.20.0.dist-info",
+     "version": "2.20.0"
+    },
+    {
+     "direct_url": null,
+     "name": "wcwidth",
+     "path": "/workspace/venv/lib/python3.12/site-packages/wcwidth-0.8.0.dist-info",
+     "version": "0.8.0"
+    },
+    {
+     "direct_url": null,
+     "name": "tqdm",
+     "path": "/workspace/venv/lib/python3.12/site-packages/tqdm-4.68.1.dist-info",
+     "version": "4.68.1"
+    },
+    {
+     "direct_url": null,
+     "name": "tokenizers",
+     "path": "/workspace/venv/lib/python3.12/site-packages/tokenizers-0.21.4.dist-info",
+     "version": "0.21.4"
+    },
+    {
+     "direct_url": null,
+     "name": "iniconfig",
+     "path": "/workspace/venv/lib/python3.12/site-packages/iniconfig-2.3.0.dist-info",
+     "version": "2.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "setuptools",
+     "path": "/workspace/venv/lib/python3.12/site-packages/setuptools-82.0.1.dist-info",
+     "version": "82.0.1"
+    },
+    {
+     "direct_url": null,
+     "name": "imagesize",
+     "path": "/workspace/venv/lib/python3.12/site-packages/imagesize-1.4.1.dist-info",
+     "version": "1.4.1"
+    },
+    {
+     "direct_url": null,
+     "name": "filelock",
+     "path": "/workspace/venv/lib/python3.12/site-packages/filelock-3.29.1.dist-info",
+     "version": "3.29.1"
+    },
+    {
+     "direct_url": null,
+     "name": "absl-py",
+     "path": "/workspace/venv/lib/python3.12/site-packages/absl_py-2.4.0.dist-info",
+     "version": "2.4.0"
+    },
+    {
+     "direct_url": null,
+     "name": "MarkupSafe",
+     "path": "/workspace/venv/lib/python3.12/site-packages/markupsafe-3.0.3.dist-info",
+     "version": "3.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "grpcio",
+     "path": "/workspace/venv/lib/python3.12/site-packages/grpcio-1.81.0.dist-info",
+     "version": "1.81.0"
+    },
+    {
+     "direct_url": null,
+     "name": "idna",
+     "path": "/workspace/venv/lib/python3.12/site-packages/idna-3.18.dist-info",
+     "version": "3.18"
+    },
+    {
+     "direct_url": null,
+     "name": "requests",
+     "path": "/workspace/venv/lib/python3.12/site-packages/requests-2.34.2.dist-info",
+     "version": "2.34.2"
+    },
+    {
+     "direct_url": null,
+     "name": "safetensors",
+     "path": "/workspace/venv/lib/python3.12/site-packages/safetensors-0.4.5.dist-info",
+     "version": "0.4.5"
+    },
+    {
+     "direct_url": null,
+     "name": "voluptuous",
+     "path": "/workspace/venv/lib/python3.12/site-packages/voluptuous-0.15.2.dist-info",
+     "version": "0.15.2"
+    },
+    {
+     "direct_url": null,
+     "name": "tensorboard",
+     "path": "/workspace/venv/lib/python3.12/site-packages/tensorboard-2.19.0.dist-info",
+     "version": "2.19.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pytest-8.3.4.dist-info",
+     "version": "8.3.4"
+    },
+    {
+     "direct_url": null,
+     "name": "transformers",
+     "path": "/workspace/venv/lib/python3.12/site-packages/transformers-4.54.1.dist-info",
+     "version": "4.54.1"
+    },
+    {
+     "direct_url": null,
+     "name": "Werkzeug",
+     "path": "/workspace/venv/lib/python3.12/site-packages/werkzeug-3.1.8.dist-info",
+     "version": "3.1.8"
+    },
+    {
+     "direct_url": null,
+     "name": "charset-normalizer",
+     "path": "/workspace/venv/lib/python3.12/site-packages/charset_normalizer-3.4.7.dist-info",
+     "version": "3.4.7"
+    },
+    {
+     "direct_url": null,
+     "name": "Markdown",
+     "path": "/workspace/venv/lib/python3.12/site-packages/markdown-3.10.2.dist-info",
+     "version": "3.10.2"
+    },
+    {
+     "direct_url": null,
+     "name": "toml",
+     "path": "/workspace/venv/lib/python3.12/site-packages/toml-0.10.2.dist-info",
+     "version": "0.10.2"
+    },
+    {
+     "direct_url": null,
+     "name": "sentencepiece",
+     "path": "/workspace/venv/lib/python3.12/site-packages/sentencepiece-0.2.1.dist-info",
+     "version": "0.2.1"
+    },
+    {
+     "direct_url": null,
+     "name": "importlib_metadata",
+     "path": "/workspace/venv/lib/python3.12/site-packages/importlib_metadata-9.0.0.dist-info",
+     "version": "9.0.0"
+    },
+    {
+     "direct_url": null,
+     "name": "hf-xet",
+     "path": "/workspace/venv/lib/python3.12/site-packages/hf_xet-1.5.0.dist-info",
+     "version": "1.5.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pluggy",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pluggy-1.6.0.dist-info",
+     "version": "1.6.0"
+    },
+    {
+     "direct_url": null,
+     "name": "markdown-it-py",
+     "path": "/workspace/venv/lib/python3.12/site-packages/markdown_it_py-4.2.0.dist-info",
+     "version": "4.2.0"
+    },
+    {
+     "direct_url": null,
+     "name": "mpmath",
+     "path": "/workspace/venv/lib/python3.12/site-packages/mpmath-1.3.0.dist-info",
+     "version": "1.3.0"
+    },
+    {
+     "direct_url": null,
+     "name": "networkx",
+     "path": "/workspace/venv/lib/python3.12/site-packages/networkx-3.6.1.dist-info",
+     "version": "3.6.1"
+    },
+    {
+     "direct_url": null,
+     "name": "tensorboard-data-server",
+     "path": "/workspace/venv/lib/python3.12/site-packages/tensorboard_data_server-0.7.2.dist-info",
+     "version": "0.7.2"
+    },
+    {
+     "direct_url": null,
+     "name": "torchvision",
+     "path": "/workspace/venv/lib/python3.12/site-packages/torchvision-0.21.0+cpu.dist-info",
+     "version": "0.21.0+cpu"
+    },
+    {
+     "direct_url": null,
+     "name": "typing_extensions",
+     "path": "/workspace/venv/lib/python3.12/site-packages/typing_extensions-4.15.0.dist-info",
+     "version": "4.15.0"
+    },
+    {
+     "direct_url": null,
+     "name": "regex",
+     "path": "/workspace/venv/lib/python3.12/site-packages/regex-2026.5.9.dist-info",
+     "version": "2026.5.9"
+    },
+    {
+     "direct_url": null,
+     "name": "certifi",
+     "path": "/workspace/venv/lib/python3.12/site-packages/certifi-2026.5.20.dist-info",
+     "version": "2026.5.20"
+    },
+    {
+     "direct_url": null,
+     "name": "sympy",
+     "path": "/workspace/venv/lib/python3.12/site-packages/sympy-1.13.1.dist-info",
+     "version": "1.13.1"
+    },
+    {
+     "direct_url": null,
+     "name": "protobuf",
+     "path": "/workspace/venv/lib/python3.12/site-packages/protobuf-7.35.0.dist-info",
+     "version": "7.35.0"
+    },
+    {
+     "direct_url": null,
+     "name": "urllib3",
+     "path": "/workspace/venv/lib/python3.12/site-packages/urllib3-2.7.0.dist-info",
+     "version": "2.7.0"
+    },
+    {
+     "direct_url": null,
+     "name": "zipp",
+     "path": "/workspace/venv/lib/python3.12/site-packages/zipp-4.1.0.dist-info",
+     "version": "4.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "diffusers",
+     "path": "/workspace/venv/lib/python3.12/site-packages/diffusers-0.32.1.dist-info",
+     "version": "0.32.1"
+    },
+    {
+     "direct_url": null,
+     "name": "PyYAML",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info",
+     "version": "6.0.3"
+    },
+    {
+     "direct_url": null,
+     "name": "psutil",
+     "path": "/workspace/venv/lib/python3.12/site-packages/psutil-7.2.2.dist-info",
+     "version": "7.2.2"
+    },
+    {
+     "direct_url": null,
+     "name": "Jinja2",
+     "path": "/workspace/venv/lib/python3.12/site-packages/jinja2-3.1.6.dist-info",
+     "version": "3.1.6"
+    },
+    {
+     "direct_url": null,
+     "name": "rich",
+     "path": "/workspace/venv/lib/python3.12/site-packages/rich-14.1.0.dist-info",
+     "version": "14.1.0"
+    },
+    {
+     "direct_url": null,
+     "name": "pytest-timeout",
+     "path": "/workspace/venv/lib/python3.12/site-packages/pytest_timeout-2.3.1.dist-info",
+     "version": "2.3.1"
+    },
+    {
+     "direct_url": null,
+     "name": "accelerate",
+     "path": "/workspace/venv/lib/python3.12/site-packages/accelerate-1.6.0.dist-info",
+     "version": "1.6.0"
+    },
+    {
+     "direct_url": null,
+     "name": "torch",
+     "path": "/workspace/venv/lib/python3.12/site-packages/torch-2.6.0+cpu.dist-info",
+     "version": "2.6.0+cpu"
+    }
+   ],
+   "prefix": "/workspace/venv",
+   "version": "3.12.8"
+  }
+ },
+ "tools": {
+  "gcc": {
+   "path": "/usr/bin/gcc",
+   "version": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0"
+  },
+  "pip3": {
+   "path": "/usr/local/bin/pip3",
+   "version": "pip 24.3.1 from /usr/local/lib/python3.12/site-packages/pip (python 3.12)"
+  },
+  "python3": {
+   "path": "/usr/local/bin/python3",
+   "version": "Python 3.12.8"
+  }
+ }
+}

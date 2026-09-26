@@ -1,0 +1,5 @@
+work/
+logs/
+validation/
+!status.json
+status.lock
