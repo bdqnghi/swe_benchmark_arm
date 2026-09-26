@@ -97,6 +97,16 @@ def run_once(task, image, logfile, apply_solution=True, keep=False, platform="li
         else:
             ok = reward is not None and float(reward) >= 1.0
         res["ok"] = ok if apply_solution else (reward is not None and float(reward) == 0.0)
+        # a known upstream quirk: accept when the result equals what the official amd64 image gives (under qemu)
+        off_f = ROOT / "rules" / task / "official_amd64_validation.json"
+        if apply_solution and not res["ok"] and platform == "linux/arm64" and off_f.exists():
+            off = json.load(open(off_f))
+            keys = ("reward", "tests_reward", "relevant", "full_p2f", "full_m2f", "relevant_passed_after")
+            if all(str(res.get(k)) == str(off.get(k)) for k in keys if k in off):
+                res["ok"] = True
+                res["vacuous_or_failing_as_official"] = res.pop("reason", None)
+                res["matches_official_amd64"] = True
+                res["upstream_quirk"] = off.get("note")
         if not res["ok"] and "reason" not in res:
             res["reason"] = f"reward={reward}" + (f" tests_reward={res.get('tests_reward')}" if fam == "rf" else "")
         return res

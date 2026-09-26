@@ -42,6 +42,7 @@ DROP_PREFIX = ("var/lib/dpkg/", "var/lib/apt/", "lib/apk/", "etc/apk/world", "va
                "etc/hostname", "etc/hosts", "etc/resolv.conf", ".dockerenv", "root/.wget-hsts",
                "root/.python_history", "root/.npm/_cacache/", "root/.npm/_logs/", "usr/local/share/.cache/")
 X86_PKG = re.compile(r"(x86-64|amd64|i386|x86_64|:amd64$|^libc6-dev-i386|^lib32|^libx32|^gcc-multilib|^g\+\+-multilib)")
+NODE_PLATFORM_RE = re.compile(r"^(.*node_modules)/((?:@[^/]+/)?[^/]*linux-(?:musl-)?x64[^/]*)/package\.json$")
 SITE_RE = re.compile(r"^(.*?/(?:site|dist)-packages)/")
 DIST_RE = re.compile(r"^(.*?/(?:site|dist)-packages)/([^/]+)-([^/-]+)\.dist-info/$")
 
@@ -148,12 +149,15 @@ def transplant(container, touched, owned, ctx, report):
     elf, dropped_owned, dropped_site, x86_text = [], 0, Counter(), []
     go_tools = {}
     rust = {}
+    node_platform = []
     dists = defaultdict(dict)       # site dir -> {name: version}
     direct = {}                     # site dir/name -> direct_url json
     pth = defaultdict(list)
     kept = Counter()
-    p = subprocess.Popen(["docker", "export", container], stdout=subprocess.PIPE)
-    tin = tarfile.open(fileobj=p.stdout, mode="r|")
+    # random-access copy of the merged filesystem (streaming mode cannot revisit members, e.g. hard-link targets)
+    exp = ctx.parent / "export.tar"
+    subprocess.run(f"docker export {container} > {exp}", shell=True, check=True)
+    tin = tarfile.open(exp, mode="r:")
     for m in tin:
         name = m.name.lstrip("./").rstrip("/")
         if not name or name not in touched:
@@ -170,6 +174,13 @@ def transplant(container, touched, owned, ctx, report):
             rust["cargo_home"] = name.rsplit("/", 1)[0]
         if re.match(r"^.*cargo/bin/", name):
             continue
+        nm = NODE_PLATFORM_RE.match(name)
+        if nm and m.isfile():
+            try:
+                ver = json.loads(tin.extractfile(m).read()).get("version")
+                node_platform.append({"node_modules": nm.group(1), "name": nm.group(2), "version": ver})
+            except Exception:
+                pass
         if name in owned and not name.startswith("etc/"):
             dropped_owned += 1  # reinstalled by the package manager (including distro python3-* modules)
             continue
@@ -201,16 +212,20 @@ def transplant(container, touched, owned, ctx, report):
         else:
             out.addfile(m)
         kept[name.split("/")[0]] += 1
-    p.wait()
+    tin.close()
+    exp.unlink()
     out.close()
-    report.update(elf_dropped=elf, go_tools=go_tools, rust=rust, dpkg_owned_dropped=dropped_owned, site_dropped=dict(dropped_site),
+    report.update(elf_dropped=elf, go_tools=go_tools, rust=rust, node_platform=node_platform, dpkg_owned_dropped=dropped_owned, site_dropped=dict(dropped_site),
                   x86_text_files=x86_text, kept_top=dict(kept))
     return dists, direct, pth
 
 
 def keep_elf(name):
     """ELF files that are data rather than executables of this image: module/source test fixtures."""
-    return name.startswith("go/pkg/mod/") or "/testdata/" in name or "/fixtures/" in name
+    # node_modules keep what the packages ship (multi-arch prebuild bundles included); arm64 counterparts of the
+    # x64-only platform packages are added in render()
+    return (name.startswith("go/pkg/mod/") or "/testdata/" in name or "/fixtures/" in name
+            or "/node_modules/" in name or name.startswith("node_modules/"))
 
 
 def go_buildinfo(data):
@@ -218,7 +233,9 @@ def go_buildinfo(data):
     m = re.search(rb"path\t([^\n]+)\nmod\t([^\t\n]+)\t([^\t\n]+)", data)
     if not m:
         return None
-    return {"path": m.group(1).decode(), "mod": m.group(2).decode(), "version": m.group(3).decode()}
+    rev = re.search(rb"build\tvcs\.revision=([0-9a-f]{7,40})", data)
+    return {"path": m.group(1).decode(), "mod": m.group(2).decode(), "version": m.group(3).decode(),
+            "vcs_revision": rev.group(1).decode() if rev else None}
 
 
 def interpreter_for(site, dists_all):
@@ -267,9 +284,10 @@ def main():
                                        text=True, check=True).stdout)
         if not fb["base"]:
             sys.exit(f"{task}: no base image matched: {fb['tried']}")
-        report.update(base=fb["base"], base_layers=fb["matched_layers"], os=fb["os"])
+        report.update(base=fb["base"], base_layers=fb["matched_layers"], base_match=fb.get("match"), os=fb["os"])
         cfg, touched, dpkg_base, dpkg_final, apk_db = analyse(official, fb["matched_layers"], work)
         report["pkg_manager"] = "apk" if apk_db is not None else "apt"
+        (work / "image.tar").unlink(missing_ok=True)
         report["config"] = cfg.get("config", {})
         added = sorted(k for k in dpkg_final if k not in dpkg_base)
         apt_pkgs = sorted({re.sub(r":amd64$", "", k) for k in added if not X86_PKG.search(k)})
@@ -342,11 +360,19 @@ def render(report, ctx, repo):
     if report["apt"] and report.get("pkg_manager") == "apk":
         L.append("RUN apk add --no-cache \\\n    " + " \\\n    ".join(report["apt"]))
     elif report["apt"]:
-        L.append("RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \\\n    "
-                 + " \\\n    ".join(report["apt"]) + " \\\n && rm -rf /var/lib/apt/lists/*")
+        # packages with no arm64 build (e.g. libquadmath0, *-x86-64-*) are skipped and listed in the build log
+        pk = " ".join(report["apt"])
+        L.append("RUN apt-get update && for p in " + pk + "; do if apt-cache show \"$p\" 2>/dev/null | grep -q '^Package:'; "
+                 "then echo \"$p\"; else echo \"arm64: no candidate for $p, skipped\" >&2; fi; done > /tmp/apt-pkgs \\\n"
+                 " && DEBIAN_FRONTEND=noninteractive xargs -a /tmp/apt-pkgs apt-get install -y --no-install-recommends \\\n"
+                 " && rm -rf /var/lib/apt/lists/* /tmp/apt-pkgs")
     L.append("ADD transplant.tar /")
     if eol_fix:  # the transplant restores the official /etc/apt sources
         L.append(eol_fix)
+    if "Ubuntu" in (report.get("os") or ""):  # amd64 archive mirrors do not carry arm64; use ports.ubuntu.com
+        L.append("RUN for f in /etc/apt/sources.list /etc/apt/sources.list.d/*; do [ -f \"$f\" ] && sed -i "
+                 "-e 's#http://\\([a-z0-9]*\\.\\)\\{0,1\\}archive.ubuntu.com/ubuntu#http://ports.ubuntu.com/ubuntu-ports#g' "
+                 "-e 's#http://security.ubuntu.com/ubuntu#http://ports.ubuntu.com/ubuntu-ports#g' \"$f\"; done; true")
     for e in env:
         k, v = e.split("=", 1)
         L.append(f"ENV {k}={json.dumps(v)}")
@@ -396,12 +422,23 @@ def render(report, ctx, repo):
                         (f" --features {','.join(feats)}" if feats else "")
                 L.append(f"RUN {chome}/bin/cargo install --locked {m.group(1)} --version {m.group(2)}{flags} "
                          f"|| {chome}/bin/cargo install {m.group(1)} --version {m.group(2)}{flags}")
+    for np_ in report.get("node_platform") or []:
+        arm = np_["name"].replace("x64", "arm64")
+        L.append(f"RUN d=$(mktemp -d) && cd $d && (npm pack --silent {arm}@{np_['version']} "
+                 f"&& mkdir -p /{np_['node_modules']}/{arm} && tar xzf *.tgz -C /{np_['node_modules']}/{arm} --strip-components=1 "
+                 f"|| echo 'arm64: no {arm}@{np_['version']} on npm, skipped') && cd / && rm -rf $d")
+    has_go = any(e.startswith(("GOLANG_VERSION=", "GOPATH=")) for e in cfg.get("Env") or [])
     for path, gi in sorted((report.get("go_tools") or {}).items()):
         dest = "/" + os.path.dirname(path)
+        if not has_go:
+            continue
         if gi["version"] in ("(devel)", ""):
-            # built from the task repository itself (e.g. /usr/local/bin/k6): rebuild it from the workspace
+            # built from a source checkout (e.g. /usr/local/bin/k6): install the recorded VCS revision; fall back to
+            # the workspace; best effort (listed in the build log if neither works)
             wd = cfg.get("WorkingDir") or "/"
-            L.append(f"RUN cd {wd} && go build -o /{path} {gi['path']}")
+            alt = f"(cd {wd} && go build -o /{path} {gi['path']})"
+            first = f"GOBIN={dest} go install {gi['path']}@{gi['vcs_revision']}" if gi.get("vcs_revision") else alt
+            L.append(f"RUN {first} || {alt} || echo 'arm64: could not rebuild /{path}' >&2")
             continue
         L.append(f"RUN GOBIN={dest} CGO_ENABLED=0 go install {gi['path']}@{gi['version']}")
     recipe = HERE / "recipes" / f"{repo}.sh"

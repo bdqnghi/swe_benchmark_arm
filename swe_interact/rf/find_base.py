@@ -95,6 +95,7 @@ def main():
     mine = diff_ids_local(a.image)
     cands, env, osr = candidates(a.image)
     best = (None, 0)
+    structural = None  # first candidate (most specific first) with the same OS and toolchain ENV, when tags have moved
     tried = {}
     for c in a.candidate + cands:
         ids = diff_ids_remote(c)
@@ -106,9 +107,16 @@ def main():
             k += 1
         full = k == len(ids)
         tried[c] = f"{k}/{len(ids)}"
+        if structural is None and len(ids) < len(mine) and not full:
+            structural = (c, len(ids))
         if full and k > best[1]:
             best = (c, k)
-    print(json.dumps({"image": a.image, "base": best[0], "matched_layers": best[1], "total_layers": len(mine),
+    match = "exact"
+    if not best[0] and structural:
+        # The tag was rebuilt since (e.g. python:3.10.19-bookworm gets Debian point updates): no digest match. Use the
+        # most specific candidate and treat the same number of leading layers as the base.
+        best, match = structural, "structural (tag rebuilt since; same layer count, OS and toolchain version)"
+    print(json.dumps({"image": a.image, "base": best[0], "matched_layers": best[1], "match": match, "total_layers": len(mine),
                       "os": osr.get("PRETTY_NAME"), "env": env, "tried": tried}, indent=1))
 
 

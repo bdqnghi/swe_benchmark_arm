@@ -1,0 +1,12 @@
+{
+ "reward": "0.0",
+ "tests_reward": "0.0",
+ "relevant": null,
+ "full_p2f": null,
+ "full_m2f": null,
+ "filtered_summary": null,
+ "relevant_passed_after": 0,
+ "image": "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_OISF_suricata_69b7c2a04b6f8ff9ed988137_1.0@sha256:543b0599b340194f6676b07058db8a279ced51c2161d8b6997c0332072fb499e",
+ "platform": "linux/amd64 (qemu)",
+ "note": "Upstream quirk: the image's autotools tree lacks the automake helper scripts (missing, install-sh, compile) and configure.ac is newer than aclocal.m4, so the validator's 'make clean' tries to rerun aclocal via ./missing and fails; no comparison is produced and tests_reward is 0 with the reference solution on the official amd64 image (qemu) exactly as on arm64. The reward of this task can only come out 0."
+}

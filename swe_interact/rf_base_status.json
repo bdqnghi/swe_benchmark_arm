@@ -1,35 +1,57 @@
 {
  "rf_automattic_wp-calypso_694b4b99829f00e24fd11891": {
-  "built": false,
-  "pushed": false,
-  "error": "rf_task-694b4b99829f00e24fd11891: base build failed, see /home/nghibui/codes/swe_benchmark_arm/swe_interact/logs/rfbase_rf_automattic_wp-calypso_694b4b99829f00e24fd11891.log\n",
-  "ts": "2026-09-26T05:46:16"
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T08:29:54",
+  "digest": "sha256:fb031ae649b125714691375f16a5e320fdd75e77e83a713334bfc0fae2993854",
+  "seconds": 2825
  },
  "rf_grafana_k6_696719205599a51110d4b436": {
   "built": true,
-  "pushed": false,
-  "digest": null,
-  "seconds": 1513,
+  "pushed": true,
+  "digest": "sha256:a565dcfb9013c2a433a8548437a97cf0f30ae4d78763b70dddc2d103ee0293ba",
+  "seconds": 1777,
   "error": null,
-  "ts": "2026-09-26T05:38:51"
+  "ts": "2026-09-26T08:35:30"
  },
  "rf_grafana_k6_696719205599a51110d4b446": {
-  "built": false,
-  "pushed": false,
-  "error": "rf_task-696719205599a51110d4b446: no base image matched: {'golang:1.20.14-': None, 'golang:1.20.14': '0/7', 'golang:1.20-': None}\n",
-  "ts": "2026-09-26T06:00:29"
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T07:03:51",
+  "digest": "sha256:1d32394db6b53d6d18b634d7f3ae0d264d4d35820ac0e08a754970796e8b946d",
+  "seconds": 1686
  },
  "rf_oisf_suricata_69b7c2a04b6f8ff9ed988137": {
-  "built": false,
-  "pushed": false,
-  "error": "rf_task-69b7c2a04b6f8ff9ed988137: no base image matched: {'ubuntu:20.04': None, 'ubuntu:focal': None, 'buildpack-deps:focal': None, 'buildpack-deps:focal-scm': None, 'buildpack-deps:focal-curl': None}\n",
-  "ts": "2026-09-26T05:31:19"
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T08:26:35",
+  "digest": "sha256:8bea8ebcd6b1ea54e9ccb5efc73285571d81b4d15f0c989df958b596f98dd48e",
+  "seconds": 2626
  },
  "rf_secdev_scapy_694b4b99829f00e24fd118a1": {
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T06:56:12",
+  "digest": "sha256:9faac6bccd5d3a885b33db190ab80e0b22aaa024daa6d96eab7a6f0c5fb41ca4",
+  "seconds": 303
+ },
+ "rf_secdev_scapy_696719205599a51110d4b476": {
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T07:50:36",
+  "digest": "sha256:7a6826f3402d1349df0f4442ac21b92fe471a7ce3c2d23369c9841db603dadda",
+  "seconds": 824
+ },
+ "rf_simple-login_app_69391d8d1ce51c407be1e533": {
   "built": false,
   "pushed": false,
-  "error": "rf_task-694b4b99829f00e24fd118a1: base build failed, see /home/nghibui/codes/swe_benchmark_arm/swe_interact/logs/rfbase_rf_secdev_scapy_694b4b99829f00e24fd118a1.log\n",
-  "ts": "2026-09-26T05:13:39"
+  "error": "rf_task-69391d8d1ce51c407be1e533: no base image matched: {'python:3.10.19-bookworm': '0/7', 'python:3.10.19-slim-bookworm': '0/4', 'python:3.10.19': '0/7', 'python:3.10.19-slim': '0/4', 'buildpack-deps:bookworm': '0/4', 'buildpack-deps:bookworm-scm': '0/3', 'buildpack-deps:bookworm-curl': '0/2', 'debian:bookworm': '0/1', 'debian:bookworm-slim': '0/1'}\n",
+  "ts": "2026-09-26T08:58:34"
  },
  "rf_trufflesecurity_trufflehog_69391d8d1ce51c407be1e531": {
   "built": true,
@@ -39,10 +61,28 @@
   "error": null,
   "ts": "2026-09-26T06:07:18"
  },
+ "rf_trufflesecurity_trufflehog_694b4b99829f00e24fd11885": {
+  "built": true,
+  "pushed": true,
+  "digest": "sha256:7cf09163173470f03a61701740bc31e32b827d165ecf005596150ab30e2ff331",
+  "seconds": 398,
+  "error": null,
+  "ts": "2026-09-26T09:04:05"
+ },
  "rf_trufflesecurity_trufflehog_694b4b99829f00e24fd11889": {
-  "built": false,
-  "pushed": false,
-  "error": "rf_task-694b4b99829f00e24fd11889: base build failed, see /home/nghibui/codes/swe_benchmark_arm/swe_interact/logs/rfbase_rf_trufflesecurity_trufflehog_694b4b99829f00e24fd11889.log\n",
-  "ts": "2026-09-26T05:23:54"
+  "built": true,
+  "pushed": true,
+  "error": null,
+  "ts": "2026-09-26T06:47:29",
+  "digest": "sha256:3c9d3d041e8624db33e59ac10fbbb3bd2e0c271c93d19c5660c7dbb23911321b",
+  "seconds": 4208
+ },
+ "rf_trufflesecurity_trufflehog_696719205599a51110d4b40c": {
+  "built": true,
+  "pushed": true,
+  "digest": "sha256:0479115eb1c93db72e2001022a25cce63f101d7c49f79dda48b43dea8572f543",
+  "seconds": 520,
+  "error": null,
+  "ts": "2026-09-26T09:07:14"
  }
 }

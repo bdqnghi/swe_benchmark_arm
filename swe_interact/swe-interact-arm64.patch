@@ -1582,7 +1582,7 @@ index ce9d17e..3d2a329 100644
  build_timeout_sec = 1800.0
  os = "linux"
 diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
-index 9489a0a..2edd3a1 100644
+index 9489a0a..e25303f 100644
 --- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
 +++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
 @@ -12,7 +12,7 @@
@@ -1594,6 +1594,1537 @@ index 9489a0a..2edd3a1 100644
  
  # Reset entrypoint to allow docker-compose command (sleep infinity) to run
  ENTRYPOINT []
+@@ -31,3 +31,27 @@ RUN curl -LsSf https://astral.sh/uv/0.7.13/install.sh | sh || true
+ RUN mkdir -p /logs
+ 
+ COPY repo_exec_server.py /usr/local/bin/repo_exec_server.py
++
++# arm64: the image uses Ubuntu focal's PyQt5 5.14.1 (no aarch64 PyQt5 wheels on PyPI), which ships sip 4 as the
++# top-level `sip` module; qutebrowser at this base commit imports `from PyQt5 import sip` (the private sip module the
++# official image's PyPI PyQt5 wheel provides). Expose the same extension under PyQt5 (its init symbol is PyInit_sip).
++RUN ln -sf /usr/lib/python3/dist-packages/sip.cpython-38-aarch64-linux-gnu.so /usr/lib/python3/dist-packages/PyQt5/sip.cpython-38-aarch64-linux-gnu.so \
++ && python -c "from PyQt5 import sip; print('PyQt5.sip', sip.SIP_VERSION_STR)"
++
++# arm64: Ubuntu focal's Qt 5.12 "offscreen" platform plugin takes an X11/GLX path whenever DISPLAY is set (the task's
++# run_script starts Xvfb and exports DISPLAY=:99); creating QtWebEngine's global GL share context there aborts the
++# test process ("Could not initialize GLX") on this Mesa/Xvfb, killing every test that needs a QApplication. The
++# official amd64 image passes the same verifier under qemu. Rebuild the same plugin from the
++# Qt 5.12.8 sources (qt/qtbase v5.12.8 src/plugins/platforms/offscreen; C++ unmodified, offscreen.pro edited to drop
++# the X11/GLX branch and build outside the Qt tree),
++# as Qt itself does when built without xlib. Only packages this step installs are removed afterwards.
++COPY qoffscreen-src /tmp/qoffscreen-src
++RUN dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.before \
++ && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends qtbase5-private-dev \
++    qtbase5-dev qt5-qmake build-essential libfontconfig1-dev libfreetype6-dev libglib2.0-dev \
++ && cd /tmp/qoffscreen-src && qmake -qt=qt5 offscreen.pro && make -j"$(nproc)" \
++ && cp out/libqoffscreen.so /usr/lib/aarch64-linux-gnu/qt5/plugins/platforms/libqoffscreen.so \
++ && dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.after \
++ && comm -13 /tmp/pkgs.before /tmp/pkgs.after | xargs -r env DEBIAN_FRONTEND=noninteractive apt-get purge -y \
++ && rm -rf /tmp/qoffscreen-src /tmp/pkgs.* /var/lib/apt/lists/* \
++ && (Xvfb :97 -screen 0 1024x768x24 +extension GLX & sleep 2; DISPLAY=:97 QT_QPA_PLATFORM=offscreen python -c "from PyQt5 import QtWebEngineWidgets; from PyQt5.QtWidgets import QApplication; QApplication(['x']); print('offscreen+QtWebEngine ok')")
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp
+new file mode 100644
+index 0000000..207db60
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp
+@@ -0,0 +1,65 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++
++#include <qpa/qplatformintegrationplugin.h>
++#include "qoffscreenintegration.h"
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenIntegrationPlugin : public QPlatformIntegrationPlugin
++{
++    Q_OBJECT
++    Q_PLUGIN_METADATA(IID QPlatformIntegrationFactoryInterface_iid FILE "offscreen.json")
++public:
++    QPlatformIntegration *create(const QString&, const QStringList&) override;
++};
++
++QPlatformIntegration *QOffscreenIntegrationPlugin::create(const QString& system, const QStringList& paramList)
++{
++    Q_UNUSED(paramList);
++    if (!system.compare(QLatin1String("offscreen"), Qt::CaseInsensitive))
++        return QOffscreenIntegration::createOffscreenIntegration();
++
++    return 0;
++}
++
++QT_END_NAMESPACE
++
++#include "main.moc"
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json
+new file mode 100644
+index 0000000..6e87744
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json
+@@ -0,0 +1,3 @@
++{
++    "Keys": [ "offscreen" ]
++}
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro
+new file mode 100644
+index 0000000..d46464c
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro
+@@ -0,0 +1,35 @@
++TARGET = qoffscreen
++
++QT += \
++    core-private gui-private \
++    eventdispatcher_support-private fontdatabase_support-private
++
++DEFINES += QT_NO_FOREACH
++
++SOURCES =   main.cpp \
++            qoffscreenintegration.cpp \
++            qoffscreenwindow.cpp \
++            qoffscreencommon.cpp
++
++HEADERS =   qoffscreenintegration.h \
++            qoffscreenwindow.h \
++            qoffscreencommon.h
++
++OTHER_FILES += offscreen.json
++
++# arm64 (swe_interact): build the plugin without the X11/GLX path (see NOTES.md)
++false {
++    SOURCES += qoffscreenintegration_x11.cpp
++    HEADERS += qoffscreenintegration_x11.h
++    QT += glx_support-private
++    system(echo "Using X11 offscreen integration with GLX")
++} else {
++    SOURCES += qoffscreenintegration_dummy.cpp
++}
++
++PLUGIN_TYPE = platforms
++PLUGIN_CLASS_NAME = QOffscreenIntegrationPlugin
++!equals(TARGET, $$QT_DEFAULT_QPA_PLUGIN): PLUGIN_EXTENDS = -
++CONFIG += plugin
++TEMPLATE = lib
++DESTDIR = out
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp
+new file mode 100644
+index 0000000..f0eb697
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp
+@@ -0,0 +1,225 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreencommon.h"
++#include "qoffscreenwindow.h"
++
++#include <QtGui/private/qpixmap_raster_p.h>
++#include <QtGui/private/qguiapplication_p.h>
++
++#include <qpa/qplatformcursor.h>
++#include <qpa/qplatformwindow.h>
++
++QT_BEGIN_NAMESPACE
++
++QPlatformWindow *QOffscreenScreen::windowContainingCursor = 0;
++
++class QOffscreenCursor : public QPlatformCursor
++{
++public:
++    QOffscreenCursor() : m_pos(10, 10) {}
++
++    QPoint pos() const override { return m_pos; }
++    void setPos(const QPoint &pos) override
++    {
++        m_pos = pos;
++        const QWindowList wl = QGuiApplication::topLevelWindows();
++        QWindow *containing = 0;
++        for (QWindow *w : wl) {
++            if (w->type() != Qt::Desktop && w->isExposed() && w->geometry().contains(pos)) {
++                containing = w;
++                break;
++            }
++        }
++
++        QPoint local = pos;
++        if (containing)
++            local -= containing->position();
++
++        QWindow *previous = QOffscreenScreen::windowContainingCursor ? QOffscreenScreen::windowContainingCursor->window() : 0;
++
++        if (containing != previous)
++            QWindowSystemInterface::handleEnterLeaveEvent(containing, previous, local, pos);
++
++        QWindowSystemInterface::handleMouseEvent(containing, local, pos, QGuiApplication::mouseButtons(), QGuiApplication::keyboardModifiers());
++
++        QOffscreenScreen::windowContainingCursor = containing ? containing->handle() : 0;
++    }
++#ifndef QT_NO_CURSOR
++    void changeCursor(QCursor *windowCursor, QWindow *window) override
++    {
++        Q_UNUSED(windowCursor);
++        Q_UNUSED(window);
++    }
++#endif
++private:
++    QPoint m_pos;
++};
++
++QOffscreenScreen::QOffscreenScreen()
++    : m_geometry(0, 0, 800, 600)
++    , m_cursor(new QOffscreenCursor)
++{
++}
++
++QPixmap QOffscreenScreen::grabWindow(WId id, int x, int y, int width, int height) const
++{
++    QRect rect(x, y, width, height);
++
++    QOffscreenWindow *window = QOffscreenWindow::windowForWinId(id);
++    if (!window || window->window()->type() == Qt::Desktop) {
++        const QWindowList wl = QGuiApplication::topLevelWindows();
++        QWindow *containing = 0;
++        for (QWindow *w : wl) {
++            if (w->type() != Qt::Desktop && w->isExposed() && w->geometry().contains(rect)) {
++                containing = w;
++                break;
++            }
++        }
++
++        if (!containing)
++            return QPixmap();
++
++        id = containing->winId();
++        rect = rect.translated(-containing->geometry().topLeft());
++    }
++
++    QOffscreenBackingStore *store = QOffscreenBackingStore::backingStoreForWinId(id);
++    if (store)
++        return store->grabWindow(id, rect);
++    return QPixmap();
++}
++
++QOffscreenBackingStore::QOffscreenBackingStore(QWindow *window)
++    : QPlatformBackingStore(window)
++{
++}
++
++QOffscreenBackingStore::~QOffscreenBackingStore()
++{
++    clearHash();
++}
++
++QPaintDevice *QOffscreenBackingStore::paintDevice()
++{
++    return &m_image;
++}
++
++void QOffscreenBackingStore::flush(QWindow *window, const QRegion &region, const QPoint &offset)
++{
++    Q_UNUSED(region);
++
++    if (m_image.size().isEmpty())
++        return;
++
++    QSize imageSize = m_image.size();
++
++    QRegion clipped = QRect(0, 0, window->width(), window->height());
++    clipped &= QRect(0, 0, imageSize.width(), imageSize.height()).translated(-offset);
++
++    QRect bounds = clipped.boundingRect().translated(offset);
++
++    if (bounds.isNull())
++        return;
++
++    WId id = window->winId();
++
++    m_windowAreaHash[id] = bounds;
++    m_backingStoreForWinIdHash[id] = this;
++}
++
++void QOffscreenBackingStore::resize(const QSize &size, const QRegion &)
++{
++    QImage::Format format = QGuiApplication::primaryScreen()->handle()->format();
++    if (m_image.size() != size)
++        m_image = QImage(size, format);
++    clearHash();
++}
++
++extern void qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &offset);
++
++bool QOffscreenBackingStore::scroll(const QRegion &area, int dx, int dy)
++{
++    if (m_image.isNull())
++        return false;
++
++    for (const QRect &rect : area)
++        qt_scrollRectInImage(m_image, rect, QPoint(dx, dy));
++
++    return true;
++}
++
++QPixmap QOffscreenBackingStore::grabWindow(WId window, const QRect &rect) const
++{
++    QRect area = m_windowAreaHash.value(window, QRect());
++    if (area.isNull())
++        return QPixmap();
++
++    QRect adjusted = rect;
++    if (adjusted.width() <= 0)
++        adjusted.setWidth(area.width());
++    if (adjusted.height() <= 0)
++        adjusted.setHeight(area.height());
++
++    adjusted = adjusted.translated(area.topLeft()) & area;
++
++    if (adjusted.isEmpty())
++        return QPixmap();
++
++    return QPixmap::fromImage(m_image.copy(adjusted));
++}
++
++QOffscreenBackingStore *QOffscreenBackingStore::backingStoreForWinId(WId id)
++{
++    return m_backingStoreForWinIdHash.value(id, 0);
++}
++
++void QOffscreenBackingStore::clearHash()
++{
++    for (auto it = m_windowAreaHash.cbegin(), end = m_windowAreaHash.cend(); it != end; ++it) {
++        const auto it2 = qAsConst(m_backingStoreForWinIdHash).find(it.key());
++        if (it2.value() == this)
++            m_backingStoreForWinIdHash.erase(it2);
++    }
++    m_windowAreaHash.clear();
++}
++
++QHash<WId, QOffscreenBackingStore *> QOffscreenBackingStore::m_backingStoreForWinIdHash;
++
++QT_END_NAMESPACE
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h
+new file mode 100644
+index 0000000..f4f0142
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h
+@@ -0,0 +1,110 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENCOMMON_H
++#define QOFFSCREENCOMMON_H
++
++#include <qpa/qplatformbackingstore.h>
++#if QT_CONFIG(draganddrop)
++#include <qpa/qplatformdrag.h>
++#endif
++#include <qpa/qplatformintegration.h>
++#include <qpa/qplatformscreen.h>
++#include <qpa/qplatformwindow.h>
++
++#include <qscopedpointer.h>
++#include <qimage.h>
++#include <qhash.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenScreen : public QPlatformScreen
++{
++public:
++    QOffscreenScreen();
++
++    QRect geometry() const override { return m_geometry; }
++    int depth() const override { return 32; }
++    QImage::Format format() const override { return QImage::Format_RGB32; }
++    QPlatformCursor *cursor() const override { return m_cursor.data(); }
++
++    QPixmap grabWindow(WId window, int x, int y, int width, int height) const override;
++
++    static QPlatformWindow *windowContainingCursor;
++
++public:
++    QRect m_geometry;
++    QScopedPointer<QPlatformCursor> m_cursor;
++};
++
++#if QT_CONFIG(draganddrop)
++class QOffscreenDrag : public QPlatformDrag
++{
++public:
++    Qt::DropAction drag(QDrag *) override { return Qt::IgnoreAction; }
++};
++#endif
++
++class QOffscreenBackingStore : public QPlatformBackingStore
++{
++public:
++    QOffscreenBackingStore(QWindow *window);
++    ~QOffscreenBackingStore();
++
++    QPaintDevice *paintDevice() override;
++    void flush(QWindow *window, const QRegion &region, const QPoint &offset) override;
++    void resize(const QSize &size, const QRegion &staticContents) override;
++    bool scroll(const QRegion &area, int dx, int dy) override;
++
++    QPixmap grabWindow(WId window, const QRect &rect) const;
++
++    static QOffscreenBackingStore *backingStoreForWinId(WId id);
++
++private:
++    void clearHash();
++
++    QImage m_image;
++    QHash<WId, QRect> m_windowAreaHash;
++
++    static QHash<WId, QOffscreenBackingStore *> m_backingStoreForWinIdHash;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp
+new file mode 100644
+index 0000000..ef3b0dd
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp
+@@ -0,0 +1,223 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration.h"
++#include "qoffscreenwindow.h"
++#include "qoffscreencommon.h"
++
++#if defined(Q_OS_UNIX)
++#include <QtEventDispatcherSupport/private/qgenericunixeventdispatcher_p.h>
++#if defined(Q_OS_MAC)
++#include <qpa/qplatformfontdatabase.h>
++#include <QtFontDatabaseSupport/private/qcoretextfontdatabase_p.h>
++#else
++#include <QtFontDatabaseSupport/private/qgenericunixfontdatabase_p.h>
++#endif
++#elif defined(Q_OS_WIN)
++#include <QtFontDatabaseSupport/private/qfreetypefontdatabase_p.h>
++#ifndef Q_OS_WINRT
++#include <QtCore/private/qeventdispatcher_win_p.h>
++#else
++#include <QtCore/private/qeventdispatcher_winrt_p.h>
++#endif
++#endif
++
++#include <QtGui/private/qpixmap_raster_p.h>
++#include <QtGui/private/qguiapplication_p.h>
++#include <qpa/qplatforminputcontextfactory_p.h>
++#include <qpa/qplatforminputcontext.h>
++#include <qpa/qplatformtheme.h>
++#include <qpa/qwindowsysteminterface.h>
++
++#include <qpa/qplatformservices.h>
++
++QT_BEGIN_NAMESPACE
++
++class QCoreTextFontEngine;
++
++template <typename BaseEventDispatcher>
++class QOffscreenEventDispatcher : public BaseEventDispatcher
++{
++public:
++    explicit QOffscreenEventDispatcher(QObject *parent = 0)
++        : BaseEventDispatcher(parent)
++    {
++    }
++
++    bool processEvents(QEventLoop::ProcessEventsFlags flags)
++    {
++        bool didSendEvents = BaseEventDispatcher::processEvents(flags);
++
++        return QWindowSystemInterface::sendWindowSystemEvents(flags) || didSendEvents;
++    }
++
++    bool hasPendingEvents()
++    {
++        return BaseEventDispatcher::hasPendingEvents()
++            || QWindowSystemInterface::windowSystemEventsQueued();
++    }
++
++    void flush()
++    {
++        if (qApp)
++            qApp->sendPostedEvents();
++        BaseEventDispatcher::flush();
++    }
++};
++
++QOffscreenIntegration::QOffscreenIntegration()
++{
++#if defined(Q_OS_UNIX)
++#if defined(Q_OS_MAC)
++    m_fontDatabase.reset(new QCoreTextFontDatabaseEngineFactory<QCoreTextFontEngine>);
++#else
++    m_fontDatabase.reset(new QGenericUnixFontDatabase());
++#endif
++#elif defined(Q_OS_WIN)
++    m_fontDatabase.reset(new QFreeTypeFontDatabase());
++#endif
++
++#if QT_CONFIG(draganddrop)
++    m_drag.reset(new QOffscreenDrag);
++#endif
++    m_services.reset(new QPlatformServices);
++
++    QWindowSystemInterface::handleScreenAdded(new QOffscreenScreen);
++}
++
++QOffscreenIntegration::~QOffscreenIntegration()
++{
++}
++
++void QOffscreenIntegration::initialize()
++{
++    m_inputContext.reset(QPlatformInputContextFactory::create());
++}
++
++QPlatformInputContext *QOffscreenIntegration::inputContext() const
++{
++    return m_inputContext.data();
++}
++
++bool QOffscreenIntegration::hasCapability(QPlatformIntegration::Capability cap) const
++{
++    switch (cap) {
++    case ThreadedPixmaps: return true;
++    case MultipleWindows: return true;
++    default: return QPlatformIntegration::hasCapability(cap);
++    }
++}
++
++QPlatformWindow *QOffscreenIntegration::createPlatformWindow(QWindow *window) const
++{
++    Q_UNUSED(window);
++    QPlatformWindow *w = new QOffscreenWindow(window);
++    w->requestActivateWindow();
++    return w;
++}
++
++QPlatformBackingStore *QOffscreenIntegration::createPlatformBackingStore(QWindow *window) const
++{
++    return new QOffscreenBackingStore(window);
++}
++
++QAbstractEventDispatcher *QOffscreenIntegration::createEventDispatcher() const
++{
++#if defined(Q_OS_UNIX)
++    return createUnixEventDispatcher();
++#elif defined(Q_OS_WIN)
++#ifndef Q_OS_WINRT
++    return new QOffscreenEventDispatcher<QEventDispatcherWin32>();
++#else // !Q_OS_WINRT
++    return new QOffscreenEventDispatcher<QEventDispatcherWinRT>();
++#endif // Q_OS_WINRT
++#else
++    return 0;
++#endif
++}
++
++static QString themeName() { return QStringLiteral("offscreen"); }
++
++QStringList QOffscreenIntegration::themeNames() const
++{
++    return QStringList(themeName());
++}
++
++// Restrict the styles to "fusion" to prevent native styles requiring native
++// window handles (eg Windows Vista style) from being used.
++class OffscreenTheme : public QPlatformTheme
++{
++public:
++    OffscreenTheme() {}
++
++    QVariant themeHint(ThemeHint h) const override
++    {
++        switch (h) {
++        case StyleNames:
++            return QVariant(QStringList(QStringLiteral("fusion")));
++        default:
++            break;
++        }
++        return QPlatformTheme::themeHint(h);
++    }
++};
++
++QPlatformTheme *QOffscreenIntegration::createPlatformTheme(const QString &name) const
++{
++    return name == themeName() ? new OffscreenTheme() : nullptr;
++}
++
++QPlatformFontDatabase *QOffscreenIntegration::fontDatabase() const
++{
++    return m_fontDatabase.data();
++}
++
++#if QT_CONFIG(draganddrop)
++QPlatformDrag *QOffscreenIntegration::drag() const
++{
++    return m_drag.data();
++}
++#endif
++
++QPlatformServices *QOffscreenIntegration::services() const
++{
++    return m_services.data();
++}
++
++QT_END_NAMESPACE
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h
+new file mode 100644
+index 0000000..fc98812
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h
+@@ -0,0 +1,88 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENINTEGRATION_H
++#define QOFFSCREENINTEGRATION_H
++
++#include <qpa/qplatformintegration.h>
++
++#include <qscopedpointer.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenBackendData;
++
++class QOffscreenIntegration : public QPlatformIntegration
++{
++public:
++    QOffscreenIntegration();
++    ~QOffscreenIntegration();
++
++    void initialize() override;
++    bool hasCapability(QPlatformIntegration::Capability cap) const override;
++
++    QPlatformWindow *createPlatformWindow(QWindow *window) const override;
++    QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
++#if QT_CONFIG(draganddrop)
++    QPlatformDrag *drag() const override;
++#endif
++
++    QPlatformInputContext *inputContext() const override;
++    QPlatformServices *services() const override;
++
++    QPlatformFontDatabase *fontDatabase() const override;
++    QAbstractEventDispatcher *createEventDispatcher() const override;
++
++    QStringList themeNames() const override;
++    QPlatformTheme *createPlatformTheme(const QString &name) const override;
++
++    static QOffscreenIntegration *createOffscreenIntegration();
++
++private:
++    QScopedPointer<QPlatformFontDatabase> m_fontDatabase;
++#if QT_CONFIG(draganddrop)
++    QScopedPointer<QPlatformDrag> m_drag;
++#endif
++    QScopedPointer<QPlatformInputContext> m_inputContext;
++    QScopedPointer<QPlatformServices> m_services;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp
+new file mode 100644
+index 0000000..78b289e
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp
+@@ -0,0 +1,45 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration.h"
++
++QOffscreenIntegration *QOffscreenIntegration::createOffscreenIntegration()
++{
++    return new QOffscreenIntegration;
++}
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp
+new file mode 100644
+index 0000000..9356622
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp
+@@ -0,0 +1,254 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration_x11.h"
++
++#include <QByteArray>
++#include <QOpenGLContext>
++
++#include <X11/Xlib.h>
++#include <GL/glx.h>
++
++#include <QtGlxSupport/private/qglxconvenience_p.h>
++
++#include <qpa/qplatformsurface.h>
++#include <qsurface.h>
++
++QT_BEGIN_NAMESPACE
++
++QOffscreenIntegration *QOffscreenIntegration::createOffscreenIntegration()
++{
++    return new QOffscreenX11Integration;
++}
++
++bool QOffscreenX11Integration::hasCapability(QPlatformIntegration::Capability cap) const
++{
++    switch (cap) {
++    case OpenGL: return true;
++    case ThreadedOpenGL: return true;
++    default: return QOffscreenIntegration::hasCapability(cap);
++    }
++}
++
++QPlatformOpenGLContext *QOffscreenX11Integration::createPlatformOpenGLContext(QOpenGLContext *context) const
++{
++    if (!m_connection)
++        m_connection.reset(new QOffscreenX11Connection);
++
++    if (!m_connection->display())
++        return nullptr;
++
++    return new QOffscreenX11GLXContext(m_connection->x11Info(), context);
++}
++
++QOffscreenX11Connection::QOffscreenX11Connection()
++{
++    XInitThreads();
++
++    QByteArray displayName = qgetenv("DISPLAY");
++    Display *display = XOpenDisplay(displayName.constData());
++    m_display = display;
++    m_screenNumber = m_display ? DefaultScreen(m_display) : -1;
++}
++
++QOffscreenX11Connection::~QOffscreenX11Connection()
++{
++    if (m_display)
++        XCloseDisplay((Display *)m_display);
++}
++
++class QOffscreenX11Info
++{
++public:
++    QOffscreenX11Info(QOffscreenX11Connection *connection)
++        : m_connection(connection)
++    {
++    }
++
++    Display *display() const {
++        return (Display *)m_connection->display();
++    }
++
++    Window root() const {
++        return DefaultRootWindow(display());
++    }
++
++    int screenNumber() const {
++        return m_connection->screenNumber();
++    }
++
++private:
++    QOffscreenX11Connection *m_connection;
++};
++
++QOffscreenX11Info *QOffscreenX11Connection::x11Info()
++{
++    if (!m_x11Info)
++        m_x11Info.reset(new QOffscreenX11Info(this));
++    return m_x11Info.data();
++}
++
++class QOffscreenX11GLXContextData
++{
++public:
++    QOffscreenX11Info *x11;
++    QSurfaceFormat format;
++    GLXContext context;
++    GLXContext shareContext;
++    Window window;
++};
++
++static Window createDummyWindow(QOffscreenX11Info *x11, XVisualInfo *visualInfo)
++{
++    Colormap cmap = XCreateColormap(x11->display(), x11->root(), visualInfo->visual, AllocNone);
++    XSetWindowAttributes a;
++    a.background_pixel = WhitePixel(x11->display(), x11->screenNumber());
++    a.border_pixel = BlackPixel(x11->display(), x11->screenNumber());
++    a.colormap = cmap;
++
++    Window window = XCreateWindow(x11->display(), x11->root(),
++                                  0, 0, 100, 100,
++                                  0, visualInfo->depth, InputOutput, visualInfo->visual,
++                                  CWBackPixel|CWBorderPixel|CWColormap, &a);
++    XFreeColormap(x11->display(), cmap);
++    return window;
++}
++
++static Window createDummyWindow(QOffscreenX11Info *x11, GLXFBConfig config)
++{
++    XVisualInfo *visualInfo = glXGetVisualFromFBConfig(x11->display(), config);
++    if (Q_UNLIKELY(!visualInfo))
++        qFatal("Could not initialize GLX");
++    Window window = createDummyWindow(x11, visualInfo);
++    XFree(visualInfo);
++    return window;
++}
++
++QOffscreenX11GLXContext::QOffscreenX11GLXContext(QOffscreenX11Info *x11, QOpenGLContext *context)
++    : d(new QOffscreenX11GLXContextData)
++{
++    d->x11 = x11;
++    d->format = context->format();
++
++    d->shareContext = 0;
++    if (context->shareHandle())
++        d->shareContext = static_cast<QOffscreenX11GLXContext *>(context->shareHandle())->d->context;
++
++    GLXFBConfig config = qglx_findConfig(x11->display(), x11->screenNumber(), d->format);
++    if (config) {
++        d->context = glXCreateNewContext(x11->display(), config, GLX_RGBA_TYPE, d->shareContext, true);
++        if (!d->context && d->shareContext) {
++            d->shareContext = 0;
++            // re-try without a shared glx context
++            d->context = glXCreateNewContext(x11->display(), config, GLX_RGBA_TYPE, 0, true);
++        }
++
++        // Get the basic surface format details
++        if (d->context)
++            qglx_surfaceFormatFromGLXFBConfig(&d->format, x11->display(), config);
++
++        // Create a temporary window so that we can make the new context current
++        d->window = createDummyWindow(x11, config);
++    } else {
++        XVisualInfo *visualInfo = qglx_findVisualInfo(x11->display(), 0, &d->format);
++        if (Q_UNLIKELY(!visualInfo))
++            qFatal("Could not initialize GLX");
++        d->context = glXCreateContext(x11->display(), visualInfo, d->shareContext, true);
++        if (!d->context && d->shareContext) {
++            // re-try without a shared glx context
++            d->shareContext = 0;
++            d->context = glXCreateContext(x11->display(), visualInfo, 0, true);
++        }
++
++        d->window = createDummyWindow(x11, visualInfo);
++        XFree(visualInfo);
++    }
++}
++
++QOffscreenX11GLXContext::~QOffscreenX11GLXContext()
++{
++    glXDestroyContext(d->x11->display(), d->context);
++    XDestroyWindow(d->x11->display(), d->window);
++}
++
++bool QOffscreenX11GLXContext::makeCurrent(QPlatformSurface *surface)
++{
++    QSize size = surface->surface()->size();
++
++    XResizeWindow(d->x11->display(), d->window, size.width(), size.height());
++    XSync(d->x11->display(), true);
++
++    if (glXMakeCurrent(d->x11->display(), d->window, d->context)) {
++        glViewport(0, 0, size.width(), size.height());
++        return true;
++    }
++
++    return false;
++}
++
++void QOffscreenX11GLXContext::doneCurrent()
++{
++    glXMakeCurrent(d->x11->display(), 0, 0);
++}
++
++void QOffscreenX11GLXContext::swapBuffers(QPlatformSurface *)
++{
++}
++
++QFunctionPointer QOffscreenX11GLXContext::getProcAddress(const char *procName)
++{
++    return (QFunctionPointer)glXGetProcAddressARB(reinterpret_cast<const GLubyte *>(procName));
++}
++
++QSurfaceFormat QOffscreenX11GLXContext::format() const
++{
++    return d->format;
++}
++
++bool QOffscreenX11GLXContext::isSharing() const
++{
++    return d->shareContext;
++}
++
++bool QOffscreenX11GLXContext::isValid() const
++{
++    return d->context && d->window;
++}
++
++QT_END_NAMESPACE
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h
+new file mode 100644
+index 0000000..5e1c6b7
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h
+@@ -0,0 +1,106 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENINTEGRATION_X11_H
++#define QOFFSCREENINTEGRATION_X11_H
++
++#include "qoffscreenintegration.h"
++
++#include <qglobal.h>
++#include <qscopedpointer.h>
++
++#include <qpa/qplatformopenglcontext.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenX11Connection;
++class QOffscreenX11Info;
++
++class QOffscreenX11Integration : public QOffscreenIntegration
++{
++public:
++    bool hasCapability(QPlatformIntegration::Capability cap) const override;
++
++    QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
++
++private:
++    mutable QScopedPointer<QOffscreenX11Connection> m_connection;
++};
++
++class QOffscreenX11Connection {
++public:
++    QOffscreenX11Connection();
++    ~QOffscreenX11Connection();
++
++    QOffscreenX11Info *x11Info();
++
++    void *display() const { return m_display; }
++    int screenNumber() const { return m_screenNumber; }
++
++private:
++    void *m_display;
++    int m_screenNumber;
++
++    QScopedPointer<QOffscreenX11Info> m_x11Info;
++};
++
++class QOffscreenX11GLXContextData;
++
++class QOffscreenX11GLXContext : public QPlatformOpenGLContext
++{
++public:
++    QOffscreenX11GLXContext(QOffscreenX11Info *x11, QOpenGLContext *context);
++    ~QOffscreenX11GLXContext();
++
++    bool makeCurrent(QPlatformSurface *surface) override;
++    void doneCurrent() override;
++    void swapBuffers(QPlatformSurface *surface) override;
++    QFunctionPointer getProcAddress(const char *procName) override;
++
++    QSurfaceFormat format() const override;
++    bool isSharing() const override;
++    bool isValid() const override;
++
++private:
++    QScopedPointer<QOffscreenX11GLXContextData> d;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp
+new file mode 100644
+index 0000000..832e940
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp
+@@ -0,0 +1,193 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenwindow.h"
++#include "qoffscreencommon.h"
++
++#include <qpa/qplatformscreen.h>
++#include <qpa/qwindowsysteminterface.h>
++
++#include <private/qwindow_p.h>
++
++QT_BEGIN_NAMESPACE
++
++QOffscreenWindow::QOffscreenWindow(QWindow *window)
++    : QPlatformWindow(window)
++    , m_positionIncludesFrame(false)
++    , m_visible(false)
++    , m_pendingGeometryChangeOnShow(true)
++{
++    if (window->windowState() == Qt::WindowNoState)
++        setGeometry(window->geometry());
++    else
++        setWindowState(window->windowStates());
++
++    QWindowSystemInterface::flushWindowSystemEvents();
++
++    static WId counter = 0;
++    m_winId = ++counter;
++
++    m_windowForWinIdHash[m_winId] = this;
++}
++
++QOffscreenWindow::~QOffscreenWindow()
++{
++    if (QOffscreenScreen::windowContainingCursor == this)
++        QOffscreenScreen::windowContainingCursor = 0;
++    m_windowForWinIdHash.remove(m_winId);
++}
++
++void QOffscreenWindow::setGeometry(const QRect &rect)
++{
++    if (window()->windowState() != Qt::WindowNoState)
++        return;
++
++    m_positionIncludesFrame = qt_window_private(window())->positionPolicy == QWindowPrivate::WindowFrameInclusive;
++
++    setFrameMarginsEnabled(true);
++    setGeometryImpl(rect);
++
++    m_normalGeometry = geometry();
++}
++
++void QOffscreenWindow::setGeometryImpl(const QRect &rect)
++{
++    QRect adjusted = rect;
++    if (adjusted.width() <= 0)
++        adjusted.setWidth(1);
++    if (adjusted.height() <= 0)
++        adjusted.setHeight(1);
++
++    if (m_positionIncludesFrame) {
++        adjusted.translate(m_margins.left(), m_margins.top());
++    } else {
++        // make sure we're not placed off-screen
++        if (adjusted.left() < m_margins.left())
++            adjusted.translate(m_margins.left(), 0);
++        if (adjusted.top() < m_margins.top())
++            adjusted.translate(0, m_margins.top());
++    }
++
++    QPlatformWindow::setGeometry(adjusted);
++
++    if (m_visible) {
++        QWindowSystemInterface::handleGeometryChange(window(), adjusted);
++        QWindowSystemInterface::handleExposeEvent(window(), QRect(QPoint(), adjusted.size()));
++    } else {
++        m_pendingGeometryChangeOnShow = true;
++    }
++}
++
++void QOffscreenWindow::setVisible(bool visible)
++{
++    if (visible == m_visible)
++        return;
++
++    if (visible) {
++        if (window()->type() != Qt::ToolTip)
++            QWindowSystemInterface::handleWindowActivated(window());
++
++        if (m_pendingGeometryChangeOnShow) {
++            m_pendingGeometryChangeOnShow = false;
++            QWindowSystemInterface::handleGeometryChange(window(), geometry());
++        }
++    }
++
++    if (visible) {
++        QRect rect(QPoint(), geometry().size());
++        QWindowSystemInterface::handleExposeEvent(window(), rect);
++    } else {
++        QWindowSystemInterface::handleExposeEvent(window(), QRegion());
++    }
++
++    m_visible = visible;
++}
++
++void QOffscreenWindow::requestActivateWindow()
++{
++    if (m_visible)
++        QWindowSystemInterface::handleWindowActivated(window());
++}
++
++WId QOffscreenWindow::winId() const
++{
++    return m_winId;
++}
++
++QMargins QOffscreenWindow::frameMargins() const
++{
++    return m_margins;
++}
++
++void QOffscreenWindow::setFrameMarginsEnabled(bool enabled)
++{
++    if (enabled
++        && !(window()->flags() & Qt::FramelessWindowHint)
++        && (parent() == nullptr)) {
++        m_margins = QMargins(2, 2, 2, 2);
++    } else {
++        m_margins = QMargins(0, 0, 0, 0);
++    }
++}
++
++void QOffscreenWindow::setWindowState(Qt::WindowStates state)
++{
++    setFrameMarginsEnabled(!(state & Qt::WindowFullScreen));
++    m_positionIncludesFrame = false;
++
++    if (state & Qt::WindowMinimized)
++        ; // nothing to do
++    else if (state & Qt::WindowFullScreen)
++        setGeometryImpl(screen()->geometry());
++    else if (state & Qt::WindowMaximized)
++        setGeometryImpl(screen()->availableGeometry().adjusted(m_margins.left(), m_margins.top(), -m_margins.right(), -m_margins.bottom()));
++    else
++        setGeometryImpl(m_normalGeometry);
++
++    QWindowSystemInterface::handleWindowStateChanged(window(), state);
++}
++
++QOffscreenWindow *QOffscreenWindow::windowForWinId(WId id)
++{
++    return m_windowForWinIdHash.value(id, 0);
++}
++
++QHash<WId, QOffscreenWindow *> QOffscreenWindow::m_windowForWinIdHash;
++
++QT_END_NAMESPACE
+diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h
+new file mode 100644
+index 0000000..e1f37bb
+--- /dev/null
++++ b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h
+@@ -0,0 +1,84 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENWINDOW_H
++#define QOFFSCREENWINDOW_H
++
++#include <qpa/qplatformbackingstore.h>
++#include <qpa/qplatformwindow.h>
++
++#include <qhash.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenWindow : public QPlatformWindow
++{
++public:
++    QOffscreenWindow(QWindow *window);
++    ~QOffscreenWindow();
++
++    void setGeometry(const QRect &rect) override;
++    void setWindowState(Qt::WindowStates states) override;
++
++    QMargins frameMargins() const override;
++
++    void setVisible(bool visible) override;
++    void requestActivateWindow() override;
++
++    WId winId() const override;
++
++    static QOffscreenWindow *windowForWinId(WId id);
++
++private:
++    void setFrameMarginsEnabled(bool enabled);
++    void setGeometryImpl(const QRect &rect);
++
++    QRect m_normalGeometry;
++    QMargins m_margins;
++    bool m_positionIncludesFrame;
++    bool m_visible;
++    bool m_pendingGeometryChangeOnShow;
++    WId m_winId;
++
++    static QHash<WId, QOffscreenWindow *> m_windowForWinIdHash;
++};
++
++QT_END_NAMESPACE
++
++#endif
 diff --git a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml b/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
 index d5ea533..9749e77 100644
 --- a/data/multiturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
@@ -3264,7 +4795,7 @@ index 0fbbd81..99dbcfd 100644
  cpus = 1
  memory_mb = 4096
 diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
-index 77e2e0f..4e2e5d7 100644
+index 77e2e0f..54e339f 100644
 --- a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
 +++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/Dockerfile
 @@ -12,7 +12,7 @@
@@ -3276,6 +4807,1537 @@ index 77e2e0f..4e2e5d7 100644
  
  # Reset entrypoint to allow docker-compose command (sleep infinity) to run
  ENTRYPOINT []
+@@ -29,3 +29,27 @@ RUN set -e && git reset --hard 2e65f731b1b615b5cd60417c00b6993c2295e9f8 && git c
+ # Install uv for running Python scripts
+ RUN curl -LsSf https://astral.sh/uv/0.7.13/install.sh | sh || true
+ RUN mkdir -p /logs
++
++# arm64: the image uses Ubuntu focal's PyQt5 5.14.1 (no aarch64 PyQt5 wheels on PyPI), which ships sip 4 as the
++# top-level `sip` module; qutebrowser at this base commit imports `from PyQt5 import sip` (the private sip module the
++# official image's PyPI PyQt5 wheel provides). Expose the same extension under PyQt5 (its init symbol is PyInit_sip).
++RUN ln -sf /usr/lib/python3/dist-packages/sip.cpython-38-aarch64-linux-gnu.so /usr/lib/python3/dist-packages/PyQt5/sip.cpython-38-aarch64-linux-gnu.so \
++ && python -c "from PyQt5 import sip; print('PyQt5.sip', sip.SIP_VERSION_STR)"
++
++# arm64: Ubuntu focal's Qt 5.12 "offscreen" platform plugin takes an X11/GLX path whenever DISPLAY is set (the task's
++# run_script starts Xvfb and exports DISPLAY=:99); creating QtWebEngine's global GL share context there aborts the
++# test process ("Could not initialize GLX") on this Mesa/Xvfb, killing every test that needs a QApplication. The
++# official amd64 image passes the same verifier under qemu. Rebuild the same plugin from the
++# Qt 5.12.8 sources (qt/qtbase v5.12.8 src/plugins/platforms/offscreen; C++ unmodified, offscreen.pro edited to drop
++# the X11/GLX branch and build outside the Qt tree),
++# as Qt itself does when built without xlib. Only packages this step installs are removed afterwards.
++COPY qoffscreen-src /tmp/qoffscreen-src
++RUN dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.before \
++ && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends qtbase5-private-dev \
++    qtbase5-dev qt5-qmake build-essential libfontconfig1-dev libfreetype6-dev libglib2.0-dev \
++ && cd /tmp/qoffscreen-src && qmake -qt=qt5 offscreen.pro && make -j"$(nproc)" \
++ && cp out/libqoffscreen.so /usr/lib/aarch64-linux-gnu/qt5/plugins/platforms/libqoffscreen.so \
++ && dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.after \
++ && comm -13 /tmp/pkgs.before /tmp/pkgs.after | xargs -r env DEBIAN_FRONTEND=noninteractive apt-get purge -y \
++ && rm -rf /tmp/qoffscreen-src /tmp/pkgs.* /var/lib/apt/lists/* \
++ && (Xvfb :97 -screen 0 1024x768x24 +extension GLX & sleep 2; DISPLAY=:97 QT_QPA_PLATFORM=offscreen python -c "from PyQt5 import QtWebEngineWidgets; from PyQt5.QtWidgets import QApplication; QApplication(['x']); print('offscreen+QtWebEngine ok')")
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp
+new file mode 100644
+index 0000000..207db60
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/main.cpp
+@@ -0,0 +1,65 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++
++#include <qpa/qplatformintegrationplugin.h>
++#include "qoffscreenintegration.h"
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenIntegrationPlugin : public QPlatformIntegrationPlugin
++{
++    Q_OBJECT
++    Q_PLUGIN_METADATA(IID QPlatformIntegrationFactoryInterface_iid FILE "offscreen.json")
++public:
++    QPlatformIntegration *create(const QString&, const QStringList&) override;
++};
++
++QPlatformIntegration *QOffscreenIntegrationPlugin::create(const QString& system, const QStringList& paramList)
++{
++    Q_UNUSED(paramList);
++    if (!system.compare(QLatin1String("offscreen"), Qt::CaseInsensitive))
++        return QOffscreenIntegration::createOffscreenIntegration();
++
++    return 0;
++}
++
++QT_END_NAMESPACE
++
++#include "main.moc"
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json
+new file mode 100644
+index 0000000..6e87744
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.json
+@@ -0,0 +1,3 @@
++{
++    "Keys": [ "offscreen" ]
++}
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro
+new file mode 100644
+index 0000000..d46464c
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/offscreen.pro
+@@ -0,0 +1,35 @@
++TARGET = qoffscreen
++
++QT += \
++    core-private gui-private \
++    eventdispatcher_support-private fontdatabase_support-private
++
++DEFINES += QT_NO_FOREACH
++
++SOURCES =   main.cpp \
++            qoffscreenintegration.cpp \
++            qoffscreenwindow.cpp \
++            qoffscreencommon.cpp
++
++HEADERS =   qoffscreenintegration.h \
++            qoffscreenwindow.h \
++            qoffscreencommon.h
++
++OTHER_FILES += offscreen.json
++
++# arm64 (swe_interact): build the plugin without the X11/GLX path (see NOTES.md)
++false {
++    SOURCES += qoffscreenintegration_x11.cpp
++    HEADERS += qoffscreenintegration_x11.h
++    QT += glx_support-private
++    system(echo "Using X11 offscreen integration with GLX")
++} else {
++    SOURCES += qoffscreenintegration_dummy.cpp
++}
++
++PLUGIN_TYPE = platforms
++PLUGIN_CLASS_NAME = QOffscreenIntegrationPlugin
++!equals(TARGET, $$QT_DEFAULT_QPA_PLUGIN): PLUGIN_EXTENDS = -
++CONFIG += plugin
++TEMPLATE = lib
++DESTDIR = out
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp
+new file mode 100644
+index 0000000..f0eb697
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.cpp
+@@ -0,0 +1,225 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreencommon.h"
++#include "qoffscreenwindow.h"
++
++#include <QtGui/private/qpixmap_raster_p.h>
++#include <QtGui/private/qguiapplication_p.h>
++
++#include <qpa/qplatformcursor.h>
++#include <qpa/qplatformwindow.h>
++
++QT_BEGIN_NAMESPACE
++
++QPlatformWindow *QOffscreenScreen::windowContainingCursor = 0;
++
++class QOffscreenCursor : public QPlatformCursor
++{
++public:
++    QOffscreenCursor() : m_pos(10, 10) {}
++
++    QPoint pos() const override { return m_pos; }
++    void setPos(const QPoint &pos) override
++    {
++        m_pos = pos;
++        const QWindowList wl = QGuiApplication::topLevelWindows();
++        QWindow *containing = 0;
++        for (QWindow *w : wl) {
++            if (w->type() != Qt::Desktop && w->isExposed() && w->geometry().contains(pos)) {
++                containing = w;
++                break;
++            }
++        }
++
++        QPoint local = pos;
++        if (containing)
++            local -= containing->position();
++
++        QWindow *previous = QOffscreenScreen::windowContainingCursor ? QOffscreenScreen::windowContainingCursor->window() : 0;
++
++        if (containing != previous)
++            QWindowSystemInterface::handleEnterLeaveEvent(containing, previous, local, pos);
++
++        QWindowSystemInterface::handleMouseEvent(containing, local, pos, QGuiApplication::mouseButtons(), QGuiApplication::keyboardModifiers());
++
++        QOffscreenScreen::windowContainingCursor = containing ? containing->handle() : 0;
++    }
++#ifndef QT_NO_CURSOR
++    void changeCursor(QCursor *windowCursor, QWindow *window) override
++    {
++        Q_UNUSED(windowCursor);
++        Q_UNUSED(window);
++    }
++#endif
++private:
++    QPoint m_pos;
++};
++
++QOffscreenScreen::QOffscreenScreen()
++    : m_geometry(0, 0, 800, 600)
++    , m_cursor(new QOffscreenCursor)
++{
++}
++
++QPixmap QOffscreenScreen::grabWindow(WId id, int x, int y, int width, int height) const
++{
++    QRect rect(x, y, width, height);
++
++    QOffscreenWindow *window = QOffscreenWindow::windowForWinId(id);
++    if (!window || window->window()->type() == Qt::Desktop) {
++        const QWindowList wl = QGuiApplication::topLevelWindows();
++        QWindow *containing = 0;
++        for (QWindow *w : wl) {
++            if (w->type() != Qt::Desktop && w->isExposed() && w->geometry().contains(rect)) {
++                containing = w;
++                break;
++            }
++        }
++
++        if (!containing)
++            return QPixmap();
++
++        id = containing->winId();
++        rect = rect.translated(-containing->geometry().topLeft());
++    }
++
++    QOffscreenBackingStore *store = QOffscreenBackingStore::backingStoreForWinId(id);
++    if (store)
++        return store->grabWindow(id, rect);
++    return QPixmap();
++}
++
++QOffscreenBackingStore::QOffscreenBackingStore(QWindow *window)
++    : QPlatformBackingStore(window)
++{
++}
++
++QOffscreenBackingStore::~QOffscreenBackingStore()
++{
++    clearHash();
++}
++
++QPaintDevice *QOffscreenBackingStore::paintDevice()
++{
++    return &m_image;
++}
++
++void QOffscreenBackingStore::flush(QWindow *window, const QRegion &region, const QPoint &offset)
++{
++    Q_UNUSED(region);
++
++    if (m_image.size().isEmpty())
++        return;
++
++    QSize imageSize = m_image.size();
++
++    QRegion clipped = QRect(0, 0, window->width(), window->height());
++    clipped &= QRect(0, 0, imageSize.width(), imageSize.height()).translated(-offset);
++
++    QRect bounds = clipped.boundingRect().translated(offset);
++
++    if (bounds.isNull())
++        return;
++
++    WId id = window->winId();
++
++    m_windowAreaHash[id] = bounds;
++    m_backingStoreForWinIdHash[id] = this;
++}
++
++void QOffscreenBackingStore::resize(const QSize &size, const QRegion &)
++{
++    QImage::Format format = QGuiApplication::primaryScreen()->handle()->format();
++    if (m_image.size() != size)
++        m_image = QImage(size, format);
++    clearHash();
++}
++
++extern void qt_scrollRectInImage(QImage &img, const QRect &rect, const QPoint &offset);
++
++bool QOffscreenBackingStore::scroll(const QRegion &area, int dx, int dy)
++{
++    if (m_image.isNull())
++        return false;
++
++    for (const QRect &rect : area)
++        qt_scrollRectInImage(m_image, rect, QPoint(dx, dy));
++
++    return true;
++}
++
++QPixmap QOffscreenBackingStore::grabWindow(WId window, const QRect &rect) const
++{
++    QRect area = m_windowAreaHash.value(window, QRect());
++    if (area.isNull())
++        return QPixmap();
++
++    QRect adjusted = rect;
++    if (adjusted.width() <= 0)
++        adjusted.setWidth(area.width());
++    if (adjusted.height() <= 0)
++        adjusted.setHeight(area.height());
++
++    adjusted = adjusted.translated(area.topLeft()) & area;
++
++    if (adjusted.isEmpty())
++        return QPixmap();
++
++    return QPixmap::fromImage(m_image.copy(adjusted));
++}
++
++QOffscreenBackingStore *QOffscreenBackingStore::backingStoreForWinId(WId id)
++{
++    return m_backingStoreForWinIdHash.value(id, 0);
++}
++
++void QOffscreenBackingStore::clearHash()
++{
++    for (auto it = m_windowAreaHash.cbegin(), end = m_windowAreaHash.cend(); it != end; ++it) {
++        const auto it2 = qAsConst(m_backingStoreForWinIdHash).find(it.key());
++        if (it2.value() == this)
++            m_backingStoreForWinIdHash.erase(it2);
++    }
++    m_windowAreaHash.clear();
++}
++
++QHash<WId, QOffscreenBackingStore *> QOffscreenBackingStore::m_backingStoreForWinIdHash;
++
++QT_END_NAMESPACE
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h
+new file mode 100644
+index 0000000..f4f0142
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreencommon.h
+@@ -0,0 +1,110 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENCOMMON_H
++#define QOFFSCREENCOMMON_H
++
++#include <qpa/qplatformbackingstore.h>
++#if QT_CONFIG(draganddrop)
++#include <qpa/qplatformdrag.h>
++#endif
++#include <qpa/qplatformintegration.h>
++#include <qpa/qplatformscreen.h>
++#include <qpa/qplatformwindow.h>
++
++#include <qscopedpointer.h>
++#include <qimage.h>
++#include <qhash.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenScreen : public QPlatformScreen
++{
++public:
++    QOffscreenScreen();
++
++    QRect geometry() const override { return m_geometry; }
++    int depth() const override { return 32; }
++    QImage::Format format() const override { return QImage::Format_RGB32; }
++    QPlatformCursor *cursor() const override { return m_cursor.data(); }
++
++    QPixmap grabWindow(WId window, int x, int y, int width, int height) const override;
++
++    static QPlatformWindow *windowContainingCursor;
++
++public:
++    QRect m_geometry;
++    QScopedPointer<QPlatformCursor> m_cursor;
++};
++
++#if QT_CONFIG(draganddrop)
++class QOffscreenDrag : public QPlatformDrag
++{
++public:
++    Qt::DropAction drag(QDrag *) override { return Qt::IgnoreAction; }
++};
++#endif
++
++class QOffscreenBackingStore : public QPlatformBackingStore
++{
++public:
++    QOffscreenBackingStore(QWindow *window);
++    ~QOffscreenBackingStore();
++
++    QPaintDevice *paintDevice() override;
++    void flush(QWindow *window, const QRegion &region, const QPoint &offset) override;
++    void resize(const QSize &size, const QRegion &staticContents) override;
++    bool scroll(const QRegion &area, int dx, int dy) override;
++
++    QPixmap grabWindow(WId window, const QRect &rect) const;
++
++    static QOffscreenBackingStore *backingStoreForWinId(WId id);
++
++private:
++    void clearHash();
++
++    QImage m_image;
++    QHash<WId, QRect> m_windowAreaHash;
++
++    static QHash<WId, QOffscreenBackingStore *> m_backingStoreForWinIdHash;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp
+new file mode 100644
+index 0000000..ef3b0dd
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.cpp
+@@ -0,0 +1,223 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration.h"
++#include "qoffscreenwindow.h"
++#include "qoffscreencommon.h"
++
++#if defined(Q_OS_UNIX)
++#include <QtEventDispatcherSupport/private/qgenericunixeventdispatcher_p.h>
++#if defined(Q_OS_MAC)
++#include <qpa/qplatformfontdatabase.h>
++#include <QtFontDatabaseSupport/private/qcoretextfontdatabase_p.h>
++#else
++#include <QtFontDatabaseSupport/private/qgenericunixfontdatabase_p.h>
++#endif
++#elif defined(Q_OS_WIN)
++#include <QtFontDatabaseSupport/private/qfreetypefontdatabase_p.h>
++#ifndef Q_OS_WINRT
++#include <QtCore/private/qeventdispatcher_win_p.h>
++#else
++#include <QtCore/private/qeventdispatcher_winrt_p.h>
++#endif
++#endif
++
++#include <QtGui/private/qpixmap_raster_p.h>
++#include <QtGui/private/qguiapplication_p.h>
++#include <qpa/qplatforminputcontextfactory_p.h>
++#include <qpa/qplatforminputcontext.h>
++#include <qpa/qplatformtheme.h>
++#include <qpa/qwindowsysteminterface.h>
++
++#include <qpa/qplatformservices.h>
++
++QT_BEGIN_NAMESPACE
++
++class QCoreTextFontEngine;
++
++template <typename BaseEventDispatcher>
++class QOffscreenEventDispatcher : public BaseEventDispatcher
++{
++public:
++    explicit QOffscreenEventDispatcher(QObject *parent = 0)
++        : BaseEventDispatcher(parent)
++    {
++    }
++
++    bool processEvents(QEventLoop::ProcessEventsFlags flags)
++    {
++        bool didSendEvents = BaseEventDispatcher::processEvents(flags);
++
++        return QWindowSystemInterface::sendWindowSystemEvents(flags) || didSendEvents;
++    }
++
++    bool hasPendingEvents()
++    {
++        return BaseEventDispatcher::hasPendingEvents()
++            || QWindowSystemInterface::windowSystemEventsQueued();
++    }
++
++    void flush()
++    {
++        if (qApp)
++            qApp->sendPostedEvents();
++        BaseEventDispatcher::flush();
++    }
++};
++
++QOffscreenIntegration::QOffscreenIntegration()
++{
++#if defined(Q_OS_UNIX)
++#if defined(Q_OS_MAC)
++    m_fontDatabase.reset(new QCoreTextFontDatabaseEngineFactory<QCoreTextFontEngine>);
++#else
++    m_fontDatabase.reset(new QGenericUnixFontDatabase());
++#endif
++#elif defined(Q_OS_WIN)
++    m_fontDatabase.reset(new QFreeTypeFontDatabase());
++#endif
++
++#if QT_CONFIG(draganddrop)
++    m_drag.reset(new QOffscreenDrag);
++#endif
++    m_services.reset(new QPlatformServices);
++
++    QWindowSystemInterface::handleScreenAdded(new QOffscreenScreen);
++}
++
++QOffscreenIntegration::~QOffscreenIntegration()
++{
++}
++
++void QOffscreenIntegration::initialize()
++{
++    m_inputContext.reset(QPlatformInputContextFactory::create());
++}
++
++QPlatformInputContext *QOffscreenIntegration::inputContext() const
++{
++    return m_inputContext.data();
++}
++
++bool QOffscreenIntegration::hasCapability(QPlatformIntegration::Capability cap) const
++{
++    switch (cap) {
++    case ThreadedPixmaps: return true;
++    case MultipleWindows: return true;
++    default: return QPlatformIntegration::hasCapability(cap);
++    }
++}
++
++QPlatformWindow *QOffscreenIntegration::createPlatformWindow(QWindow *window) const
++{
++    Q_UNUSED(window);
++    QPlatformWindow *w = new QOffscreenWindow(window);
++    w->requestActivateWindow();
++    return w;
++}
++
++QPlatformBackingStore *QOffscreenIntegration::createPlatformBackingStore(QWindow *window) const
++{
++    return new QOffscreenBackingStore(window);
++}
++
++QAbstractEventDispatcher *QOffscreenIntegration::createEventDispatcher() const
++{
++#if defined(Q_OS_UNIX)
++    return createUnixEventDispatcher();
++#elif defined(Q_OS_WIN)
++#ifndef Q_OS_WINRT
++    return new QOffscreenEventDispatcher<QEventDispatcherWin32>();
++#else // !Q_OS_WINRT
++    return new QOffscreenEventDispatcher<QEventDispatcherWinRT>();
++#endif // Q_OS_WINRT
++#else
++    return 0;
++#endif
++}
++
++static QString themeName() { return QStringLiteral("offscreen"); }
++
++QStringList QOffscreenIntegration::themeNames() const
++{
++    return QStringList(themeName());
++}
++
++// Restrict the styles to "fusion" to prevent native styles requiring native
++// window handles (eg Windows Vista style) from being used.
++class OffscreenTheme : public QPlatformTheme
++{
++public:
++    OffscreenTheme() {}
++
++    QVariant themeHint(ThemeHint h) const override
++    {
++        switch (h) {
++        case StyleNames:
++            return QVariant(QStringList(QStringLiteral("fusion")));
++        default:
++            break;
++        }
++        return QPlatformTheme::themeHint(h);
++    }
++};
++
++QPlatformTheme *QOffscreenIntegration::createPlatformTheme(const QString &name) const
++{
++    return name == themeName() ? new OffscreenTheme() : nullptr;
++}
++
++QPlatformFontDatabase *QOffscreenIntegration::fontDatabase() const
++{
++    return m_fontDatabase.data();
++}
++
++#if QT_CONFIG(draganddrop)
++QPlatformDrag *QOffscreenIntegration::drag() const
++{
++    return m_drag.data();
++}
++#endif
++
++QPlatformServices *QOffscreenIntegration::services() const
++{
++    return m_services.data();
++}
++
++QT_END_NAMESPACE
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h
+new file mode 100644
+index 0000000..fc98812
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration.h
+@@ -0,0 +1,88 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENINTEGRATION_H
++#define QOFFSCREENINTEGRATION_H
++
++#include <qpa/qplatformintegration.h>
++
++#include <qscopedpointer.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenBackendData;
++
++class QOffscreenIntegration : public QPlatformIntegration
++{
++public:
++    QOffscreenIntegration();
++    ~QOffscreenIntegration();
++
++    void initialize() override;
++    bool hasCapability(QPlatformIntegration::Capability cap) const override;
++
++    QPlatformWindow *createPlatformWindow(QWindow *window) const override;
++    QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
++#if QT_CONFIG(draganddrop)
++    QPlatformDrag *drag() const override;
++#endif
++
++    QPlatformInputContext *inputContext() const override;
++    QPlatformServices *services() const override;
++
++    QPlatformFontDatabase *fontDatabase() const override;
++    QAbstractEventDispatcher *createEventDispatcher() const override;
++
++    QStringList themeNames() const override;
++    QPlatformTheme *createPlatformTheme(const QString &name) const override;
++
++    static QOffscreenIntegration *createOffscreenIntegration();
++
++private:
++    QScopedPointer<QPlatformFontDatabase> m_fontDatabase;
++#if QT_CONFIG(draganddrop)
++    QScopedPointer<QPlatformDrag> m_drag;
++#endif
++    QScopedPointer<QPlatformInputContext> m_inputContext;
++    QScopedPointer<QPlatformServices> m_services;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp
+new file mode 100644
+index 0000000..78b289e
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_dummy.cpp
+@@ -0,0 +1,45 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration.h"
++
++QOffscreenIntegration *QOffscreenIntegration::createOffscreenIntegration()
++{
++    return new QOffscreenIntegration;
++}
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp
+new file mode 100644
+index 0000000..9356622
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.cpp
+@@ -0,0 +1,254 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenintegration_x11.h"
++
++#include <QByteArray>
++#include <QOpenGLContext>
++
++#include <X11/Xlib.h>
++#include <GL/glx.h>
++
++#include <QtGlxSupport/private/qglxconvenience_p.h>
++
++#include <qpa/qplatformsurface.h>
++#include <qsurface.h>
++
++QT_BEGIN_NAMESPACE
++
++QOffscreenIntegration *QOffscreenIntegration::createOffscreenIntegration()
++{
++    return new QOffscreenX11Integration;
++}
++
++bool QOffscreenX11Integration::hasCapability(QPlatformIntegration::Capability cap) const
++{
++    switch (cap) {
++    case OpenGL: return true;
++    case ThreadedOpenGL: return true;
++    default: return QOffscreenIntegration::hasCapability(cap);
++    }
++}
++
++QPlatformOpenGLContext *QOffscreenX11Integration::createPlatformOpenGLContext(QOpenGLContext *context) const
++{
++    if (!m_connection)
++        m_connection.reset(new QOffscreenX11Connection);
++
++    if (!m_connection->display())
++        return nullptr;
++
++    return new QOffscreenX11GLXContext(m_connection->x11Info(), context);
++}
++
++QOffscreenX11Connection::QOffscreenX11Connection()
++{
++    XInitThreads();
++
++    QByteArray displayName = qgetenv("DISPLAY");
++    Display *display = XOpenDisplay(displayName.constData());
++    m_display = display;
++    m_screenNumber = m_display ? DefaultScreen(m_display) : -1;
++}
++
++QOffscreenX11Connection::~QOffscreenX11Connection()
++{
++    if (m_display)
++        XCloseDisplay((Display *)m_display);
++}
++
++class QOffscreenX11Info
++{
++public:
++    QOffscreenX11Info(QOffscreenX11Connection *connection)
++        : m_connection(connection)
++    {
++    }
++
++    Display *display() const {
++        return (Display *)m_connection->display();
++    }
++
++    Window root() const {
++        return DefaultRootWindow(display());
++    }
++
++    int screenNumber() const {
++        return m_connection->screenNumber();
++    }
++
++private:
++    QOffscreenX11Connection *m_connection;
++};
++
++QOffscreenX11Info *QOffscreenX11Connection::x11Info()
++{
++    if (!m_x11Info)
++        m_x11Info.reset(new QOffscreenX11Info(this));
++    return m_x11Info.data();
++}
++
++class QOffscreenX11GLXContextData
++{
++public:
++    QOffscreenX11Info *x11;
++    QSurfaceFormat format;
++    GLXContext context;
++    GLXContext shareContext;
++    Window window;
++};
++
++static Window createDummyWindow(QOffscreenX11Info *x11, XVisualInfo *visualInfo)
++{
++    Colormap cmap = XCreateColormap(x11->display(), x11->root(), visualInfo->visual, AllocNone);
++    XSetWindowAttributes a;
++    a.background_pixel = WhitePixel(x11->display(), x11->screenNumber());
++    a.border_pixel = BlackPixel(x11->display(), x11->screenNumber());
++    a.colormap = cmap;
++
++    Window window = XCreateWindow(x11->display(), x11->root(),
++                                  0, 0, 100, 100,
++                                  0, visualInfo->depth, InputOutput, visualInfo->visual,
++                                  CWBackPixel|CWBorderPixel|CWColormap, &a);
++    XFreeColormap(x11->display(), cmap);
++    return window;
++}
++
++static Window createDummyWindow(QOffscreenX11Info *x11, GLXFBConfig config)
++{
++    XVisualInfo *visualInfo = glXGetVisualFromFBConfig(x11->display(), config);
++    if (Q_UNLIKELY(!visualInfo))
++        qFatal("Could not initialize GLX");
++    Window window = createDummyWindow(x11, visualInfo);
++    XFree(visualInfo);
++    return window;
++}
++
++QOffscreenX11GLXContext::QOffscreenX11GLXContext(QOffscreenX11Info *x11, QOpenGLContext *context)
++    : d(new QOffscreenX11GLXContextData)
++{
++    d->x11 = x11;
++    d->format = context->format();
++
++    d->shareContext = 0;
++    if (context->shareHandle())
++        d->shareContext = static_cast<QOffscreenX11GLXContext *>(context->shareHandle())->d->context;
++
++    GLXFBConfig config = qglx_findConfig(x11->display(), x11->screenNumber(), d->format);
++    if (config) {
++        d->context = glXCreateNewContext(x11->display(), config, GLX_RGBA_TYPE, d->shareContext, true);
++        if (!d->context && d->shareContext) {
++            d->shareContext = 0;
++            // re-try without a shared glx context
++            d->context = glXCreateNewContext(x11->display(), config, GLX_RGBA_TYPE, 0, true);
++        }
++
++        // Get the basic surface format details
++        if (d->context)
++            qglx_surfaceFormatFromGLXFBConfig(&d->format, x11->display(), config);
++
++        // Create a temporary window so that we can make the new context current
++        d->window = createDummyWindow(x11, config);
++    } else {
++        XVisualInfo *visualInfo = qglx_findVisualInfo(x11->display(), 0, &d->format);
++        if (Q_UNLIKELY(!visualInfo))
++            qFatal("Could not initialize GLX");
++        d->context = glXCreateContext(x11->display(), visualInfo, d->shareContext, true);
++        if (!d->context && d->shareContext) {
++            // re-try without a shared glx context
++            d->shareContext = 0;
++            d->context = glXCreateContext(x11->display(), visualInfo, 0, true);
++        }
++
++        d->window = createDummyWindow(x11, visualInfo);
++        XFree(visualInfo);
++    }
++}
++
++QOffscreenX11GLXContext::~QOffscreenX11GLXContext()
++{
++    glXDestroyContext(d->x11->display(), d->context);
++    XDestroyWindow(d->x11->display(), d->window);
++}
++
++bool QOffscreenX11GLXContext::makeCurrent(QPlatformSurface *surface)
++{
++    QSize size = surface->surface()->size();
++
++    XResizeWindow(d->x11->display(), d->window, size.width(), size.height());
++    XSync(d->x11->display(), true);
++
++    if (glXMakeCurrent(d->x11->display(), d->window, d->context)) {
++        glViewport(0, 0, size.width(), size.height());
++        return true;
++    }
++
++    return false;
++}
++
++void QOffscreenX11GLXContext::doneCurrent()
++{
++    glXMakeCurrent(d->x11->display(), 0, 0);
++}
++
++void QOffscreenX11GLXContext::swapBuffers(QPlatformSurface *)
++{
++}
++
++QFunctionPointer QOffscreenX11GLXContext::getProcAddress(const char *procName)
++{
++    return (QFunctionPointer)glXGetProcAddressARB(reinterpret_cast<const GLubyte *>(procName));
++}
++
++QSurfaceFormat QOffscreenX11GLXContext::format() const
++{
++    return d->format;
++}
++
++bool QOffscreenX11GLXContext::isSharing() const
++{
++    return d->shareContext;
++}
++
++bool QOffscreenX11GLXContext::isValid() const
++{
++    return d->context && d->window;
++}
++
++QT_END_NAMESPACE
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h
+new file mode 100644
+index 0000000..5e1c6b7
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenintegration_x11.h
+@@ -0,0 +1,106 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENINTEGRATION_X11_H
++#define QOFFSCREENINTEGRATION_X11_H
++
++#include "qoffscreenintegration.h"
++
++#include <qglobal.h>
++#include <qscopedpointer.h>
++
++#include <qpa/qplatformopenglcontext.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenX11Connection;
++class QOffscreenX11Info;
++
++class QOffscreenX11Integration : public QOffscreenIntegration
++{
++public:
++    bool hasCapability(QPlatformIntegration::Capability cap) const override;
++
++    QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
++
++private:
++    mutable QScopedPointer<QOffscreenX11Connection> m_connection;
++};
++
++class QOffscreenX11Connection {
++public:
++    QOffscreenX11Connection();
++    ~QOffscreenX11Connection();
++
++    QOffscreenX11Info *x11Info();
++
++    void *display() const { return m_display; }
++    int screenNumber() const { return m_screenNumber; }
++
++private:
++    void *m_display;
++    int m_screenNumber;
++
++    QScopedPointer<QOffscreenX11Info> m_x11Info;
++};
++
++class QOffscreenX11GLXContextData;
++
++class QOffscreenX11GLXContext : public QPlatformOpenGLContext
++{
++public:
++    QOffscreenX11GLXContext(QOffscreenX11Info *x11, QOpenGLContext *context);
++    ~QOffscreenX11GLXContext();
++
++    bool makeCurrent(QPlatformSurface *surface) override;
++    void doneCurrent() override;
++    void swapBuffers(QPlatformSurface *surface) override;
++    QFunctionPointer getProcAddress(const char *procName) override;
++
++    QSurfaceFormat format() const override;
++    bool isSharing() const override;
++    bool isValid() const override;
++
++private:
++    QScopedPointer<QOffscreenX11GLXContextData> d;
++};
++
++QT_END_NAMESPACE
++
++#endif
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp
+new file mode 100644
+index 0000000..832e940
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.cpp
+@@ -0,0 +1,193 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qoffscreenwindow.h"
++#include "qoffscreencommon.h"
++
++#include <qpa/qplatformscreen.h>
++#include <qpa/qwindowsysteminterface.h>
++
++#include <private/qwindow_p.h>
++
++QT_BEGIN_NAMESPACE
++
++QOffscreenWindow::QOffscreenWindow(QWindow *window)
++    : QPlatformWindow(window)
++    , m_positionIncludesFrame(false)
++    , m_visible(false)
++    , m_pendingGeometryChangeOnShow(true)
++{
++    if (window->windowState() == Qt::WindowNoState)
++        setGeometry(window->geometry());
++    else
++        setWindowState(window->windowStates());
++
++    QWindowSystemInterface::flushWindowSystemEvents();
++
++    static WId counter = 0;
++    m_winId = ++counter;
++
++    m_windowForWinIdHash[m_winId] = this;
++}
++
++QOffscreenWindow::~QOffscreenWindow()
++{
++    if (QOffscreenScreen::windowContainingCursor == this)
++        QOffscreenScreen::windowContainingCursor = 0;
++    m_windowForWinIdHash.remove(m_winId);
++}
++
++void QOffscreenWindow::setGeometry(const QRect &rect)
++{
++    if (window()->windowState() != Qt::WindowNoState)
++        return;
++
++    m_positionIncludesFrame = qt_window_private(window())->positionPolicy == QWindowPrivate::WindowFrameInclusive;
++
++    setFrameMarginsEnabled(true);
++    setGeometryImpl(rect);
++
++    m_normalGeometry = geometry();
++}
++
++void QOffscreenWindow::setGeometryImpl(const QRect &rect)
++{
++    QRect adjusted = rect;
++    if (adjusted.width() <= 0)
++        adjusted.setWidth(1);
++    if (adjusted.height() <= 0)
++        adjusted.setHeight(1);
++
++    if (m_positionIncludesFrame) {
++        adjusted.translate(m_margins.left(), m_margins.top());
++    } else {
++        // make sure we're not placed off-screen
++        if (adjusted.left() < m_margins.left())
++            adjusted.translate(m_margins.left(), 0);
++        if (adjusted.top() < m_margins.top())
++            adjusted.translate(0, m_margins.top());
++    }
++
++    QPlatformWindow::setGeometry(adjusted);
++
++    if (m_visible) {
++        QWindowSystemInterface::handleGeometryChange(window(), adjusted);
++        QWindowSystemInterface::handleExposeEvent(window(), QRect(QPoint(), adjusted.size()));
++    } else {
++        m_pendingGeometryChangeOnShow = true;
++    }
++}
++
++void QOffscreenWindow::setVisible(bool visible)
++{
++    if (visible == m_visible)
++        return;
++
++    if (visible) {
++        if (window()->type() != Qt::ToolTip)
++            QWindowSystemInterface::handleWindowActivated(window());
++
++        if (m_pendingGeometryChangeOnShow) {
++            m_pendingGeometryChangeOnShow = false;
++            QWindowSystemInterface::handleGeometryChange(window(), geometry());
++        }
++    }
++
++    if (visible) {
++        QRect rect(QPoint(), geometry().size());
++        QWindowSystemInterface::handleExposeEvent(window(), rect);
++    } else {
++        QWindowSystemInterface::handleExposeEvent(window(), QRegion());
++    }
++
++    m_visible = visible;
++}
++
++void QOffscreenWindow::requestActivateWindow()
++{
++    if (m_visible)
++        QWindowSystemInterface::handleWindowActivated(window());
++}
++
++WId QOffscreenWindow::winId() const
++{
++    return m_winId;
++}
++
++QMargins QOffscreenWindow::frameMargins() const
++{
++    return m_margins;
++}
++
++void QOffscreenWindow::setFrameMarginsEnabled(bool enabled)
++{
++    if (enabled
++        && !(window()->flags() & Qt::FramelessWindowHint)
++        && (parent() == nullptr)) {
++        m_margins = QMargins(2, 2, 2, 2);
++    } else {
++        m_margins = QMargins(0, 0, 0, 0);
++    }
++}
++
++void QOffscreenWindow::setWindowState(Qt::WindowStates state)
++{
++    setFrameMarginsEnabled(!(state & Qt::WindowFullScreen));
++    m_positionIncludesFrame = false;
++
++    if (state & Qt::WindowMinimized)
++        ; // nothing to do
++    else if (state & Qt::WindowFullScreen)
++        setGeometryImpl(screen()->geometry());
++    else if (state & Qt::WindowMaximized)
++        setGeometryImpl(screen()->availableGeometry().adjusted(m_margins.left(), m_margins.top(), -m_margins.right(), -m_margins.bottom()));
++    else
++        setGeometryImpl(m_normalGeometry);
++
++    QWindowSystemInterface::handleWindowStateChanged(window(), state);
++}
++
++QOffscreenWindow *QOffscreenWindow::windowForWinId(WId id)
++{
++    return m_windowForWinIdHash.value(id, 0);
++}
++
++QHash<WId, QOffscreenWindow *> QOffscreenWindow::m_windowForWinIdHash;
++
++QT_END_NAMESPACE
+diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h
+new file mode 100644
+index 0000000..e1f37bb
+--- /dev/null
++++ b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/environment/qoffscreen-src/qoffscreenwindow.h
+@@ -0,0 +1,84 @@
++/****************************************************************************
++**
++** Copyright (C) 2016 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QOFFSCREENWINDOW_H
++#define QOFFSCREENWINDOW_H
++
++#include <qpa/qplatformbackingstore.h>
++#include <qpa/qplatformwindow.h>
++
++#include <qhash.h>
++
++QT_BEGIN_NAMESPACE
++
++class QOffscreenWindow : public QPlatformWindow
++{
++public:
++    QOffscreenWindow(QWindow *window);
++    ~QOffscreenWindow();
++
++    void setGeometry(const QRect &rect) override;
++    void setWindowState(Qt::WindowStates states) override;
++
++    QMargins frameMargins() const override;
++
++    void setVisible(bool visible) override;
++    void requestActivateWindow() override;
++
++    WId winId() const override;
++
++    static QOffscreenWindow *windowForWinId(WId id);
++
++private:
++    void setFrameMarginsEnabled(bool enabled);
++    void setGeometryImpl(const QRect &rect);
++
++    QRect m_normalGeometry;
++    QMargins m_margins;
++    bool m_positionIncludesFrame;
++    bool m_visible;
++    bool m_pendingGeometryChangeOnShow;
++    WId m_winId;
++
++    static QHash<WId, QOffscreenWindow *> m_windowForWinIdHash;
++};
++
++QT_END_NAMESPACE
++
++#endif
 diff --git a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml b/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml
 index 0fbbd81..f9ff010 100644
 --- a/data/singleturn/swebenchpro_instance_qutebrowser__qutebrowser-96b997802e942937e81d2b8a32d08f00d3f4bc4e-v5fc38aaf22415ab0b70567368332beee7955b367/task.toml

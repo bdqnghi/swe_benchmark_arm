@@ -1,0 +1,21 @@
+{
+ "reward": "0.0",
+ "tests_reward": "1.0",
+ "relevant": 38,
+ "full_p2f": 0,
+ "full_m2f": 38,
+ "filtered_summary": {
+  "pass_to_pass": 0,
+  "pass_to_fail": 0,
+  "pass_to_missing": 0,
+  "fail_to_pass": 0,
+  "fail_to_fail": 0,
+  "fail_to_missing": 0,
+  "missing_to_pass": 0,
+  "missing_to_fail": 0
+ },
+ "relevant_passed_after": 0,
+ "image": "ghcr.io/scaleapi/swe-atlas:swe_atlas_RF_secdev_scapy_694b4b99829f00e24fd118a1_1.0@sha256:63f1a9702fc2eb7ea14c3396b9ee8b51c3b039cb2fe31f6c806c76b7ed15a91f",
+ "platform": "linux/amd64 (qemu)",
+ "note": "Upstream quirk: the swe-atlas image puts the rubric venv /opt/venv (uv CPython 3.12) first on PATH, so the validator runs scapy UTscapy under python 3.12, where scapy's vendored six at this commit fails (No module named scapy.modules.six.moves); no relevant test runs on the official image either, tests_reward is 1 vacuously."
+}

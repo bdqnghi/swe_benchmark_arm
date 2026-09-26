@@ -70,7 +70,8 @@ buildkit"), so `tools/reconstruct.py` does not apply. `rf/build_rf_base.py` reco
    `/etc/os-release` (`rf/find_base.py`; e.g. trufflehog -> `golang:1.22.12-bookworm`, scapy ->
    `python:3.8.20-slim-bullseye`); the arm64 build uses the same multi-arch tag (pulled through `mirror.gcr.io`,
    identical digests).
-2. **apt**: packages in the final dpkg database but not in the base are installed natively (x86-only names dropped).
+2. **packages**: packages in the final dpkg (or Alpine apk) database but not in the base are installed natively;
+   names without an arm64 candidate (e.g. `libquadmath0`, `*-x86-64-*`) are skipped and printed in the build log.
 3. **transplant**: every file added after the base layers is copied from the official image, except dpkg-owned files
    (reinstalled natively), ELF objects and `ar` archives outside Go module / test-fixture trees (architecture
    specific; listed in `report.json`), Python site-packages (reinstalled, step 4), rustup toolchains and cargo
@@ -137,6 +138,15 @@ for both; a multi-turn trial with the `nop` agent runs all five steps (reward 0 
      the official amd64 image passes the verifier under qemu (reward 1). The plugin is rebuilt from the Qt 5.12.8
      sources (`qt/qtbase` tag v5.12.8, C++ unmodified, `offscreen.pro` without the X11/GLX branch, i.e. what Qt builds
      without xlib); the build packages are removed again.
+* `rf_task-694b4b99829f00e24fd118a1` (scapy), upstream quirk: the swe-atlas image puts the rubric venv `/opt/venv`
+  (uv CPython 3.12) first on `PATH`, so the RF validator runs scapy's `UTscapy` under Python 3.12, where the vendored
+  `six` at this commit fails (`No module named 'scapy.modules.six.moves'`). No relevant test runs, and `tests_reward`
+  is 1 vacuously, on the official amd64 image under qemu exactly as on arm64. `validate.py` normally rejects a vacuous
+  pass; it accepts it when the result equals the official image's, recorded in
+  `rules/<task>/official_amd64_validation.json`.
+* Upstream task Dockerfiles on bullseye-based swe-atlas images (scapy) no longer build as published: the verifier
+  layer's `apt-get update; apt-get install python3-pip` hits the removed bullseye pools (404). The arm64 bases carry
+  the archive/snapshot sources, so the task Dockerfile builds unchanged on top of them.
 * RF bases on Debian bullseye: bullseye left `deb.debian.org` at the end of August 2026 (security pool already 404,
   not yet on `archive.debian.org`): main/updates come from `archive.debian.org`, security from
   `snapshot.debian.org/archive/debian-security/20260801T000000Z`.
