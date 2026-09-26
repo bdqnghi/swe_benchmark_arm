@@ -26,6 +26,28 @@ libjansson/libyaml, ripgrep for six others) and were fixed (`parity_fixups.json`
 `programbench eval` with gold submissions passes on arm64 (cmatrix solved; quickjs 3035/3036, the one
 failure being a directory-order-dependent test).
 
+## SWE-Together — complete
+
+109/109 canonical tasks built natively, gold-validated and pushed (`bdqnghi/swe-together:<task_id>`, tags
+verified on Docker Hub); the four private bases (`hyperswitch-dev`, `reigh-dev`, `comfyui-dev`, `sd-scripts-dev`)
+were reconstructed and pushed as `bdqnghi/swe-together-base:<name>`. 42 tasks score 1.0 with the reference
+patch; 51 score below 1.0 and the official amd64 image gives exactly the same reward (many upstream reference
+patches are reconstructed from session logs); 16 have no reference patch upstream and their unpatched reward
+matches the official image. arm64 changes: Go toolchain tarballs (26 tasks), PyTorch `+cpu` wheels without
+aarch64 builds, private bases, and pins to the official images' bun, npm globals, Node.js and pip versions
+(current bun changes the test report format and would lower one task from 1.0 to 0.375). No test or verifier
+file was changed. Details and per-task deviations: `swe_together/NOTES.md`, `status.json`.
+
+## SWE-Interact — in progress
+
+SWE-bench-Pro family 25/25 and DeepSWE family 25/25 built, validated with the reference solution and pushed
+(`bdqnghi/swe-interact:<task>`). Refactoring (SWE-Atlas) family: 10/25 pushed so far; its bases are
+reconstructed from the official images' history. Validation for this family covers the verifier's test half
+only (the rubric half is LLM-graded). Three refactoring tasks reproduce upstream verifier defects on the
+official image as well: two scapy tasks run no tests under the verifier's Python 3.12 (tests reward 1 without
+testing) and one suricata task can never pass (`make clean` fails). Harbor 0.23.0 needs
+`swe_interact/harbor-0.23.0-multistep-log-ownership.patch` for multi-step runs on Docker.
+
 ## SWE-Bench-ProMax — complete
 
 170/170 images built natively, gold-validated with the official `test_run.py` (offline) and pushed

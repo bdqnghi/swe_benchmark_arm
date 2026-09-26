@@ -1,6 +1,6 @@
 # SWE benchmarks on arm64
 
-Native `linux/arm64` Docker images for five agentic coding benchmarks whose official images are
+Native `linux/arm64` Docker images for agentic coding benchmarks whose official images are
 `linux/amd64`-only, plus the scripts that built them and the patches needed to run the benchmark
 harnesses against them. Everything here was produced and validated on an NVIDIA GB10 (DGX Spark,
 aarch64, 20 cores, 121 GB RAM) so that evaluation no longer has to run under `qemu-x86_64`.
@@ -15,6 +15,8 @@ All images are public on Docker Hub under the `bdqnghi` namespace.
 | SWE-Bench-ProMax | 170 | `bdqnghi/swebench-promax:<instance_id>` | 170/170 gold patches pass with the official `test_run.py` (offline) |
 | Terminal-Bench 3.0 | 74 | `bdqnghi/terminal-bench-v3:<task>` and `:<task>-verifier` | Harbor oracle pass on 72/74; fp8-rmsnorm-gemm and jax-speedrun-gpu need H100 hardware |
 | Terminal-Bench 4.0 | 66 | `bdqnghi/terminal-bench-v4:<task>` and `:<task>-verifier` | Harbor oracle pass on 64/66; the same two tasks need H100 hardware |
+| SWE-Together (Meta) | 109 | `bdqnghi/swe-together:<task_id>` + 4 bases `bdqnghi/swe-together-base:<name>` | 109/109 gold (reference patch + `tests/test.sh`) rewards identical to the official amd64 images |
+| SWE-Interact (Scale AI) | 75 | `bdqnghi/swe-interact:<task>` | in progress: SWE-bench-Pro and DeepSWE families 25/25 each pass the reference solution; refactoring family 10/25 (see STATUS.md) |
 
 Terminal-Bench 3.0 and 4.0 are kept in separate repositories; a v4 run never pulls a v3 image.
 
@@ -100,6 +102,24 @@ On hosts with Linux 6.13 or newer, run the eval containers with the classic rece
 poll tests, which assume the older TCP buffer dynamics, then fail intermittently on the official
 amd64 image as well as on the arm64 one.
 
+### SWE-Together
+
+Apply `swe_together/swe-together-arm64.patch` to SWE-Together commit `891d19e` (it points every
+`task.toml` `docker_image` at `bdqnghi/swe-together:<task_id>` and swaps in the arm64 Dockerfiles), then
+run trials locally with `src/run_eval.py --env-type docker`. The agentic judge still runs on E2B. Validation
+applies the reference patch as root and runs `tests/test.sh` as Harbor's verifier does; Harbor's docker
+backend runs commands as the image user (`agent`), which lowered one Go task's reward (NOTES.md), so run
+agent and verifier as root to match E2B. Details: `swe_together/NOTES.md`.
+
+### SWE-Interact
+
+Use the arm64 task tree `swe_interact/tasks_arm64/` (or apply `swe_interact/swe-interact-arm64.patch` to
+SWE-Interact commit `b32f98c`) and run Harbor on local Docker instead of Modal:
+`harbor run -p <abs path> -e docker --no-force-build`. Multi-step runs on Harbor 0.23.0 need
+`swe_interact/harbor-0.23.0-multistep-log-ownership.patch`. One SWE-bench-Pro task image drops `instance_`
+from its tag to stay under Docker's 128-character limit; `swe_interact/status.json` has every exact name.
+Details: `swe_interact/NOTES.md`.
+
 ### Terminal-Bench 3.0 / 4.0
 
 ```
@@ -161,6 +181,8 @@ deepswe/                        build_deepswe.py, pin_task.py, deep-swe-arm64.pa
 programbench/                   build_programbench.py, parity_check.py, parity_fixups.json, gold examples
 swebench_promax/                build_promax.py, swe-bench-promax.arm64.json
 terminal_bench/                 build_tb.py, v3/v4 patches, harbor GPU patch
+swe_together/                   build, bases, arm64 rules and pins, validation, dataset patch
+swe_interact/                   build, RF base reconstruction, validation, arm64 task tree, Harbor patch
 STATUS.md                       per-benchmark validation status and known failures
 ```
 
