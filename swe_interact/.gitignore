@@ -1,0 +1,6 @@
+work/
+logs/
+tasks_arm64/
+*.lock
+*.tmp*
+__pycache__/

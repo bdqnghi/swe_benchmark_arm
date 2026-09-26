@@ -1,0 +1,17 @@
+--- a/harbor/trial/multi_step.py
++++ b/harbor/trial/multi_step.py
+@@ -135,6 +135,14 @@
+             mode=mode,
+         )
+ 
++        # Local Docker: files the (root) verifier wrote into the bind-mounted log dirs, e.g. SWE-Interact's
++        # /logs/verifier/user-server/, are root-owned; moving them into steps/<name>/ fails with EACCES unless
++        # ownership is handed back to the host user first (single-step trials do this on stop()).
++        if self.agent_environment.capabilities.mounted and not (
++            mode == VerifierEnvironmentMode.SEPARATE and index == total
++        ):
++            await self.agent_environment.prepare_logs_for_host()
++
+         self._archive_step_outputs(
+             step,
+             preserve_agent=self._next_step_resumes(index=index, total=total),

