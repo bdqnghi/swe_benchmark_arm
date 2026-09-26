@@ -38,15 +38,22 @@ aarch64 builds, private bases, and pins to the official images' bun, npm globals
 (current bun changes the test report format and would lower one task from 1.0 to 0.375). No test or verifier
 file was changed. Details and per-task deviations: `swe_together/NOTES.md`, `status.json`.
 
-## SWE-Interact — in progress
+## SWE-Interact — complete
 
-SWE-bench-Pro family 25/25 and DeepSWE family 25/25 built, validated with the reference solution and pushed
-(`bdqnghi/swe-interact:<task>`). Refactoring (SWE-Atlas) family: 10/25 pushed so far; its bases are
-reconstructed from the official images' history. Validation for this family covers the verifier's test half
-only (the rubric half is LLM-graded). Three refactoring tasks reproduce upstream verifier defects on the
-official image as well: two scapy tasks run no tests under the verifier's Python 3.12 (tests reward 1 without
-testing) and one suricata task can never pass (`make clean` fails). Harbor 0.23.0 needs
-`swe_interact/harbor-0.23.0-multistep-log-ownership.patch` for multi-step runs on Docker.
+75/75 task images built, validated and pushed (`bdqnghi/swe-interact:<task>`; one SWE-bench-Pro task drops
+`instance_` to fit Docker's 128-character tag limit, see `swe_interact/status.json`), plus 25 reconstructed
+refactoring bases (`bdqnghi/swe-interact-base:<name>`); every digest verified on Docker Hub.
+
+* SWE-bench-Pro family 25/25 and DeepSWE family 25/25: the reference solution passes the task's own verifier.
+  qutebrowser needed `PyQt5.sip` exposed and Qt 5.12.8's offscreen plugin rebuilt without X11/GLX.
+* Refactoring (SWE-Atlas) family: the official images carry no build history, so each base is reconstructed from
+  its filesystem (native distro packages, official Python/Go/Rust/npm versions, rebuilt binaries). Validation
+  covers the verifier's test half only (the rubric half is LLM-graded and was not run). 19/25 are genuine passes.
+  Six reproduce upstream verifier defects and should not be used for scoring: five pass without running any
+  relevant test (three scapy tasks and simple-login under the verifier's Python 3.12 environment; netdata `813d`
+  calls `ninja` after a Makefile build) and one can never pass (suricata `137`, `make clean` fails). The official
+  amd64 image gives the identical result for all but `813d`, whose qemu run timed out (confirmed by analysis).
+* Multi-step Harbor runs on local Docker need `swe_interact/harbor-0.23.0-multistep-log-ownership.patch`.
 
 ## SWE-Bench-ProMax — complete
 

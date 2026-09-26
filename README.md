@@ -16,7 +16,7 @@ All images are public on Docker Hub under the `bdqnghi` namespace.
 | Terminal-Bench 3.0 | 74 | `bdqnghi/terminal-bench-v3:<task>` and `:<task>-verifier` | Harbor oracle pass on 72/74; fp8-rmsnorm-gemm and jax-speedrun-gpu need H100 hardware |
 | Terminal-Bench 4.0 | 66 | `bdqnghi/terminal-bench-v4:<task>` and `:<task>-verifier` | Harbor oracle pass on 64/66; the same two tasks need H100 hardware |
 | SWE-Together (Meta) | 109 | `bdqnghi/swe-together:<task_id>` + 4 bases `bdqnghi/swe-together-base:<name>` | 109/109 gold (reference patch + `tests/test.sh`) rewards identical to the official amd64 images |
-| SWE-Interact (Scale AI) | 75 | `bdqnghi/swe-interact:<task>` | in progress: SWE-bench-Pro and DeepSWE families 25/25 each pass the reference solution; refactoring family 10/25 (see STATUS.md) |
+| SWE-Interact (Scale AI) | 75 | `bdqnghi/swe-interact:<task>` + 25 RF bases `bdqnghi/swe-interact-base:<name>` | 75/75 built and pushed; SWE-bench-Pro and DeepSWE 25/25 pass the reference solution; refactoring 19/25 genuine test passes, 6 reproduce upstream verifier defects (see STATUS.md) |
 
 Terminal-Bench 3.0 and 4.0 are kept in separate repositories; a v4 run never pulls a v3 image.
 
